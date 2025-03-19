@@ -1,0 +1,193 @@
+@import "./assets/themes/tailwind-light/theme.scss" layer(primereact);
+@import "primeflex/primeflex.css";
+@import "primereact/resources/primereact.min.css";
+@import "primeicons/primeicons.css";
+
+body {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.kanban-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.5) transparent;
+}
+
+.kanban-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.kanban-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.kanban-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+  border-radius: 20px;
+  border: transparent;
+}
+
+.chevron-icon {
+  transition: transform 0.15s linear;
+}
+
+.chevron-icon.chevron-down {
+  transform: rotate(90deg);
+}
+
+.roadmap-card .p-card-body h2 {
+  transition: color 0.3s ease-in-out 50ms; /* Transition only the color property */
+}
+
+.roadmap-card .p-card-body:hover h2,
+.roadmap-card .p-card-body:hover i {
+  color: #29abe2;
+}
+
+.grid-card {
+  transition: transform 0.15s ease-in-out;
+}
+
+.grid-card:hover {
+  transform: translateY(-0.25rem);
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.kanban-title-truncate {
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.line-clamp-4 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  line-clamp: 4;
+}
+
+.custom-tab-panel {
+  padding-bottom: 10rem;
+}
+
+.z-max {
+  z-index: 2147483647;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.break-words {
+  overflow-wrap: break-word;
+}
+
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+.min-w-20rem {
+  min-width: 20rem;
+}
+
+@keyframes passTitle {
+  100% {
+    transform: translateX(100%);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  0% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-pass-title {
+  animation: passTitle 5s linear infinite;
+}
+
+/* To prevent scrolling on mobile devices.  */
+.draggable-element {
+  touch-action: none;
+}
+
+/* LoadingAnimate */
+
+.loading-animate-overlay {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  z-index: 20;
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(5px);
+  transition: opacity 0.3s ease;
+}
+
+.loading-animate-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.loading-animate-content {
+  width: 100%;
+  height: 100%;
+}
+
+.loading-image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-image-container::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.3) 50%,
+    transparent 60%
+  );
+  animation: imgGradientAnimation 2s infinite;
+}
+
+@keyframes imgGradientAnimation {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(50%);
+  }
+}
+
+.audit-table
+  > .p-datatable.p-datatable-gridlines:has(.p-datatable-thead):has(
+    .p-datatable-tbody
+  )
+  .p-datatable-tbody
+  > tr
+  > td:last-child {
+  padding: 0;
+}

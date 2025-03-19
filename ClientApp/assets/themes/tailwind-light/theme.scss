@@ -1,0 +1,54 @@
+$primaryColor: #29abe2;
+$primaryDarkColor: #1f84af;
+$primaryDarkerColor: #114a62;
+
+$highlightTextColor: #1f84af;
+
+$borderRadius: 0.5rem;
+$inputPadding: 0.5rem 0.75rem;
+$buttonPadding: 0.5rem 0.5rem;
+
+$successButtonBg: #27ae60;
+$successButtonHoverBg: #27ae60;
+$successButtonHoverBorderColor: #27ae60;
+$successButtonActiveBg: #27ae60;
+$successButtonActiveBorderColor: #27ae60;
+
+$warningButtonBg: #e67e22;
+$warningButtonHoverBg: #e67e22;
+$warningButtonHoverBorderColor: #e67e22;
+$warningButtonActiveBg: #e67e22;
+$warningButtonActiveBorderColor: #e67e22;
+
+$helpButtonBg: #9b59b6;
+$helpButtonHoverBg: #9b59b6;
+$helpButtonHoverBorderColor: #9b59b6;
+$helpButtonActiveBg: #9b59b6;
+$helpButtonActiveBorderColor: #9b59b6;
+
+$dangerButtonBg: #e74c3c;
+$dangerButtonHoverBg: #e74d3ce8;
+$dangerButtonHoverBorderColor: #e74d3ce8;
+$dangerButtonActiveBg: #e74c3c;
+$dangerButtonActiveBorderColor: #e74c3c;
+
+$textButtonHoverBgOpacity: 0;
+$textButtonActiveBgOpacity: 0;
+
+$cardShadow: none;
+$cardContentPadding: 0.5rem 0;
+$cardFooterPadding: 0.5rem 0 0 0;
+
+$dialogHeaderFontSize: 1.2rem;
+$dialogContentPadding: 0 1.5rem 0rem 1.5rem;
+$dialogFooterPadding: 0.5rem 1.5rem 1.5rem 1.5rem;
+
+//focus
+$focusOutlineColor: $primaryColor;
+
+$errorMessageBg: #fafafa;
+
+@import "./_variables";
+@import "./_fonts";
+@import "../theme-base/components";
+@import "./_extensions";

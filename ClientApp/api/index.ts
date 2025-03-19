@@ -1,0 +1,1 @@
+export { default as EspecieApi } from "./especies-api";
