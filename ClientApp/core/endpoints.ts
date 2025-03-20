@@ -3,6 +3,9 @@ const CREATE = "Create";
 const UPDATE = "Update";
 const ESPECIES_BASE = "Especie";
 
+const DASHBOARD_BASE = "Dashboard";
+export const DASHBOARD_GET = `${DASHBOARD_BASE}/${GET}`;
+
 //Create Especie
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;
 export const ESPECIES_CREATE = `${ESPECIES_BASE}/${CREATE}`;

@@ -1,5 +1,3 @@
-
-
 namespace feedback_zoologic.Features.Especies.Domain
 {
     public class Especie : Entity, IAggregateRoot

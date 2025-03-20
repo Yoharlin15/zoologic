@@ -9,7 +9,9 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
   const pathname = useLocation().pathname;
   const activeTabMap: Record<string, number> = React.useMemo(
     () => ({
+      [Routes.DASHBOARD_ROUTE]: 0,
       [Routes.ESPECIES_TYPES_ROUTE]: 1,
+      
     }),
     []
   );
@@ -30,7 +32,8 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         {
           icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304833/Home_dcqk1d.png",
           label: "Home",
-          onClick: () => navigate("/admin"),
+          onClick: () =>
+          navigate(`${Routes.DASHBOARD_ROUTE}`) ,
         },
         {
           icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304737/Wildlife_Animals_fxudan.png",
@@ -61,6 +64,11 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         {
           icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304976/Training_muzn4r.png",          
           label: "Adiestramiento",
+          onClick: () => navigate(""),
+        },
+        {
+          icon: "",          
+          label: "Visitantes",
           onClick: () => navigate(""),
         },
         {

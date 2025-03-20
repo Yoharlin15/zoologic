@@ -1,9 +1,16 @@
 import React, { createContext, useContext, useCallback } from "react";
 import { Outlet, RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
-import { CustomMainLayout } from "#components";
-import EspeciesList from "ClientApp/views/Especies/especie-list";
 import { Routes } from "#core";
-import { LoginView } from "#views";
+
+import { CustomMainLayout } from "#components";
+
+import {
+
+  LoginView,
+  DashboardView,
+  EspeciesList,
+
+} from "#views";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -30,6 +37,10 @@ const Provider = () => {
       path: "/",
       element: renderMainLayout(<Outlet />),
       children: [
+        {
+          path: Routes.DASHBOARD_ROUTE,
+          element: <DashboardView />,
+        },
         {
           path: Routes.ESPECIES_TYPES_ROUTE,
           element: <EspeciesList />,
