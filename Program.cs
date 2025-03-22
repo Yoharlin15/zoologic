@@ -2,14 +2,24 @@ using System.Text;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using feedback_zoologic.Models;
-using feedback_zoologic.Features.Especies.Domain;
+
 using feedback_zoologic.Features.Global.Application;
 using feedback_zoologic.Features.Global.Infraestructure;
-using feedback_zoologic.Features.Especies.Infrastructure.Persistence;
-using feedback_zoologic.Features.Especies.Application;
+
 using feedback_zoologic.Features.Empleados.Domain;
 using feedback_zoologic.Features.Empleados.Application;
 using feedback_zoologic.Features.Empleados.Infrastructure.Persistence;
+using feedback_zoologic.Features.Roles.Domain;
+using feedback_zoologic.Features.Roles.Infrastructure.Persistence;
+using feedback_zoologic.Features.Usuarios.Domain;
+using feedback_zoologic.Features.Usuarios.Infrastructure.Persistence;
+using feedback_zoologic.Features.Habitats.Domain;
+using feedback_zoologic.Features.Habitats.Infrastructure.Persistence;
+using feedback_zoologic.Features.Especies.Domain;
+using feedback_zoologic.Features.Especies.Infrastructure.Persistence;
+using feedback_zoologic.Features.Especies.Application;
+using feedback_zoologic.Features.Tratamientos.Domain;
+using feedback_zoologic.Features.Tratamientos.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,9 +43,21 @@ builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddDBStorage<DashboardDbContext>(builder.Configuration,typeof(Program).Assembly);
 builder.Services.AddTransient<IDashboardQueryRepository, DashboardRepository>();
 
+builder.Services.AddDBStorage<RolDbContext>(builder.Configuration,typeof(Program).Assembly);
+builder.Services.AddTransient<IRolRepository, RolRepository>();
+
+builder.Services.AddDBStorage<UsuarioDbContext>(builder.Configuration,typeof(Program).Assembly);
+builder.Services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+
 builder.Services.AddDBStorage<EspecieDbContext>(builder.Configuration,typeof(Program).Assembly);
 builder.Services.AddTransient<IEspecieRepository, EspecieRepository>();
 builder.Services.AddTransient<IEspecieQueryRepository, EspecieRepository>();
+
+builder.Services.AddDBStorage<HabitatDbContext>(builder.Configuration,typeof(Program).Assembly);
+builder.Services.AddTransient<IHabitatRepository, HabitatRepository>();
+
+builder.Services.AddDBStorage<TratamientoDbContext>(builder.Configuration,typeof(Program).Assembly);
+builder.Services.AddTransient<ITratamientoRepository, TratamientoRepository>();
 
 builder.Services.AddDBStorage<EmpleadoDbContext>(builder.Configuration,typeof(Program).Assembly);
 builder.Services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();

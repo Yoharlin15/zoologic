@@ -13,7 +13,8 @@ namespace feedback_zoologic.Features.Especies.Domain
             string peso, 
             DateTime fechaLlegada,
             string procedencia,
-            string observaciones
+            string observaciones,
+            int habitatId
         )
 
         {
@@ -27,6 +28,7 @@ namespace feedback_zoologic.Features.Especies.Domain
             FechaLlegada = fechaLlegada;
             Procedencia = procedencia;
             Observaciones = observaciones;
+            HabitatId = habitatId;
         }
 
         public int EspecieId { get; set; }
@@ -39,6 +41,8 @@ namespace feedback_zoologic.Features.Especies.Domain
         public DateTime FechaLlegada { get; set; }
         public string Procedencia { get; set; } = null!;
         public string Observaciones {get; set;} = null!;
+        public int HabitatId { get; set; }
+        public string Nombre { get; set; } = null!;
 
         // Implementación de Entity
         public int Id => EspecieId;

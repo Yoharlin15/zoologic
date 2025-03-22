@@ -33,8 +33,9 @@ namespace feedback_zoologic.Features.Especies.Application
                     Peso = r.Peso,
                     FechaLlegada = r.FechaLlegada,
                     Procedencia = r.Procedencia,
-                    Observaciones = r.Observaciones
-
+                    Observaciones = r.Observaciones,
+                    HabitatId = r.HabitatId,
+                    HabitatNombre = r.Nombre,
                 }).ToArray();
             }
         }

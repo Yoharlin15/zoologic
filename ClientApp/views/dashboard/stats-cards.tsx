@@ -10,10 +10,10 @@ type CardItem = {
 };
 
 const images: Record<string, string> = {
-  Especies: "",
-  Empleados: "",
-  Visitantes: "",
-  Habitats: "",
+  Especies: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742518465/Animals_him6j0.png",
+  Empleados: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742518475/Management_w8tpjo.png",
+  Visitantes: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742518486/Team_ktp9uj.png",
+  Habitats: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304919/Lake_tfidcc.png",
 };
 
 interface IStatsCardsProps {

@@ -17,6 +17,9 @@ namespace feedback_zoologic.Features.Especies.Infraestructure.Configurations {
             entity.Property(e => e.FechaLlegada).HasColumnType("datetime");
             entity.Property(e => e.Procedencia).HasColumnType("text").HasMaxLength(255);
             entity.Property(e => e.Observaciones).HasColumnType("text").HasMaxLength(255);
+
+            entity.HasOne(d => d.habitats).WithMany(p => p.especies)
+                   .HasForeignKey(d => d.HabitatId);
        }
     }
 }

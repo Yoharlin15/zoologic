@@ -22,7 +22,6 @@ import {
 import { ColumnFilterElementTemplateOptions } from "primereact/column";
 import { constants } from "buffer";
 import { CardTable, ICardTableProps } from "../../components/card-table";
-import EspecieSidebar from "./especie-sidebar-Create";
 import EspecieSidebarCreate from "./especie-sidebar-Create";
 import EspecieSidebarUpdate from "./especie-sidebar-Update";
 

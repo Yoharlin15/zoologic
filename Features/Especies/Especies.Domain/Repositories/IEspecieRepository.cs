@@ -10,5 +10,4 @@ namespace feedback_zoologic.Features.Especies.Domain
         Task<int> AddAsync(Especie especie, CancellationToken cancellationToken = default);
         Task<int> UpdateAsync(Especie especie, CancellationToken cancellationToken = default);
     }
-
 }

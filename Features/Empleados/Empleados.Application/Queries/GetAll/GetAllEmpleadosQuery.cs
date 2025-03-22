@@ -33,7 +33,9 @@ namespace feedback_zoologic.Features.Empleados.Application
                     Telefono = r.Telefono,
                     Nacionalidad = r.Nacionalidad,
                     Direccion = r.Direccion,
-                    FechaLlegada = r.FechaLlegada
+                    FechaContratacion = r.FechaContratacion,
+                    CargoId = r.CargoId,
+                    Cargo = r.Cargo,
 
                 }).ToArray();
             }

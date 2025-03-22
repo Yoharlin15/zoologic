@@ -10,7 +10,7 @@ import {
   InputTextArea,
 } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
-import { IEspecieCreate } from "#interfaces";
+import { IEspecieCreate, IEspecieUpdate } from "#interfaces";
 import toast from "react-hot-toast";
 import { useUpdateEspecie } from "ClientApp/hooks/useMutation"; // Importa solo el hook de actualización
 
@@ -18,13 +18,13 @@ interface IEspecieSidebarProps {
   visible: boolean;
   onHide: () => void;
   especieId: number | undefined; // ID de la especie a actualizar (obligatorio)
-  especie?: IEspecieCreate; // Datos de la especie existente
+  especie?: IEspecieUpdate; // Datos de la especie existente
 }
 
 const EspecieSidebarUpdate = ({ onHide, visible, especieId, especie }: IEspecieSidebarProps) => {
   const updateEspecie = useUpdateEspecie(); // Hook para actualizar la especie
 
-  const { control, handleSubmit, reset } = useForm<IEspecieCreate>({
+  const { control, handleSubmit, reset } = useForm<IEspecieUpdate, any>({
     mode: "onChange",
     defaultValues: especie || {
       NombreCientifico: "",

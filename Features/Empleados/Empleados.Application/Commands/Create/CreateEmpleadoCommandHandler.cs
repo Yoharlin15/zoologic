@@ -26,7 +26,8 @@ namespace feedback_zoologic.Features.Empleados.Application.Commands.Create
                 request.Telefono,
                 request.Nacionalidad,
                 request.Direccion,
-                request.FechaLlegada
+                request.FechaContratacion,
+                request.CargoId
             );
 
             var result = new CreateEmpleadoResponse(await _repository.AddAsync(empleado));

@@ -25,7 +25,8 @@ namespace feedback_zoologic.Features.Especies.Application.Commands.Update
                 request.Peso,
                 request.FechaLlegada,
                 request.Procedencia,
-                request.Observaciones                
+                request.Observaciones,
+                request.HabitatId              
             );
 
             var result = new UpdateEspecieResponse(await _repository.UpdateAsync(especie));

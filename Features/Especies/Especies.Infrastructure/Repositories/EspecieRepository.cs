@@ -26,7 +26,8 @@ namespace feedback_zoologic.Features.Especies.Infrastructure.Persistence
 
         public async Task<Especie[]> Get(CancellationToken cancellationToken = default)
         {
-            List<EspecieDataModel>? result = await _context.Especies 
+            List<EspecieDataModel>? result = await _context.Especies
+                .Include(t => t.habitats)
                 .ToListAsync(cancellationToken);
 
             var mappedEspecies = _mapper.Map<Especie[]>(result);
@@ -45,7 +46,8 @@ namespace feedback_zoologic.Features.Especies.Infrastructure.Persistence
                 Peso = especie.Peso,
                 FechaLlegada = especie.FechaLlegada,
                 Procedencia = especie.Procedencia,
-                Observaciones = especie.Observaciones
+                Observaciones = especie.Observaciones,
+                HabitatId = especie.HabitatId
             };
 
             var data = await _context.Especies.AddAsync(especiedb);

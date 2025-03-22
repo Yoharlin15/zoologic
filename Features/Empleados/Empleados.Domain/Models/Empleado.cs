@@ -13,7 +13,8 @@ namespace feedback_zoologic.Features.Empleados.Domain
             string telefono,
             string nacionalidad,
             string direccion,
-            DateTime fechaLlegada
+            DateTime fechaContratacion,
+            int cargoId
         )
 
         {
@@ -26,7 +27,8 @@ namespace feedback_zoologic.Features.Empleados.Domain
             Telefono = telefono;
             Nacionalidad = nacionalidad;
             Direccion = direccion;
-            FechaLlegada = fechaLlegada;
+            FechaContratacion = fechaContratacion;
+            CargoId = cargoId;
         }
 
         public int EmpleadoId { get; set; }
@@ -38,7 +40,9 @@ namespace feedback_zoologic.Features.Empleados.Domain
         public string Telefono { get; set; } = null!;
         public string Nacionalidad { get; set; } = null!;
         public string Direccion {get; set;} = null!;
-        public DateTime FechaLlegada {get; set;}
+        public DateTime FechaContratacion {get; set;}
+        public int CargoId { get; set; }
+        public string Cargo { get; set; } = null!;
         
         public Empleado UpdateOrganizacionId(int empleadoId)
         {

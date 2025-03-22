@@ -17,11 +17,16 @@ namespace feedback_zoologic.Features.Especies.Application.Common
         public DateTime FechaLlegada { get; set; }
         public string Procedencia { get; set; } = null!;
         public string Observaciones {get; set;} = null!;
+        public int HabitatId { get; set; }
+        public string HabitatNombre { get; set; } = null!;
 
         public void Mapping(Profile profile) 
         {
-            profile.CreateMap<EspecieDataModel, EspecieResponse>();
-            profile.CreateMap<EspecieDataModel, Especie>();
+            profile.CreateMap<EspecieDataModel, EspecieResponse>()
+                .ForMember(dest => dest.HabitatNombre, opt => opt.MapFrom(src => src.habitats.NombreHabitat));  
+
+            profile.CreateMap<EspecieDataModel, Especie>()
+                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.habitats.NombreHabitat));
         }
         
     }

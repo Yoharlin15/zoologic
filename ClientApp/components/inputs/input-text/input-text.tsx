@@ -1,6 +1,6 @@
 import React from "react";
 import { InputText } from "primereact/inputtext";
-import { Control, useController, UseControllerProps } from "react-hook-form";
+import { useController, UseControllerProps, Control } from "react-hook-form";
 import { FieldErrorMessage } from "../field-error-message";
 
 // Define the props for InputText (excluding 'name' and 'defaultValue')
@@ -10,11 +10,13 @@ type InputTextProps = Omit<React.ComponentProps<typeof InputText>, "name" | "def
 interface IControlledInputTextProps extends InputTextProps, UseControllerProps {
   
   defaultValue?: string; // Explicitly define defaultValue as string
+  control: Control<any>;
 }
 
 const ControlledInputText = ({
   name,
   rules,
+  control,
   type = "text",
   defaultValue = "",
   ...restProps
@@ -22,6 +24,7 @@ const ControlledInputText = ({
   const { field, fieldState } = useController({
     name,
     rules,
+    control,
     defaultValue, // Pass defaultValue to useController
   });
 

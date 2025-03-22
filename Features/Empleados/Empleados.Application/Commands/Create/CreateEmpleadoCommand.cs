@@ -13,6 +13,7 @@ namespace feedback_zoologic.Application.Commands.Create
         public string Telefono { get; set; } = null!;
         public string Nacionalidad { get; set; } = null!;
         public string Direccion {get; set;} = null!;
-        public DateTime FechaLlegada {get; set;}
+        public DateTime FechaContratacion {get; set;}
+        public int CargoId { get; set; }
     }
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; 
-import { Controller } from "react-hook-form";
+import { Controller, FieldValues } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";
@@ -37,7 +37,7 @@ const EspecieSidebarCreate = ({ onHide, visible }: IEspecieSidebarProps) => {
       toast.error("Error al guardar la especie");
     }
   };
-  const { control, handleSubmit, reset } = useForm<IEspecieCreate>({
+  const { control, handleSubmit, reset } = useForm<IEspecieCreate, FieldValues>({
     mode: "onChange",
     defaultValues: {
       NombreCientifico: "",
@@ -131,7 +131,7 @@ const EspecieSidebarCreate = ({ onHide, visible }: IEspecieSidebarProps) => {
 
       <FieldColumn label="Procedencia" columns={{ sm: 6 }}>
           <InputText
-            name="procedencia"
+            name="Procedencia"
             control={control}
             placeholder="Procedencia"
             rules={{ required: "Procedencia" }}

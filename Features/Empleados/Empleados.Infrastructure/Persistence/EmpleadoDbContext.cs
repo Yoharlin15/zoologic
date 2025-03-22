@@ -14,11 +14,12 @@ public class EmpleadoDbContext : BaseDbContext<EmpleadoDbContext>
     {
     }
     public DbSet<EmpleadoDataModel> Empleados { get; set; }
-    
+    public DbSet<CargoDataModel> Cargos { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new EmpleadosModels.EmpleadoConfiguration());
+        modelBuilder.ApplyConfiguration(new EmpleadosModels.CargoConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }   

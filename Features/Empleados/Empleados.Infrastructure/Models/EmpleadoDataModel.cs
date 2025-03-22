@@ -13,6 +13,8 @@ namespace feedback_zoologic.Features.Empleados.Infraestructure.Models {
         public string Telefono { get; set; } = null!;
         public string Nacionalidad { get; set; } = null!;
         public string Direccion {get; set;} = null!;
-        public DateTime FechaLlegada {get; set;}
+        public int CargoId { get; set; }
+        public DateTime FechaContratacion {get; set;}
+        public virtual CargoDataModel Cargos { get; set; } = null!;
     }
 }

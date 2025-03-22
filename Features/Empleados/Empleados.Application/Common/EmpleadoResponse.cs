@@ -16,12 +16,16 @@ namespace feedback_zoologic.Features.Empleados.Application.Common
         public string Telefono { get; set; } = null!;
         public string Nacionalidad { get; set; } = null!;
         public string Direccion {get; set;} = null!;
-        public DateTime FechaLlegada {get; set;}
-
+        public DateTime FechaContratacion {get; set;}
+        public int CargoId {get; set;}
+        public string Cargo {get; set;} = null!;
         public void Mapping(Profile profile) 
         {
-            profile.CreateMap<EmpleadoDataModel, EmpleadoResponse>();
-            profile.CreateMap<EmpleadoDataModel, Empleado>();
+            profile.CreateMap<EmpleadoDataModel, EmpleadoResponse>()
+                .ForMember(dest => dest.Cargo, opt => opt.MapFrom(src => src.Cargos.Cargo));                    
+
+            profile.CreateMap<EmpleadoDataModel, Empleado>()
+                .ForMember(dest => dest.Cargo, opt => opt.MapFrom(src => src.Cargos.Cargo));                    
         }
     }
 }

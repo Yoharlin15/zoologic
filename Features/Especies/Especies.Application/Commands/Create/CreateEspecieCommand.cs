@@ -14,6 +14,6 @@ namespace feedback_zoologic.Application.Commands.Create
         public DateTime FechaLlegada { get; set; }
         public string Procedencia { get; set; } = null!;
         public string Observaciones {get; set;} = null!;
-
+        public int HabitatId { get; set; }
     }
 }

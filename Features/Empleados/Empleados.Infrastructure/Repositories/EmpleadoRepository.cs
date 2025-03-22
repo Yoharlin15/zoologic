@@ -32,7 +32,8 @@ namespace feedback_zoologic.Features.Empleados.Infrastructure.Persistence
 
         public async Task<Empleado[]> Get(CancellationToken cancellationToken = default)
         {
-            List<EmpleadoDataModel>? result = await _context.Empleados 
+            List<EmpleadoDataModel>? result = await _context.Empleados
+                .Include(e => e.Cargos)
                 .ToListAsync(cancellationToken);
 
             var mappedEmpleados = _mapper.Map<Empleado[]>(result);

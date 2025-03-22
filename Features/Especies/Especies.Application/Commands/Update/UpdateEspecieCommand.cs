@@ -14,5 +14,6 @@ namespace feedback_zoologic.Features.Especies.Application.Commands.Update
         public DateTime FechaLlegada { get; set; }
         public string Procedencia { get; set; } = null!;
         public string Observaciones {get; set;} = null!;
+        public int HabitatId { get; set; }
     }
 }
