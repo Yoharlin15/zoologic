@@ -8,6 +8,7 @@ using feedback_zoologic.Features.Usuarios.Infraestructure.Models;
 using feedback_zoologic.Features.Roles.Infraestructure.Models;
 using feedback_zoologic.Features.Usuarios.Infraestructure.Configurations;
 using feedback_zoologic.Features.Roles.Infraestructure.Configurations;
+using feedback_zoologic.Features.Tratamientos.Infraestructure.Configurations;
 
 public class EspecieDbContext : BaseDbContext<EspecieDbContext>
 {
@@ -27,6 +28,7 @@ public class EspecieDbContext : BaseDbContext<EspecieDbContext>
         modelBuilder.ApplyConfiguration(new EspeciesModels.EspeciesConfiguration());
         modelBuilder.ApplyConfiguration(new HabitatConfiguration());
         modelBuilder.ApplyConfiguration(new UsuarioConfiguration());
+        modelBuilder.ApplyConfiguration(new TratamientosConfiguration());
         modelBuilder.ApplyConfiguration(new RolConfiguration());
 
         base.OnModelCreating(modelBuilder);

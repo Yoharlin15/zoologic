@@ -18,7 +18,7 @@ export const ESPECIES_CREATE_GET = `${ESPECIES_BASE}/${CREATE}`;
 //Update Especie
 export const ESPECIES_UPDATE = `${ESPECIES_BASE}/${UPDATE}`;
 
-//Get Especie
+//Get Empleado
 export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;
 
 
