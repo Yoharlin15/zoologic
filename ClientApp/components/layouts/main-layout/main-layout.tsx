@@ -190,7 +190,7 @@ const LayoutContent = ({
 }: ILayoutContentProps) => {
   const { title, dropdown } = headerProps;
   const renderStyledContainer = (children: React.ReactNode) => (
-    <div className="border-2 border-dashed surface-border border-round surface-section flex-auto w-full">
+    <div className="border-1 border-solid surface-border border-round surface-section flex-auto w-full">
       {children}
     </div>
   );

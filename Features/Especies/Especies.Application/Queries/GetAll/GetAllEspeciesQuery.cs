@@ -29,13 +29,9 @@ namespace feedback_zoologic.Features.Especies.Application
                     NombreComun = r.NombreComun,
                     Familia = r.Familia,
                     Clase = r.Clase,
-                    Sexo = r.Sexo,
-                    Peso = r.Peso,
-                    FechaLlegada = r.FechaLlegada,
                     Procedencia = r.Procedencia,
-                    Observaciones = r.Observaciones,
-                    HabitatId = r.HabitatId,
-                    HabitatNombre = r.Nombre,
+                    ZonaId = r.ZonaId,
+                    NombreZona = r.NombreZona,
                 }).ToArray();
             }
         }

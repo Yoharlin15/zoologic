@@ -5,10 +5,11 @@ using feedback_zoologic.Features.Global.Application;
 using feedback_zoologic.Features.Usuarios.Infraestructure.Configurations;
 using feedback_zoologic.Features.Roles.Infraestructure.Configurations;
 using feedback_zoologic.Features.Especies.Infraestructure.Configurations;
-using feedback_zoologic.Features.Habitats.Infraestructure.Models;
 using feedback_zoologic.Features.Usuarios.Infraestructure.Models;
 using feedback_zoologic.Features.Especies.Infraestructure.Models;
-using feedback_zoologic.Features.Habitats.Infraestructure.Configurations;
+using feedback_zoologic.Features.Necropsias.Infraestructure.Configurations;
+using feedback_zoologic.Features.Zonas.Infraestructure.Models;
+using feedback_zoologic.Features.Zonas.Infraestructure.Configurations;
 
 
 public class TratamientoDbContext : BaseDbContext<TratamientoDbContext>
@@ -24,14 +25,16 @@ public class TratamientoDbContext : BaseDbContext<TratamientoDbContext>
     public DbSet<TratamientoDataModel> Tratamientos { get; set; }
     public DbSet<UsuarioDataModel> Usuarios { get; set; }
     public DbSet<EspecieDataModel> Especies { get; set; }
-    public DbSet<HabitatDataModel> Habitats { get; set; }
+    public DbSet<ZonaDataModel> Zonas { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new TratamientosModels.TratamientosConfiguration());
         modelBuilder.ApplyConfiguration(new UsuarioConfiguration());
         modelBuilder.ApplyConfiguration(new RolConfiguration());
         modelBuilder.ApplyConfiguration(new EspeciesConfiguration());
-        modelBuilder.ApplyConfiguration(new HabitatConfiguration());
+        modelBuilder.ApplyConfiguration(new ZonaConfiguration());
+        modelBuilder.ApplyConfiguration(new ExamenConfiguration());
+        modelBuilder.ApplyConfiguration(new NecropsiaConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }   

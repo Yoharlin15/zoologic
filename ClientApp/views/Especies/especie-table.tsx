@@ -11,7 +11,7 @@ import { AppQueryHooks } from "#hooks";
 import { Button } from "primereact/button";
 import { Calendar } from "primereact/calendar";
 import { Skeleton } from "primereact/skeleton";
-import { Routes, Redurces } from "#core";
+import { Routes, Reducers } from "#core";
 import { ContextMenu } from "primereact/contextmenu";
 import { useNavigate, generatePath } from "react-router-dom";
 import {
@@ -57,7 +57,7 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
     },
   ];
 
-  const [confirmState, confirmDispatch] = useReducer(Redurces.DialogsReducer, {
+  const [confirmState, confirmDispatch] = useReducer(Reducers.DialogsReducer, {
     id: 0,
     visible: false,
   });
@@ -71,8 +71,8 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
         filter: true,
         sortable: true,
         field: "EspecieId",
-        header: "EspecieId",
-        style: { minWidth: "18rem" },
+        header: "ID",
+        style: { minWidth: "10rem" },
       },
       {
         filter: true,
@@ -144,14 +144,14 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
   }, [especie.data, searchText]);
 
   return (
-    <div className="h-full">
+    <div className="h-full p-4">
       <ContextMenu
         ref={cm}
         model={menuModel}
         onHide={() => setSelectedEspecie(undefined)}
       />
       <CardTable<IEspecie>
-        title="Especies"
+        title="Lista de Especies  "
         columns={columns}
         value={filteredEspecies}
         skeletonLoading={especie.isPending}

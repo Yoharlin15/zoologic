@@ -18,11 +18,11 @@ namespace feedback_zoologic.Features.Empleados.Application.Common
         public string Direccion {get; set;} = null!;
         public DateTime FechaContratacion {get; set;}
         public int CargoId {get; set;}
-        public string Cargo {get; set;} = null!;
+        public string CargoNombre {get; set;} = null!;
         public void Mapping(Profile profile) 
         {
             profile.CreateMap<EmpleadoDataModel, EmpleadoResponse>()
-                .ForMember(dest => dest.Cargo, opt => opt.MapFrom(src => src.Cargos.Cargo));                    
+                .ForMember(dest => dest.CargoNombre, opt => opt.MapFrom(src => src.Cargos.Cargo));                    
 
             profile.CreateMap<EmpleadoDataModel, Empleado>()
                 .ForMember(dest => dest.Cargo, opt => opt.MapFrom(src => src.Cargos.Cargo));                    

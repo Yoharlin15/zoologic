@@ -29,7 +29,10 @@ namespace feedback_zoologic.Features.Tratamientos.Infrastructure.Persistence
 
         public async Task<Tratamiento[]> Get(CancellationToken cancellationToken = default)
         {
-            List<TratamientoDataModel>? result = await _context.Tratamientos 
+            List<TratamientoDataModel>? result = await _context.Tratamientos
+                .Include(t => t.especies)
+                .Include(t => t.zonas)
+                .Include(t => t.usuarios)
                 .ToListAsync(cancellationToken);
                 
             var mappedTratamientos = _mapper.Map<Tratamiento[]>(result);

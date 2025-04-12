@@ -9,12 +9,8 @@ namespace feedback_zoologic.Features.Especies.Domain
             string nombreComun,
             string familia,
             string clase, 
-            string sexo, 
-            string peso, 
-            DateTime fechaLlegada,
             string procedencia,
-            string observaciones,
-            int habitatId
+            int zonaId
         )
 
         {
@@ -23,12 +19,8 @@ namespace feedback_zoologic.Features.Especies.Domain
             NombreComun = nombreComun;
             Familia = familia;
             Clase = clase;
-            Sexo = sexo;
-            Peso = peso;
-            FechaLlegada = fechaLlegada;
             Procedencia = procedencia;
-            Observaciones = observaciones;
-            HabitatId = habitatId;
+            ZonaId = zonaId;
         }
 
         public int EspecieId { get; set; }
@@ -36,23 +28,9 @@ namespace feedback_zoologic.Features.Especies.Domain
         public string NombreComun { get; set; } = null!;
         public string Familia { get; set; } = null!;
         public string Clase { get; set; } = null!;
-        public string Sexo { get; set; } = null!;
-        public string Peso { get; set; } = null!;
-        public DateTime FechaLlegada { get; set; }
         public string Procedencia { get; set; } = null!;
-        public string Observaciones {get; set;} = null!;
-        public int HabitatId { get; set; }
-        public string Nombre { get; set; } = null!;
-
-        // Implementación de Entity
-        public int Id => EspecieId;
-        
-        public Especie UpdateOrganizacionId(int epecieId)
-        {
-            if(epecieId != 0)
-                EspecieId = epecieId;
-            return this;
-        }
+        public int ZonaId { get; set; }
+        public string NombreZona { get; set; } = null!;
     }
 }
 

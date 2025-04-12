@@ -12,23 +12,19 @@ namespace feedback_zoologic.Features.Especies.Application.Common
         public string NombreComun { get; set; } = null!;
         public string Familia { get; set; } = null!;
         public string Clase { get; set; } = null!;
-        public string Sexo { get; set; } = null!;
-        public string Peso { get; set; } = null!;
         public DateTime FechaLlegada { get; set; }
         public string Procedencia { get; set; } = null!;
-        public string Observaciones {get; set;} = null!;
-        public int HabitatId { get; set; }
-        public string HabitatNombre { get; set; } = null!;
+        public int ZonaId { get; set; }
+        public string NombreZona { get; set; } = null!;
 
         public void Mapping(Profile profile) 
         {
             profile.CreateMap<EspecieDataModel, EspecieResponse>()
-                .ForMember(dest => dest.HabitatNombre, opt => opt.MapFrom(src => src.habitats.NombreHabitat));  
+                .ForMember(dest => dest.NombreZona, opt => opt.MapFrom(src => src.zonas.NombreZona));  
 
             profile.CreateMap<EspecieDataModel, Especie>()
-                .ForMember(dest => dest.Nombre, opt => opt.MapFrom(src => src.habitats.NombreHabitat));
+                .ForMember(dest => dest.NombreZona, opt => opt.MapFrom(src => src.zonas.NombreZona));
         }
-        
     }
 }
 

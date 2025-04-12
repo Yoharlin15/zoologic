@@ -7,7 +7,7 @@ namespace feedback_zoologic.Features.Tratamientos.Domain
             int tratamientoId,
             string nombreTratamiento,
             int especieId,
-            string habitatId,
+            string zonaId,
             DateTime fechaEntrada,
             DateTime fechaSalida,
             int usuarioId,
@@ -18,7 +18,7 @@ namespace feedback_zoologic.Features.Tratamientos.Domain
             TratamientoId = tratamientoId;
             NombreTratamiento = nombreTratamiento;
             EspecieId = especieId;
-            HabitatId = habitatId;
+            ZonaId = zonaId;
             FechaEntrada = fechaEntrada;
             FechaSalida = fechaSalida;
             UsuarioId = usuarioId;
@@ -30,8 +30,8 @@ namespace feedback_zoologic.Features.Tratamientos.Domain
         public string NombreTratamiento { get; set; } = null!;
         public int EspecieId { get; set; }
         public string NombreComun { get; set; } = null!;
-        public string HabitatId { get; set; } = null!;
-        public string NombreHabitat { get; set; } = null!;
+        public string ZonaId { get; set; } = null!;
+        public string NombreZona { get; set; } = null!;
         public DateTime FechaEntrada { get; set; }
         public DateTime FechaSalida { get; set; }
         public int UsuarioId { get; set; }

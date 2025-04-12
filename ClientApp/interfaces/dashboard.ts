@@ -7,5 +7,5 @@ export interface ITotals {
   Especies: number;
   Empleados: number;
   Visitantes: number;
-  Habitats: number;
+  Zonas: number;
 }

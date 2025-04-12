@@ -59,15 +59,20 @@ const CardTable = <TB extends object>({
 
     return (
       <DataTable
-        value={value}
-        {...(tableProps as DataTableProps<TB[]>)}
-        
-        paginatorClassName={clsx(tableProps?.paginatorClassName, "border-none")}
-      >
-        {columns.map((column) => (
-          <Column key={column.field} {...column} />
-        ))}
-      </DataTable>
+      value={value}
+      className="border-1 border-gray-200 rounded-lg overflow-hidden"
+      {...(tableProps as DataTableProps<TB[]>)}
+      paginatorClassName={clsx(tableProps?.paginatorClassName, "border-none")}
+    >
+      {columns.map((column) => (
+        <Column
+          key={column.field}
+          {...column}
+          headerClassName="border border-gray-200"
+          bodyClassName="border border-gray-200"
+        />
+      ))}
+    </DataTable>
     );
   }, [columns, skeletonLoading, tableProps, value]);
 

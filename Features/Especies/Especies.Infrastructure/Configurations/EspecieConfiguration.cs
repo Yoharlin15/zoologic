@@ -12,14 +12,10 @@ namespace feedback_zoologic.Features.Especies.Infraestructure.Configurations {
             entity.Property(e => e.NombreComun).HasColumnType("text").HasMaxLength(255);
             entity.Property(e => e.Familia).HasColumnType("text").HasMaxLength(255);
             entity.Property(e => e.Clase).HasColumnType("text").HasMaxLength(255);
-            entity.Property(e => e.Sexo).HasColumnType("text").HasMaxLength(255);
-            entity.Property(e => e.Peso).HasColumnType("text").HasMaxLength(255);
-            entity.Property(e => e.FechaLlegada).HasColumnType("datetime");
             entity.Property(e => e.Procedencia).HasColumnType("text").HasMaxLength(255);
-            entity.Property(e => e.Observaciones).HasColumnType("text").HasMaxLength(255);
-
-            entity.HasOne(d => d.habitats).WithMany(p => p.especies)
-                   .HasForeignKey(d => d.HabitatId);
+            
+            entity.HasOne(d => d.zonas).WithMany(p => p.especies)
+                   .HasForeignKey(d => d.ZonaId);
        }
     }
 }

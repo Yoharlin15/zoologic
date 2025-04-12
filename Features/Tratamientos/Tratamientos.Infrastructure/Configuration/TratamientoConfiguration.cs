@@ -15,11 +15,8 @@ namespace feedback_zoologic.Features.Tratamientos.Infraestructure.Configurations
             entity.Property(e => e.UsuarioId).HasColumnType("int");
             entity.Property(e => e.Razon).HasColumnType("text").HasMaxLength(255);
             entity.Property(e => e.Procedencia).HasColumnType("text").HasMaxLength(255);
-
-            entity.HasOne(d => d.especies).WithMany(p => p.tratamientos)
-                .HasForeignKey(d => d.EspecieId);
                    
-            entity.HasOne(d => d.habitats).WithMany(p => p.tratamientos)
+            entity.HasOne(d => d.zonas).WithMany(p => p.tratamientos)
                 .HasForeignKey(d => d.HabitatId);
             
             entity.HasOne(d => d.usuarios).WithMany(p => p.tratamientos)

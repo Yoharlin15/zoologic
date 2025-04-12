@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using feedback_zoologic.Features.Global.Application;
 using feedback_zoologic.Features.Roles.Infraestructure.Models;
 using feedback_zoologic.Features.Roles.Infraestructure.Configurations;
-using feedback_zoologic.Features.Habitats.Infraestructure.Models;
-using feedback_zoologic.Features.Habitats.Infraestructure.Configurations;
 using feedback_zoologic.Features.Especies.Infraestructure.Configurations;
+using feedback_zoologic.Features.Zonas.Infraestructure.Configurations;
+using feedback_zoologic.Features.Necropsias.Infraestructure.Configurations;
+using feedback_zoologic.Features.Tratamientos.Infraestructure.Models;
+using feedback_zoologic.Features.Tratamientos.Infraestructure.Configurations;
 
 public class UsuarioDbContext : BaseDbContext<UsuarioDbContext>
 {
@@ -25,8 +27,11 @@ public class UsuarioDbContext : BaseDbContext<UsuarioDbContext>
     {
         modelBuilder.ApplyConfiguration(new UsuariosModels.UsuarioConfiguration());
         modelBuilder.ApplyConfiguration(new RolConfiguration());
-        modelBuilder.ApplyConfiguration(new HabitatConfiguration());
+        modelBuilder.ApplyConfiguration(new ZonaConfiguration());
         modelBuilder.ApplyConfiguration(new EspeciesConfiguration());
+        modelBuilder.ApplyConfiguration(new ExamenConfiguration());
+        modelBuilder.ApplyConfiguration(new NecropsiaConfiguration());
+        modelBuilder.ApplyConfiguration(new TratamientosConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }   

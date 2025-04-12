@@ -20,6 +20,11 @@ export default defineConfig(({ mode }) => {
         env.ZOOLOGIC_SERVER_URL,
       ),
     },
+    resolve: {
+      alias: {
+        leaflet: "leaflet/dist/leaflet.js",
+      },
+    },
     build: {
       minify: true,
       outDir: "./wwwroot",

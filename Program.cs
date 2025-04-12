@@ -2,10 +2,8 @@ using System.Text;
 using System.Reflection;
 using Microsoft.OpenApi.Models;
 using feedback_zoologic.Models;
-
 using feedback_zoologic.Features.Global.Application;
 using feedback_zoologic.Features.Global.Infraestructure;
-
 using feedback_zoologic.Features.Empleados.Domain;
 using feedback_zoologic.Features.Empleados.Application;
 using feedback_zoologic.Features.Empleados.Infrastructure.Persistence;
@@ -13,13 +11,19 @@ using feedback_zoologic.Features.Roles.Domain;
 using feedback_zoologic.Features.Roles.Infrastructure.Persistence;
 using feedback_zoologic.Features.Usuarios.Domain;
 using feedback_zoologic.Features.Usuarios.Infrastructure.Persistence;
-using feedback_zoologic.Features.Habitats.Domain;
-using feedback_zoologic.Features.Habitats.Infrastructure.Persistence;
 using feedback_zoologic.Features.Especies.Domain;
 using feedback_zoologic.Features.Especies.Infrastructure.Persistence;
 using feedback_zoologic.Features.Especies.Application;
 using feedback_zoologic.Features.Tratamientos.Domain;
 using feedback_zoologic.Features.Tratamientos.Infrastructure.Persistence;
+using feedback_zoologic.Features.Necropsias.Domain;
+using feedback_zoologic.Features.Necropsias.Infrastructure.Persistence;
+using feedback_zoologic.Features.Zonas.Domain;
+using feedback_zoologic.Features.Zonas.Infrastructure.Persistence;
+using feedback_zoologic.Features.Dietas.Infrastructure.Persistence;
+using feedback_zoologic.Features.Dietas.Domain;
+using feedback_zoologic.Features.Animales.Domain;
+using feedback_zoologic.Features.Animales.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -53,11 +57,20 @@ builder.Services.AddDBStorage<EspecieDbContext>(builder.Configuration,typeof(Pro
 builder.Services.AddTransient<IEspecieRepository, EspecieRepository>();
 builder.Services.AddTransient<IEspecieQueryRepository, EspecieRepository>();
 
-builder.Services.AddDBStorage<HabitatDbContext>(builder.Configuration,typeof(Program).Assembly);
-builder.Services.AddTransient<IHabitatRepository, HabitatRepository>();
+builder.Services.AddDBStorage<AnimalDbContext>(builder.Configuration,typeof(Program).Assembly);
+builder.Services.AddTransient<IAnimalRepository, AnimalRepository>();
+
+builder.Services.AddDBStorage<ZonaDbContext>(builder.Configuration,typeof(Program).Assembly);
+builder.Services.AddTransient<IZonaRepository, ZonaRepository>();
 
 builder.Services.AddDBStorage<TratamientoDbContext>(builder.Configuration,typeof(Program).Assembly);
 builder.Services.AddTransient<ITratamientoRepository, TratamientoRepository>();
+
+builder.Services.AddDBStorage<NecropsiaDbContext>(builder.Configuration,typeof(Program).Assembly);
+builder.Services.AddTransient<INecropsiaRepository, NecropsiaRepository>();
+
+builder.Services.AddDBStorage<DietaDbContext>(builder.Configuration,typeof(Program).Assembly);
+builder.Services.AddTransient<IDietaRepository, DietaRepository>();
 
 builder.Services.AddDBStorage<EmpleadoDbContext>(builder.Configuration,typeof(Program).Assembly);
 builder.Services.AddTransient<IEmpleadoRepository, EmpleadoRepository>();

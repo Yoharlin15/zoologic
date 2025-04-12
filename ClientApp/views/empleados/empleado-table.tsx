@@ -11,7 +11,7 @@ import React, {
   import { Button } from "primereact/button";
   import { Calendar } from "primereact/calendar";
   import { Skeleton } from "primereact/skeleton";
-  import { Routes, Redurces } from "#core";
+  import { Routes, Reducers } from "#core";
   import { ContextMenu } from "primereact/contextmenu";
   import { useNavigate, generatePath } from "react-router-dom";
   import {
@@ -56,7 +56,7 @@ import { fileURLToPath } from "url";
       },
     ];
   
-    const [confirmState, confirmDispatch] = useReducer(Redurces.DialogsReducer, {
+    const [confirmState, confirmDispatch] = useReducer(Reducers.DialogsReducer, {
       id: 0,
       visible: false,
     });
@@ -78,14 +78,14 @@ import { fileURLToPath } from "url";
           sortable: true,
           header: "Nombres",
           field: "Nombres",
-          style: { minWidth: "17rem" },
+          style: { minWidth: "12rem" },
         },
         {
           filter: true,
           sortable: true,
           header: "Apellidos",
           field: "Apellidos",
-          style: { minWidth: "16rem" },
+          style: { minWidth: "12rem" },
         },
         {
           filter: true,
@@ -106,7 +106,7 @@ import { fileURLToPath } from "url";
           sortable: true,
           header: "FechaContratacion",
           field: "FechaContratacion",
-          style: { minWidth: "18em" },
+          style: { minWidth: "15em" },
           
         }
 

@@ -10,8 +10,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
   const activeTabMap: Record<string, number> = React.useMemo(
     () => ({
       [Routes.DASHBOARD_ROUTE]: 0,
-      [Routes.ESPECIES_TYPES_ROUTE]: 1,
-      
+      [Routes.EJEMPLARES_ROUTE]: 1,
     }),
     []
   );
@@ -26,7 +25,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         src: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1741974209/Captura_de_pantalla_2025-03-14_133841-removebg-preview_ibdy4g.png",
       }}
       headerProps={{
-        title: "zoologic"
+        title: "ZOOLOGIC - Panel de Administrador"
       }}
       sideBarItems={[
         {
@@ -37,14 +36,14 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         },
         {
           icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304737/Wildlife_Animals_fxudan.png",
-          label: "Especies",
+          label: "Animales",
           onClick: () => 
-            navigate(`${Routes.ESPECIES_TYPES_ROUTE}`) ,
+            navigate(`${Routes.EJEMPLARES_ROUTE}`) ,
         },
         {
           icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304871/Health_ndhcm3.png",
           label: "Salud Animal",
-          onClick: () => navigate("/admin/projects"),
+          onClick: () => navigate(`${Routes.SALUD_ROUTE}`),
         },
         {
           icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304891/Meat_ydus0f.png",          
@@ -75,6 +74,11 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
           icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742305000/Tickets_w13ows.png",          
           label: "Venta de Boletos",
           onClick: () => navigate("/admin/"),
+        },
+        {
+          icon: "#",          
+          label: "Usuarios",
+          onClick: () => navigate(`${Routes.USUARIOS_ROUTE}`),
         },
         {
           icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742305023/Report_uj0rj6.png",         

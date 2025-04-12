@@ -1,6 +1,6 @@
 using feedback_zoologic.Features.Especies.Infraestructure.Models;
-using feedback_zoologic.Features.Habitats.Infraestructure.Models;
 using feedback_zoologic.Features.Usuarios.Infraestructure.Models;
+using feedback_zoologic.Features.Zonas.Infraestructure.Models;
 
 namespace feedback_zoologic.Features.Tratamientos.Infraestructure.Models {
 
@@ -16,7 +16,7 @@ namespace feedback_zoologic.Features.Tratamientos.Infraestructure.Models {
         public string Razon { get; set; } = null!;
         public string Procedencia {get ; set;} = null!;
         public virtual EspecieDataModel especies { get; set; } = null!;
-        public virtual HabitatDataModel habitats { get; set; } = null!;
+        public virtual ZonaDataModel zonas { get; set; } = null!;
         public virtual UsuarioDataModel usuarios { get; set; } = null!;
     }
 }

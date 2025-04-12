@@ -1,6 +1,14 @@
 {
   "Files": [
     {
+      "Id": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\InterVariable-CWi-zmRD.woff2",
+      "PackagePath": "staticwebassets\\assets\\InterVariable-CWi-zmRD.woff2"
+    },
+    {
+      "Id": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\InterVariable-Italic-d6KXgdvN.woff2",
+      "PackagePath": "staticwebassets\\assets\\InterVariable-Italic-d6KXgdvN.woff2"
+    },
+    {
       "Id": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\Poppins-Bold-qTAUjFF7.ttf",
       "PackagePath": "staticwebassets\\assets\\Poppins-Bold-qTAUjFF7.ttf"
     },
@@ -21,12 +29,12 @@
       "PackagePath": "staticwebassets\\assets\\Poppins-SemiBold-B_fPDAUb.ttf"
     },
     {
-      "Id": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\index-BtY9QkA7.css",
-      "PackagePath": "staticwebassets\\assets\\index-BtY9QkA7.css"
+      "Id": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\index--eQCS1Nu.css",
+      "PackagePath": "staticwebassets\\assets\\index--eQCS1Nu.css"
     },
     {
-      "Id": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\index-Btgh_OIy.js",
-      "PackagePath": "staticwebassets\\assets\\index-Btgh_OIy.js"
+      "Id": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\index-DzfvMMbB.js",
+      "PackagePath": "staticwebassets\\assets\\index-DzfvMMbB.js"
     },
     {
       "Id": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\primeicons-C6QP2o4f.woff2",

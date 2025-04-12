@@ -8,7 +8,9 @@ import {
 
   LoginView,
   DashboardView,
-  EspeciesList,
+  Ejemplares,
+  Salud,
+  UsuariosList
 
 } from "#views";
 
@@ -42,8 +44,16 @@ const Provider = () => {
           element: <DashboardView />,
         },
         {
-          path: Routes.ESPECIES_TYPES_ROUTE,
-          element: <EspeciesList />,
+          path: Routes.EJEMPLARES_ROUTE,
+          element: <Ejemplares />,
+        },
+        {
+          path: Routes.SALUD_ROUTE,
+          element: <Salud />,
+        },
+        {
+          path: Routes.USUARIOS_ROUTE,
+          element: <UsuariosList />,
         },
       ],
     },

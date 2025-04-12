@@ -10,5 +10,4 @@ namespace feedback_zoologic.Features.Empleados.Domain
         Task<int> AddAsync(Empleado empleado, CancellationToken cancellationToken = default);
         Task<int> UpdateAsync(Empleado empleados, CancellationToken cancellationToken = default);
     }
-
 }

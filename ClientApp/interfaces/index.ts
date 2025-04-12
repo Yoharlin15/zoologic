@@ -2,3 +2,8 @@ export type * from "./especie";
 export type * from "./common";
 export type * from "./dashboard";
 export type * from "./empleado";
+export type * from "./tratamiento";
+export type * from "./necropsias";
+export type * from "./zona";
+export type * from "./usuario";
+export type * from "./animal";

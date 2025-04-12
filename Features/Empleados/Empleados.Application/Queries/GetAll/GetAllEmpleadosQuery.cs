@@ -35,7 +35,7 @@ namespace feedback_zoologic.Features.Empleados.Application
                     Direccion = r.Direccion,
                     FechaContratacion = r.FechaContratacion,
                     CargoId = r.CargoId,
-                    Cargo = r.Cargo,
+                    CargoNombre = r.Cargo,
 
                 }).ToArray();
             }

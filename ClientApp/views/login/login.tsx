@@ -3,9 +3,12 @@ import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
 import { Form, InputText, FieldColumn } from "#components";
 import { Routes } from "#core";
+import ControlledInputText from "ClientApp/components/inputs/input-text/input-text";
 
 interface LoginFormData {
   Email: string;
+  Username: string;
+  Password: string;
 }
 
 const LoginContainer = ({ children }: React.PropsWithChildren) => (
@@ -24,10 +27,10 @@ const LoginSideImage = () => (
   >
     <h1 className="text-7xl font-bold mb-4">Zoologic</h1>
     <p className="text-lg text-justify max-w-md mb-4">
-      Zoologic es un sistema web integral diseñado para optimizar la gestión operativa del Parque Zoológico de Santo Domingo, en la República Dominicana. Esta plataforma permite a los empleados del zoológico gestionar de manera eficiente sus tareas diarias, desde el cuidado de los animales hasta la organización de sus rutinas. Además, Zoologic facilita el control y el seguimiento detallado de las especies que habitan en el zoológico, incluyendo su estado de salud, alimentación, reproducción y hábitats.
+    Zoologic es un sistema web integral diseñado para optimizar la gestión operativa del Parque Zoológico de Santo Domingo, en la República Dominicana. Esta plataforma permite a los empleados del zoológico gestionar de manera eficiente sus tareas diarias, desde el cuidado de los animales hasta la organización de sus rutinas. Además, Zoologic facilita el control y el seguimiento detallado de las especies que habitan en el zoológico, incluyendo su estado de salud, alimentación, reproducción y hábitats.
     </p>
     <p className="text-lg text-justify max-w-md mb-4">
-      El sistema busca mejorar la eficiencia operativa y fomentar la conservación de la biodiversidad. Zoologic está diseñado para garantizar un manejo adecuado de los recursos y contribuir al bienestar de las especies, al mismo tiempo que ofrece una experiencia más organizada y profesional para el personal del zoológico.
+    El sistema busca mejorar la eficiencia operativa y fomentar la conservación de la biodiversidad. Zoologic está diseñado para garantizar un manejo adecuado de los recursos y contribuir al bienestar de las especies, al mismo tiempo que ofrece una experiencia más organizada y profesional para el personal del zoológico.
     </p>
     <span className="text-xl font-semibold mb-4">"Protegiendo el futuro de la vida silvestre"</span>
     <div className="flex justify-content-center gap-4">
@@ -66,6 +69,8 @@ const Login = () => {
 
   const onSubmit = (data: LoginFormData) => {
     console.log("Datos del formulario:", data);
+    // Aquí podrías hacer login con fetch/axios y redireccionar si es exitoso
+    window.location.href = `${Routes.DASHBOARD_ROUTE}`;
   };
 
   return (
@@ -75,23 +80,28 @@ const Login = () => {
           <LoginHeader />
           <div className="flex flex-column">
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <FieldColumn label="Correo electrónico">
-                <InputText
-                  {...register("Email", { required: "El correo es obligatorio" })}
-                  aria-invalid={errors.Email ? "true" : "false"}
-                />
-                {errors.Email && (
-                  <span className="text-red-500 text-sm">
-                    {errors.Email.message}
-                  </span>
-                )}
+              <FieldColumn label="Nombre de usuario">
+              <ControlledInputText
+                name="Username"
+                control={control}
+                rules={{ required: "El nombre de usuario es obligatorio" }}
+              />
               </FieldColumn>
+
+              <FieldColumn label="Contraseña">
+                <ControlledInputText
+                  name="Password"
+                  type="password"
+                  control={control}
+                  rules={{ required: "La contraseña es obligatoria" }}
+                />
+              </FieldColumn>
+
               <Button
-                className="flex-1"
+                className="flex-1 mt-3"
                 loading={isSubmitting}
                 label="Iniciar Sesión"
                 type="submit"
-                onClick={() => window.location.href = `${Routes.ESPECIES_TYPES_ROUTE}`}
               />
             </Form>
           </div>

@@ -21,11 +21,7 @@ namespace feedback_zoologic.Features.Especies.Application.Commands.Update
                 request.NombreComun,
                 request.Familia,
                 request.Clase,
-                request.Sexo,
-                request.Peso,
-                request.FechaLlegada,
                 request.Procedencia,
-                request.Observaciones,
                 request.HabitatId              
             );
 

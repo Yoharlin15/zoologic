@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "xSZljG6VwQjdvrtshYHx5Xev8GWM0k4EHK0PNDMa7wI=",
+  "Hash": "q+U1fIoZs31RO4ACS6j3bqpzKDUWPgZhLahOljXImQk=",
   "Source": "zoologic.API",
   "BasePath": "_content/zoologic.API",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\index-Btgh_OIy.js",
+      "Identity": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\index--eQCS1Nu.css",
       "SourceId": "zoologic.API",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\",
       "BasePath": "_content/zoologic.API",
-      "RelativePath": "assets/index-Btgh_OIy.js",
+      "RelativePath": "assets/index--eQCS1Nu.css",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -33,15 +33,15 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\assets\\index-Btgh_OIy.js"
+      "OriginalItemSpec": "wwwroot\\assets\\index--eQCS1Nu.css"
     },
     {
-      "Identity": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\index-BtY9QkA7.css",
+      "Identity": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\index-DzfvMMbB.js",
       "SourceId": "zoologic.API",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\",
       "BasePath": "_content/zoologic.API",
-      "RelativePath": "assets/index-BtY9QkA7.css",
+      "RelativePath": "assets/index-DzfvMMbB.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -52,7 +52,45 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\assets\\index-BtY9QkA7.css"
+      "OriginalItemSpec": "wwwroot\\assets\\index-DzfvMMbB.js"
+    },
+    {
+      "Identity": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\InterVariable-CWi-zmRD.woff2",
+      "SourceId": "zoologic.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\",
+      "BasePath": "_content/zoologic.API",
+      "RelativePath": "assets/InterVariable-CWi-zmRD.woff2",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\InterVariable-CWi-zmRD.woff2"
+    },
+    {
+      "Identity": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\InterVariable-Italic-d6KXgdvN.woff2",
+      "SourceId": "zoologic.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\",
+      "BasePath": "_content/zoologic.API",
+      "RelativePath": "assets/InterVariable-Italic-d6KXgdvN.woff2",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\assets\\InterVariable-Italic-d6KXgdvN.woff2"
     },
     {
       "Identity": "C:\\Users\\Yohar\\Desktop\\zoologic\\feedback-zoologic\\wwwroot\\assets\\Poppins-Bold-qTAUjFF7.ttf",
