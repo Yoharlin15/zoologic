@@ -41,7 +41,7 @@ interface ISidebarItem {
 }
 
 interface ISidebarItemsProps {
-  
+
   items: ISidebarItem[];
 }
 
@@ -93,7 +93,7 @@ const MainLayout = ({
   };
 
   return (
-    
+
     <LayoutContainer>
       <LayoutSidebar>
         <Logo
@@ -272,7 +272,7 @@ const LayoutContent = ({
               <Ripple />
             </a>
           </li>
-         
+
           {Boolean(dropdown?.configAction) && (
             <li className="border-top-1 surface-border">
               <a
@@ -281,7 +281,7 @@ const LayoutContent = ({
         transition-duration-150 transition-colors w-full"
               >
                 <div className="flex text-base mr-2">
-                  
+
                 </div>
                 <span className=" font-medium">Configuración</span>
                 <Ripple />
@@ -295,7 +295,7 @@ const LayoutContent = ({
         transition-duration-150 transition-colors w-full"
             >
               <div className="flex text-base mr-2">
-                  <i className="pi pi-sign-out text-[28px]"></i>
+                <i className="pi pi-sign-out text-[28px]"></i>
               </div>
               <span className="font-medium">Cerrar sesión</span>
               <Ripple />

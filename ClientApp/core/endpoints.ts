@@ -19,18 +19,15 @@ const CONFIRMAR_CORREO = "ConfirmarCorreo";
 //Get Dashboard
 export const DASHBOARD_GET = `${DASHBOARD_BASE}/${GET}`;
 
-//Get Especies
+//CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;
-
-//Create Especie
 export const ESPECIES_CREATE = `${ESPECIES_BASE}/${CREATE}`;
 export const ESPECIES_CREATE_GET = `${ESPECIES_BASE}/${CREATE}`;
-
-//Update Especie
 export const ESPECIES_UPDATE = `${ESPECIES_BASE}/${UPDATE}`;
 
-//Get Animal
-export const ANIMALES_GET = `${ANIMALES_BASE}/${GET}`;
+//CRUD Animal
+export const ANIMALES_GET = `${ANIMALES_BASE}`;
+export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
 
 //Get Empleado
 export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;

@@ -11,9 +11,10 @@ import {
   SignupView,
   VerifyView,
   DashboardView,
-  Ejemplares,
+  AnimalesList,
   Salud,
-  UsuariosList
+  UsuariosList,
+  Ejemplares
 
 } from "#views";
 
@@ -21,7 +22,7 @@ interface IRouterContextProps {
   routes: RouteObject[];
 }
 
-const RouterContext = createContext<IRouterContextProps>({ 
+const RouterContext = createContext<IRouterContextProps>({
   routes: [],
 });
 
@@ -52,34 +53,34 @@ const Provider = () => {
     },
 
     {
-    path: "/",
-    element: <PrivateRoute />, // Aquí se valida si está autenticado
-    children: [
-      {
-        path: "/",
-        element: renderMainLayout(<Outlet />), // solo renderiza layout si pasa PrivateRoute
-        children: [
-          {
-            path: Routes.DASHBOARD_ROUTE,
-            element: <DashboardView />,
-          },
-          {
-            path: Routes.EJEMPLARES_ROUTE,
-            element: <Ejemplares />,
-          },
-          {
-            path: Routes.SALUD_ROUTE,
-            element: <Salud />,
-          },
-          {
-            path: Routes.USUARIOS_ROUTE,
-            element: <UsuariosList />,
-          },
-        ],
-      },
-    ],
-  },
-];
+      path: "/",
+      element: <PrivateRoute />, // Aquí se valida si está autenticado
+      children: [
+        {
+          path: "/",
+          element: renderMainLayout(<Outlet />), // solo renderiza layout si pasa PrivateRoute
+          children: [
+            {
+              path: Routes.DASHBOARD_ROUTE,
+              element: <DashboardView />,
+            },
+            {
+              path: Routes.EJEMPLARES_ROUTE,
+              element: <Ejemplares />,
+            },
+            {
+              path: Routes.SALUD_ROUTE,
+              element: <Salud />,
+            },
+            {
+              path: Routes.USUARIOS_ROUTE,
+              element: <UsuariosList />,
+            },
+          ],
+        },
+      ],
+    },
+  ];
 
   const router = createBrowserRouter(routes);
 

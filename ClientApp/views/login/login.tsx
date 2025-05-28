@@ -101,6 +101,10 @@ const Login = () => {
     });
   };
 
+  const handleSignupClick = () => {
+    navigate(Routes.SIGNUP_ROUTE, { replace: true });
+  };
+
   return (
     <div className="flex">
       <Toast ref={toast} />
@@ -134,7 +138,7 @@ const Login = () => {
                 className="flex-1 mt-3 ml-3 p-button-outlined"
                 label="Crear cuenta"
                 type="button"
-                onClick={() => (window.location.href = Routes.SIGNUP_ROUTE)}
+                onClick={handleSignupClick}
               />
             </Form>
           </div>

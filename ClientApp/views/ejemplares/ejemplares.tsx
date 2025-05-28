@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { AppQueryHooks } from "#hooks";
-import { renderTooltip } from "#utils";
-import { Reducers } from "#core";
 import { useParams } from "react-router-dom";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
 import EspeciesList from "../especies/especie-list";
@@ -16,21 +13,25 @@ const Ejemplares = () => {
   };
 
   return (
-    <div className="h-full">
+    <div className="flex flex-column h-full overflow-hidden">
       <TabView
-        className="h-full"
+        className="flex flex-column h-full"
         activeIndex={activeIndex}
         onTabChange={handleTabChange}
-        panelContainerClassName="p-0 h-full w-full"
+        panelContainerClassName="flex-grow-1 overflow-hidden"
+        renderActiveOnly={false}
       >
-        <TabPanel contentClassName="overflow-auto h-full" header="Animales">
-          <AnimalesList />
+        <TabPanel header="Animales" contentClassName="h-full overflow-hidden">
+          <div className="h-full overflow-hidden">
+            <AnimalesList />
+          </div>
         </TabPanel>
 
-        <TabPanel contentClassName="overflow-auto h-full" header="Especies">
-          <EspeciesList/>
+        <TabPanel header="Especies" contentClassName="h-full overflow-hidden">
+          <div className="h-full overflow-hidden">
+            <EspeciesList />
+          </div>
         </TabPanel>
-        
       </TabView>
     </div>
   );

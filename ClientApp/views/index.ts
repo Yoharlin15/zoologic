@@ -21,7 +21,7 @@ export { TratamientosList };
 import NecropsiasList from "./necropsias/necropsia-list";
 export { NecropsiasList };
 
-import Ejemplares  from "./ejemplares/ejemplares";
+import Ejemplares from "./ejemplares/ejemplares";
 export { Ejemplares };
 
 import Salud from "./salud/salud";

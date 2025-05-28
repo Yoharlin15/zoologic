@@ -123,7 +123,7 @@ const Card = ({
       className,
     )}
   >
-    <div className="text-2xl font-bold mb-2 p-3">{header}</div>
+    <div className="text-2xl font-bold mb-0 p-3">{header}</div>
     {children}
   </div>
 );
