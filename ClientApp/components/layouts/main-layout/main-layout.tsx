@@ -4,6 +4,8 @@ import { Ripple } from "primereact/ripple";
 import { useMediaQuery } from "usehooks-ts";
 import { classNames } from "primereact/utils";
 import { StyleClass } from "primereact/styleclass";
+import { useNavigate } from 'react-router-dom';
+import { Routes } from "#core";
 
 
 interface IMainLayoutProps {
@@ -75,7 +77,23 @@ const MainLayout = ({
   const { src, onClick, clickable, height = 180 } = logoProps;
   const btnRef = React.useRef(null);
 
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Borra el token
+    navigate(Routes.BASE_ROUTE, { replace: true }); // Redirige y reemplaza historial
+  }
+
+  const headerPropsWithLogout = {
+    ...headerProps,
+    dropdown: {
+      ...headerProps.dropdown,
+      logoutAction: headerProps.dropdown?.logoutAction || handleLogout,
+    },
+  };
+
   return (
+    
     <LayoutContainer>
       <LayoutSidebar>
         <Logo
@@ -96,7 +114,7 @@ const MainLayout = ({
       </LayoutSidebar>
       <LayoutContent
         btnRef={btnRef}
-        headerProps={headerProps}
+        headerProps={headerPropsWithLogout}
         removePadding={removePadding}
         withStyledContainer={withStyledContainer}
       >
@@ -216,11 +234,11 @@ const LayoutContent = ({
           >
             <div className="hidden lg:flex align-items-center">
               <div className="p-overlay-badge flex">
-                <img
+                {/* <img
                   alt="avatar"
                   src={dropdown?.avatarSrc}
                   style={{ width: 32, height: 32, borderRadius: 100 }}
-                />
+                /> */}
                 {/* <Badge severity="danger" /> */}
               </div>
               <div className="font-semibold text-lg text-900 flex ml-2">
@@ -232,11 +250,11 @@ const LayoutContent = ({
                 toggleClassName="chevron-down"
               />
               <div className="flex chevron-icon">
-                
+                <i className="pi pi-chevron-right text-[28px]"></i>
               </div>
             </div>
             <div className="lg:hidden">
-              
+              <i className="pi pi-ellipsis-v text-[28px]"></i>
             </div>
           </a>
         </StyleClass>
@@ -248,25 +266,13 @@ const LayoutContent = ({
         transition-duration-150 transition-colors w-full text-600 hover:text-900 "
             >
               <div className="flex text-base mr-2">
-                
+                <i className="pi pi-user text-[28px]"></i>
               </div>
               <span className="font-medium">Cuenta</span>
               <Ripple />
             </a>
           </li>
-          {/* <li className="border-top-1 surface-border">
-            <a
-              className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer
-        transition-duration-150 transition-colors w-full"
-            >
-              <div className="flex text-base mr-2 p-overlay-badge">
-                <Icon size={30} name="bell" />
-                <Badge severity="danger" />
-              </div>
-              <span className="font-medium">Notificaciones</span>
-              <Ripple />
-            </a>
-          </li> */}
+         
           {Boolean(dropdown?.configAction) && (
             <li className="border-top-1 surface-border">
               <a
@@ -289,7 +295,7 @@ const LayoutContent = ({
         transition-duration-150 transition-colors w-full"
             >
               <div className="flex text-base mr-2">
-                
+                  <i className="pi pi-sign-out text-[28px]"></i>
               </div>
               <span className="font-medium">Cerrar sesión</span>
               <Ripple />

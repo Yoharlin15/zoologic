@@ -8,7 +8,13 @@ const EMPLEADOS_BASE = "Empleado";
 const TRATAMIENTOS_BASE = "Tratamiento";
 const NECROPSIAS_BASE = "Necropsia";
 const ZONAS_BASE = "Zona";
-const USUARIOS_BASE = "Usuario"
+
+
+const USUARIOS_BASE = "Usuario";
+const LOGIN = "Login";
+const LOGOUT = "Logout";
+const REGISTER = "Register";
+const CONFIRMAR_CORREO = "ConfirmarCorreo";
 
 //Get Dashboard
 export const DASHBOARD_GET = `${DASHBOARD_BASE}/${GET}`;
@@ -40,5 +46,12 @@ export const ZONAS_GET = `${ZONAS_BASE}/${GET}`;
 
 //Get Usuarios 
 export const USUARIOS_GET = `${USUARIOS_BASE}/${GET}`;
+
+export const USUARIOS_SIGNUP = `${USUARIOS_BASE}/${REGISTER}/signup`;
+export const USUARIOS_LOGIN = `${USUARIOS_BASE}/${LOGIN}/login`;
+export const USUARIOS_LOGOUT = `${USUARIOS_BASE}/${LOGOUT}/logout`;
+export const USUARIOS_CONFIRMAR_CORREO = `${USUARIOS_BASE}/${CONFIRMAR_CORREO}/confirmar-correo`;
+
+
 
 

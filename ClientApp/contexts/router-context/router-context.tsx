@@ -1,12 +1,15 @@
 import React, { createContext, useContext, useCallback } from "react";
 import { Outlet, RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Routes } from "#core";
-
+import { isAuthenticated } from "#utils";
 import { CustomMainLayout } from "#components";
+import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
 
 import {
 
   LoginView,
+  SignupView,
+  VerifyView,
   DashboardView,
   Ejemplares,
   Salud,
@@ -35,29 +38,48 @@ const Provider = () => {
       element: <LoginView />,
       path: Routes.BASE_ROUTE,
     },
+
     {
-      path: "/",
-      element: renderMainLayout(<Outlet />),
-      children: [
-        {
-          path: Routes.DASHBOARD_ROUTE,
-          element: <DashboardView />,
-        },
-        {
-          path: Routes.EJEMPLARES_ROUTE,
-          element: <Ejemplares />,
-        },
-        {
-          path: Routes.SALUD_ROUTE,
-          element: <Salud />,
-        },
-        {
-          path: Routes.USUARIOS_ROUTE,
-          element: <UsuariosList />,
-        },
-      ],
+      id: "signup-view",
+      element: <SignupView />,
+      path: Routes.SIGNUP_ROUTE,
     },
-  ];
+
+    {
+      id: "verify-view",
+      element: <VerifyView />,
+      path: Routes.Verify_Route,
+    },
+
+    {
+    path: "/",
+    element: <PrivateRoute />, // Aquí se valida si está autenticado
+    children: [
+      {
+        path: "/",
+        element: renderMainLayout(<Outlet />), // solo renderiza layout si pasa PrivateRoute
+        children: [
+          {
+            path: Routes.DASHBOARD_ROUTE,
+            element: <DashboardView />,
+          },
+          {
+            path: Routes.EJEMPLARES_ROUTE,
+            element: <Ejemplares />,
+          },
+          {
+            path: Routes.SALUD_ROUTE,
+            element: <Salud />,
+          },
+          {
+            path: Routes.USUARIOS_ROUTE,
+            element: <UsuariosList />,
+          },
+        ],
+      },
+    ],
+  },
+];
 
   const router = createBrowserRouter(routes);
 

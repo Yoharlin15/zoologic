@@ -8,4 +8,6 @@ export const TRATAMIENTOS_ROUTE = "tratamientos";
 export const NECROPSIAS_ROUTE = "necropsias";
 export const SALUD_ROUTE = "salud";
 export const USUARIOS_ROUTE = "usuarios"
+export const SIGNUP_ROUTE = "signup";
+export const Verify_Route = "verificar";
 

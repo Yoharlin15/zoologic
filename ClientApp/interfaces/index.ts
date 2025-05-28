@@ -7,3 +7,4 @@ export type * from "./necropsias";
 export type * from "./zona";
 export type * from "./usuario";
 export type * from "./animal";
+export type * from "./account";

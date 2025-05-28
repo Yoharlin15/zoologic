@@ -1,5 +1,9 @@
 export { LoginView } from "./login";
 
+export { SignupView } from "./signup";
+
+export { VerifyView} from "./verificar";
+
 export { DashboardView } from "./dashboard";
 
 import EspeciesList from "./especies/especie-list";
@@ -25,3 +29,6 @@ export { Salud };
 
 import UsuariosList from "./usuarios/usuario-list";
 export { UsuariosList };
+
+
+

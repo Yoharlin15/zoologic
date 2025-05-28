@@ -1,13 +1,16 @@
-import React from "react";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "primereact/button";
 import { Form, InputText, FieldColumn } from "#components";
 import { Routes } from "#core";
 import ControlledInputText from "ClientApp/components/inputs/input-text/input-text";
+import { Toast } from "primereact/toast";
+import { useLoginUsuario } from "ClientApp/hooks/useMutation/useMutationSignup";
+import { LoginDatos } from "#interfaces";
+import { useNavigate } from "react-router-dom";
 
 interface LoginFormData {
-  Email: string;
-  Username: string;
+  Correo: string;
   Password: string;
 }
 
@@ -60,6 +63,7 @@ const LoginHeader = () => (
 );
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
@@ -67,27 +71,51 @@ const Login = () => {
     formState: { isSubmitting, errors },
   } = useForm<LoginFormData>();
 
+  const toast = useRef<Toast>(null); // para mostrar mensajes
+  const { mutate: loginUsuario, isPending } = useLoginUsuario();
+
   const onSubmit = (data: LoginFormData) => {
-    console.log("Datos del formulario:", data);
-    // Aquí podrías hacer login con fetch/axios y redireccionar si es exitoso
-    window.location.href = `${Routes.DASHBOARD_ROUTE}`;
+    const datos: LoginDatos = {
+      Correo: data.Correo,
+      Password : data.Password,
+    };
+
+    loginUsuario(datos, {
+      onSuccess: (res: any) => {
+        toast.current?.show({
+          severity: "success",
+          summary: "Éxito",
+          detail: res.mensaje || "Has iniciado sesión correctamente.",
+        });
+
+      setTimeout(() => navigate(Routes.DASHBOARD_ROUTE, { replace: true }), 2000);
+      },
+
+      onError: (error: any) => {
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: error.message || "Hubo un error al iniciar sesión.",
+        });
+      },
+    });
   };
 
   return (
     <div className="flex">
+      <Toast ref={toast} />
       <LoginContainer>
         <LoginCard>
           <LoginHeader />
           <div className="flex flex-column">
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <FieldColumn label="Nombre de usuario">
-              <ControlledInputText
-                name="Username"
-                control={control}
-                rules={{ required: "El nombre de usuario es obligatorio" }}
-              />
+              <FieldColumn label="Correo electrónico">
+                <ControlledInputText
+                  name="Correo"
+                  control={control}
+                  rules={{ required: "El correo es obligatorio" }}
+                />
               </FieldColumn>
-
               <FieldColumn label="Contraseña">
                 <ControlledInputText
                   name="Password"
@@ -96,12 +124,17 @@ const Login = () => {
                   rules={{ required: "La contraseña es obligatoria" }}
                 />
               </FieldColumn>
-
               <Button
                 className="flex-1 mt-3"
                 loading={isSubmitting}
                 label="Iniciar Sesión"
                 type="submit"
+              />
+              <Button
+                className="flex-1 mt-3 ml-3 p-button-outlined"
+                label="Crear cuenta"
+                type="button"
+                onClick={() => (window.location.href = Routes.SIGNUP_ROUTE)}
               />
             </Form>
           </div>
