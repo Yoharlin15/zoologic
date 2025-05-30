@@ -30,5 +30,14 @@ export { Salud };
 import UsuariosList from "./usuarios/usuario-list";
 export { UsuariosList };
 
+import AnimalDetailView from "./animales/animal-datails-view";
+export { AnimalDetailView };
+
+import InventarioList from "./inventario/inventario-list";
+export { InventarioList };
+
+import HabitatList from "./habitats/habitat-list";
+export { HabitatList };
+
 
 

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import MainLayout from "./main-layout";
 import { Routes } from "#core";
 import { LayoutUtils } from "#utils";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
   const navigate = useNavigate();
@@ -10,16 +11,21 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
   const activeTabMap: Record<string, number> = React.useMemo(
     () => ({
       [Routes.DASHBOARD_ROUTE]: 0,
-      [Routes.EJEMPLARES_ROUTE]: 1,
+      [Routes.EMPLEADOS_ROUTE]: 1,
+      [Routes.EJEMPLARES_ROUTE]: 2,
+      [Routes.SALUD_ROUTE]: 3,
+      [Routes.INVENTARIO_ROUTE]: 4,
+      [Routes.HABITAT_ROUTE]: 5,
     }),
     []
   );
+
   return (
     <MainLayout
-    activeTabIndex={LayoutUtils.getTabIndexFromPathname(
-      pathname,
-      activeTabMap
-    )}
+      activeTabIndex={LayoutUtils.getTabIndexFromPathname(
+        pathname,
+        activeTabMap
+      )}
       logoProps={{
         clickable: true,
         src: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1741974209/Captura_de_pantalla_2025-03-14_133841-removebg-preview_ibdy4g.png",
@@ -29,59 +35,62 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
       }}
       sideBarItems={[
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304833/Home_dcqk1d.png",
+          icon: <FontAwesomeIcon icon="home" />,
           label: "Home",
-          onClick: () =>
-          navigate(`${Routes.DASHBOARD_ROUTE}`) ,
+          onClick: () => navigate(`${Routes.DASHBOARD_ROUTE}`),
         },
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304737/Wildlife_Animals_fxudan.png",
+          icon: <FontAwesomeIcon icon="user-tie" />,
+          label: "Empleados",
+          onClick: () => navigate(`${Routes.EMPLEADOS_ROUTE}`),
+        },
+        {
+          icon: <FontAwesomeIcon icon="paw" />,
           label: "Animales",
-          onClick: () => 
-            navigate(`${Routes.EJEMPLARES_ROUTE}`) ,
+          onClick: () => navigate(`${Routes.EJEMPLARES_ROUTE}`),
         },
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304871/Health_ndhcm3.png",
+          icon: <FontAwesomeIcon icon="heart-pulse" />,
           label: "Salud Animal",
           onClick: () => navigate(`${Routes.SALUD_ROUTE}`),
         },
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304891/Meat_ydus0f.png",          
+          icon: <FontAwesomeIcon icon="bowl-food" />,
           label: "Dietas",
-          onClick: () => navigate("/admin/users"),
+          onClick: () => navigate(`${Routes.INVENTARIO_ROUTE}`),
         },
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304919/Lake_tfidcc.png",          
+          icon: <FontAwesomeIcon icon="tree" />,
           label: "Habitats",
-          onClick: () => navigate(""),
+          onClick: () => navigate(`${Routes.HABITAT_ROUTE}`),
         },
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304948/Lion_uhpmqu.png",          
+          icon: <FontAwesomeIcon icon="hippo" />,
           label: "Comportamiento",
           onClick: () => navigate(""),
         },
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742304976/Training_muzn4r.png",          
+          icon: <FontAwesomeIcon icon="person-chalkboard" />,
           label: "Adiestramiento",
           onClick: () => navigate(""),
         },
         {
-          icon: "",          
+          icon: <FontAwesomeIcon icon="users" />,
           label: "Visitantes",
           onClick: () => navigate(""),
         },
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742305000/Tickets_w13ows.png",          
+          icon: <FontAwesomeIcon icon="ticket" />,
           label: "Venta de Boletos",
           onClick: () => navigate("/admin/"),
         },
         {
-          icon: "#",          
+          icon: <FontAwesomeIcon icon="user-gear" />,
           label: "Usuarios",
           onClick: () => navigate(`${Routes.USUARIOS_ROUTE}`),
         },
         {
-          icon: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742305023/Report_uj0rj6.png",         
+          icon: <FontAwesomeIcon icon="chart-column" />,
           label: "Reportes",
           onClick: () => navigate("/admin/"),
         },

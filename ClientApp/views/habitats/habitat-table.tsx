@@ -5,7 +5,7 @@ import React, {
   useReducer,
 } from "react";
 import { debounce } from "radash";
-import { IAnimal } from "#interfaces";
+import { IHabitat } from "#interfaces";
 import { AppQueryHooks } from "#hooks";
 import { Button } from "primereact/button";
 import { ContextMenu } from "primereact/contextmenu";
@@ -17,18 +17,17 @@ import {
 } from "primereact/datatable";
 
 import { CardTable, ICardTableProps } from "../../components/card-table";
-import dayjs from "dayjs";
 
-import AnimalSidebarCreate from "./animal-sidebar-create";
+// import HabitatSidebarCreate from "./Habitat-sidebar-create";
 import { Reducers } from "#core";
 
-interface IAnimalTableProps {
+interface IHabitatTableProps {
   dispatch: React.Dispatch<any>;
 }
 
-const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
-  const animal = AppQueryHooks.useFetchAnimales();
-  const [selectedAnimal, setSelectedAnimal] = useState<IAnimal>();
+const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
+  const Habitat = AppQueryHooks.useFetchHabitats();
+  const [selectedHabitat, setSelectedHabitat] = useState<IHabitat>();
 
   const navigate = useNavigate();
 
@@ -37,28 +36,19 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
 
   const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
   const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
-  const [selectedAnimalId, setSelectedAnimalId] = useState<number | null>(null);
+  const [selectedHabitatId, setSelectedHabitatId] = useState<number | null>(null);
 
   const menuModel = [
     {
       label: "Editar",
       icon: "pi pi-pencil",
       command: () => {
-        if (selectedAnimal) {
-          setSelectedAnimalId(selectedAnimal.AnimalId);
+        if (selectedHabitat) {
+          setSelectedHabitatId(selectedHabitat.HabitatId);
           setSidebarUpdateVisible(true); // Abre el sidebar
         }
       },
     },
-    {
-      label: "Detalles",
-      icon: "pi pi-objects-column",
-      command: () => {
-        if (selectedAnimal) {
-          navigate(`/animales/${selectedAnimal.AnimalId}`);
-        }
-      },
-    }
   ];
 
   const optionsMenuModel = [
@@ -92,75 +82,55 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
   const [searchText, setSearchText] = useState("");
   const [filters, setFilters] = useState<DataTableFilterMeta>({});
 
-  const columns = useMemo<ICardTableProps<IAnimal>["columns"]>(
+  const columns = useMemo<ICardTableProps<IHabitat>["columns"]>(
     () => [
       {
         filter: true,
         sortable: true,
-        header: "Alias",
-        field: "Alias",
+        header: "Habitat",
+        field: "Nombre",
         style: { minWidth: "12rem" },
       },
 
       {
         filter: true,
         sortable: true,
-        header: "Especie",
-        field: "NombreCientifico",
+        header: "Cantidad maxima de Animales",
+        field: "CantidadAnimales",
         style: { minWidth: "12rem" },
       },
 
       {
         filter: true,
         sortable: true,
-        header: "Sexo",
-        field: "Sexo",
+        header: "Estado",
+        field: "NombreEstado",
         style: { minWidth: "10rem" },
-      },
-
-      {
-        filter: true,
-        sortable: true,
-        header: "Fecha de Llegada",
-        field: "FechaNacimiento",
-        style: { minWidth: "12rem" },
-        body: (rowData: IAnimal | null) => {
-          if (!rowData?.FechaNacimiento) return "";
-          return dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY");
-        },
-      },
-
-      {
-        filter: true,
-        sortable: true,
-        header: "Zona",
-        field: "NombreZona",
-        style: { minWidth: "15em" },
       },
     ],
     []
   );
 
-  const filteredAnimales = useMemo(() => {
-    if (!Array.isArray(animal.data)) return [];
-    return animal.data.filter((t) =>
-      t.Sexo?.toLowerCase().includes(searchText.toLowerCase())
+  const filteredHabitates = useMemo(() => {
+    if (!Array.isArray(Habitat.data)) return [];
+    return Habitat.data.filter((t) =>
+      t.Nombre?.toLowerCase().includes(searchText.toLowerCase())
     );
-  }, [animal.data, searchText]);
+  }, [Habitat.data, searchText]);
 
   return (
     <div className="h-full">
       <ContextMenu
         ref={cm}
         model={menuModel}
-        onHide={() => setSelectedAnimal(undefined)}
+        onHide={() => setSelectedHabitat(undefined)}
       />
       <Menu model={optionsMenuModel} popup ref={menu} />
-      <CardTable<IAnimal>
-        title="Lista de Animales"
+      <CardTable<IHabitat>
+        title="Lista de Habitats"
         columns={columns}
-        value={filteredAnimales}
-        skeletonLoading={animal.isPending}
+        value={filteredHabitates}
+        skeletonLoading={Habitat.isPending}
         onChangeSearch={debounce({ delay: 500 }, (e) =>
           setSearchText(e.target.value)
         )}
@@ -168,12 +138,13 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
           <Button
             key="btn_add"
             onClick={() => {
-              setSelectedAnimalId(null);
+              setSelectedHabitatId(null);
               setSidebarCreateVisible(true);
             }}
-            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
-            label="Nuevo Animal"
-          />,
+          >
+            <i className="pi pi-plus mr-2"></i>
+            <span className="hidden md:flex">Nuevo Habitat</span>
+          </Button>,
 
           <Button
             key="btn_menu"
@@ -188,23 +159,23 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
           rows: 8,
           size: "small",
           filters,
-          dataKey: "AnimalId",
-          loading: animal.isFetching,
-          paginator: filteredAnimales.length > 8,
-          contextMenuSelection: selectedAnimal,
+          dataKey: "HabitatId",
+          loading: Habitat.isFetching,
+          paginator: filteredHabitates.length > 8,
+          contextMenuSelection: selectedHabitat,
           onContextMenu: (e) => cm.current?.show(e.originalEvent),
           onContextMenuSelectionChange: (
-            e: DataTableSelectionSingleChangeEvent<IAnimal[]>
-          ) => setSelectedAnimal(e.value),
+            e: DataTableSelectionSingleChangeEvent<IHabitat[]>
+          ) => setSelectedHabitat(e.value),
         }}
       />
-      <AnimalSidebarCreate
+      {/* <HabitatSidebarCreate
         visible={sidebarCreateVisible}
         onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedAnimalId ?? undefined}
-      />
+        especieId={selectedHabitatId ?? undefined}
+      /> */}
     </div>
   );
 };
 
-export default AnimalTable;
+export default HabitatTable;

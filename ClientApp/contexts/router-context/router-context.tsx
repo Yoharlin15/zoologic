@@ -14,7 +14,11 @@ import {
   AnimalesList,
   Salud,
   UsuariosList,
-  Ejemplares
+  Ejemplares,
+  AnimalDetailView,
+  InventarioList,
+  EmpleadosList,
+  HabitatList
 
 } from "#views";
 
@@ -65,6 +69,10 @@ const Provider = () => {
               element: <DashboardView />,
             },
             {
+              path: Routes.EMPLEADOS_ROUTE,
+              element: <EmpleadosList />,
+            },
+            {
               path: Routes.EJEMPLARES_ROUTE,
               element: <Ejemplares />,
             },
@@ -73,8 +81,24 @@ const Provider = () => {
               element: <Salud />,
             },
             {
+              path: Routes.INVENTARIO_ROUTE,
+              element: <InventarioList />,
+            },
+            {
+              path: Routes.INVENTARIO_ROUTE,
+              element: <AnimalesList />,
+            },
+            {
               path: Routes.USUARIOS_ROUTE,
               element: <UsuariosList />,
+            },
+            {
+              path: Routes.DETAILS_ROUTE,
+              element: <AnimalDetailView />,
+            },
+            {
+              path: Routes.HABITAT_ROUTE,
+              element: <HabitatList />
             },
           ],
         },

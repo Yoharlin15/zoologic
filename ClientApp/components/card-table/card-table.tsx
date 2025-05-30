@@ -68,6 +68,7 @@ const CardTable = <TB extends object>({
         <Column
           key={column.field}
           {...column}
+          filter={false}
           headerClassName="border border-gray-200"
           bodyClassName="border border-gray-200"
         />

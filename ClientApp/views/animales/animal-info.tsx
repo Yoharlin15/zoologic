@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
-import EspeciesList from "../especies/especie-list";
-import AnimalesList from "../animales/animal-list";
+import DietasList from "../dietas/dieta-list";
+import TratamientosList from "../tratamientos/tratamiento-list";
 
-const Ejemplares = () => {
+const AnimalInfo = () => {
+  const { projectId } = useParams();
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleTabChange = (e: TabViewTabChangeEvent) => {
@@ -20,15 +21,15 @@ const Ejemplares = () => {
         panelContainerClassName="flex-grow-1 overflow-hidden"
         renderActiveOnly={false}
       >
-        <TabPanel header="Animales" contentClassName="h-full overflow-hidden">
+        <TabPanel header="Dietas" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
-            <AnimalesList />
+            <DietasList />
           </div>
         </TabPanel>
 
-        <TabPanel header="Especies" contentClassName="h-full overflow-hidden">
+        <TabPanel header="Tratamientos" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
-            <EspeciesList />
+            <TratamientosList />
           </div>
         </TabPanel>
       </TabView>
@@ -36,4 +37,4 @@ const Ejemplares = () => {
   );
 };
 
-export default Ejemplares;
+export default AnimalInfo;

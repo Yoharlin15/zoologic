@@ -4,3 +4,4 @@ export * as LayoutUtils from "./layout-utils";
 export * as ApiUtils from "./api-utils";
 export * as WarnUtils from "./warn-utils";
 export * as isAuthenticated from "./isAuthenticated";
+export * as setupFontAwesomeIcons from "./font-awesome-icons";

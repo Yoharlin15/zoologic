@@ -6,3 +6,5 @@ export * from "./useFetchTratamientos";
 export * from "./useFetchNecropsias"
 export * from "./useFetchZonas";
 export * from "./useFetchUsuarios";
+export * from "./useFetchInventario";
+export * from "./useFetchHabitats";

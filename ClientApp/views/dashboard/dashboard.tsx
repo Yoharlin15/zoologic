@@ -9,7 +9,6 @@ const Dashboard = () => {
   return (
     <DashboardContainer>
       <StatsCards isPending={isPending} totales={data?.Totales} />
-      <EmpleadosList/>
       <MapaInteractivo/>
     </DashboardContainer>
   );

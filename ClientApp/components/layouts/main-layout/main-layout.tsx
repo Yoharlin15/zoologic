@@ -10,18 +10,10 @@ import { Routes } from "#core";
 
 interface IMainLayoutProps {
   logoProps: ILogoProps;
-  //     renderActions?: () => React.ReactNode;
   activeTabIndex?: number;
   removePadding?: boolean;
-  //   breadcrumb: {
-  //     items: {
-  //       href?: string;
-  //       title: string | React.ReactNode;
-  //     }[];
   headerProps: IHeaderProps;
-  //     hide?: boolean;
   children: React.ReactNode;
-  //   };
   sideBarItems: ISidebarItem[];
   withStyledContainer?: boolean;
 }
@@ -34,14 +26,13 @@ interface ILogoProps {
 }
 
 interface ISidebarItem {
-  icon: string;
+  icon: string | React.ReactNode;
   label: string;
   active?: boolean;
   onClick?: () => void;
 }
 
 interface ISidebarItemsProps {
-
   items: ISidebarItem[];
 }
 
@@ -70,7 +61,6 @@ const MainLayout = ({
   headerProps,
   sideBarItems,
   activeTabIndex,
-  //   breadcrumb,
   withStyledContainer,
   removePadding = false,
 }: IMainLayoutProps) => {
@@ -80,9 +70,9 @@ const MainLayout = ({
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem('token'); // Borra el token
-    navigate(Routes.BASE_ROUTE, { replace: true }); // Redirige y reemplaza historial
-  }
+    localStorage.removeItem('token');
+    navigate(Routes.BASE_ROUTE, { replace: true });
+  };
 
   const headerPropsWithLogout = {
     ...headerProps,
@@ -93,7 +83,6 @@ const MainLayout = ({
   };
 
   return (
-
     <LayoutContainer>
       <LayoutSidebar>
         <Logo
@@ -131,9 +120,15 @@ const LayoutContainer = ({ children }: React.PropsWithChildren) => (
 const LayoutSidebar = ({ children }: React.PropsWithChildren) => (
   <div
     id="app-sidebar"
-    className="surface-section h-screen flex flex-shrink-0 sticky left-0 top-0 z-1 border-right-1 surface-border select-none"
+    className="h-screen hidden lg:flex flex-shrink-0 sticky left-0 top-0 z-1 border-right-1 surface-border select-none"
+    style={{ 
+      width: '280px',
+      boxShadow: '4px 0 10px rgba(0, 0, 0, 0.05)',
+      transition: 'all 0.3s ease',
+      backgroundColor: '#f5f5f5' // Fondo gris claro
+    }}
   >
-    <div className="flex flex-column h-full">{children}</div>
+    <div className="flex flex-column h-full w-full">{children}</div>
   </div>
 );
 
@@ -154,42 +149,54 @@ const Logo = ({ src, height, onClick, clickable = false }: ILogoProps) => (
 
 const SidebarItems = ({ items }: ISidebarItemsProps) => {
   const isLaptop = useMediaQuery("(max-width: 1200px)");
+  
   return (
-    <div className="overflow-y-auto px-3 py-5">
-      <ul className="list-none m-0 p-0 flex flex-column justify-content-between xl:justify-content-start mb-5 xl:mb-0">
+    <div className="overflow-y-auto px-3 py-5 flex-1">
+      <ul className="list-none m-0 p-0 flex flex-column gap-1">
         {items.map((item) => (
-          <li key={item.label} className={item.label}>
-            {isLaptop && renderTooltip(item.label, item.label, "right")}
+          <li key={item.label}>
             <a
               onClick={item.onClick}
               className={classNames(
-                "xl:w-15rem flex align-items-center cursor-pointer p-3 border-round hover:surface-200 transition-duration-150 transition-colors mb-2",
+                "flex align-items-center cursor-pointer p-3 border-round transition-all transition-duration-200",
                 {
-                  "surface-200": item.active,
+                  "bg-green-100": item.active, // Verde claro cuando está activo
+                  "text-green-700": item.active, // Texto verde oscuro para contraste
+                  "hover:surface-100": !item.active,
+                  "w-full": true
                 }
               )}
             >
-              <div
-                className={classNames("flex xl:mr-1", {
-                  "text-700": item.active,
-                  "text-600": !item.active,
-                })}
-              >
-                <img
-                  src={item.icon} // Aquí pasas la ruta del icono personalizado
-                  alt={item.label}
-                  style={{ width: "40px", marginRight: "8px" }}
-                />
-
+              <div className="flex align-items-center justify-content-center" style={{ width: '40px' }}>
+                {typeof item.icon === 'string' ? (
+                  <img
+                    src={item.icon}
+                    alt={item.label}
+                    style={{ 
+                      width: "24px",
+                      filter: item.active ? "brightness(0) saturate(100%) invert(39%) sepia(71%) saturate(576%) hue-rotate(87deg) brightness(92%) contrast(89%)" : "none"
+                    }}
+                  />
+                ) : (
+                  <div style={{ 
+                    fontSize: '1.25rem',
+                    color: item.active ? '#15803d' : 'var(--text-color-secondary)', // Verde oscuro cuando está activo
+                    width: '24px',
+                    display: 'flex',
+                    justifyContent: 'center'
+                  }}>
+                    {item.icon}
+                  </div>
+                )}
               </div>
-              <span
-                className={classNames("font-medium hidden xl:block", {
-                  "text-700": item.active,
+              {!isLaptop && (
+                <span className={classNames("font-medium ml-3", {
+                  "text-green-700": item.active,
                   "text-600": !item.active,
-                })}
-              >
-                {item.label}
-              </span>
+                })}>
+                  {item.label}
+                </span>
+              )}
               <Ripple />
             </a>
           </li>
@@ -208,7 +215,7 @@ const LayoutContent = ({
 }: ILayoutContentProps) => {
   const { title, dropdown } = headerProps;
   const renderStyledContainer = (children: React.ReactNode) => (
-    <div className="border-1 border-solid surface-border border-round surface-section flex-auto w-full">
+    <div className="border-3 border-solid surface-border border-round surface-section flex-auto w-full">
       {children}
     </div>
   );

@@ -8,3 +8,6 @@ export type * from "./zona";
 export type * from "./usuario";
 export type * from "./animal";
 export type * from "./account";
+export type * from "./inventario";
+export type * from "./dieta";
+export type * from "./habitat";

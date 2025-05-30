@@ -4,4 +4,6 @@ export { default as AnimalApi } from "./animal-api";
 export { default as EmpleadoApi } from "./empleados-api";
 export { default as TratamientoApi } from "./tratamiento-api";
 export { default as ZonaApi} from "./zona-api";
+export { default as InventarioApi } from "./inventario-api";
+export { default as HabitatApi } from "./habitat-api";
 export * as UsuarioApi from "./usuarios-api";

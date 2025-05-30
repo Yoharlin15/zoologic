@@ -70,68 +70,39 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
       {
         filter: true,
         sortable: true,
-        field: "EspecieId",
-        header: "ID",
-        style: { minWidth: "10rem" },
-      },
-      {
-        filter: true,
-        sortable: true,
         header: "Nombre Cientifico",
         field: "NombreCientifico",
-        style: { minWidth: "18rem" },
+        style: { minWidth: "15rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Nombre Comun",
         field: "NombreComun",
-        style: { minWidth: "18rem" },
+        style: { minWidth: "15rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Familia",
-        field: "Familia",
-        style: { minWidth: "18rem" },
+        field: "FamiliaNombre",
+        style: { minWidth: "12rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Clase",
-        field: "Clase",
-        style: { minWidth: "18rem" },
+        field: "ClaseNombre",
+        style: { minWidth: "12rem" },
       },
-      {
-        filter: true,
-        sortable: true,
-        header: "Sexo",
-        field: "Sexo",
-        style: { minWidth: "18rem" },
-      },
-      {
-        filter: true,
-        sortable: true,
-        header: "Fecha de Llegada",
-        field: "FechaLlegada", 
-        type: "date", 
-        dateFormat: "DD/MM/YYYY", 
-        style: { minWidth: "18rem" },
-      },
+
       {
         filter: true,
         sortable: true,
         header: "Procedencia",
-        field: "Procedencia",
-        style: { minWidth: "18rem" },
+        field: "ProcedenciaNombre",
+        style: { minWidth: "15rem" },
       },
-      {
-        filter: true,
-        sortable: true,
-        header: "Observaciones",
-        field: "Observaciones",
-        style: { minWidth: "25rem" },
-      }
     ],
     []
   );
@@ -144,7 +115,7 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
   }, [especie.data, searchText]);
 
   return (
-    <div className="h-full p-4">
+    <div className="h-full">
       <ContextMenu
         ref={cm}
         model={menuModel}

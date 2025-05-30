@@ -10,4 +10,7 @@ export const SALUD_ROUTE = "salud";
 export const USUARIOS_ROUTE = "usuarios"
 export const SIGNUP_ROUTE = "signup";
 export const Verify_Route = "verificar";
+export const DETAILS_ROUTE = "animales/:id";
+export const INVENTARIO_ROUTE = "inventario";
+export const HABITAT_ROUTE = "habitat";
 

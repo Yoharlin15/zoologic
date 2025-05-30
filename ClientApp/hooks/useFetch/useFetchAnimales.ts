@@ -9,3 +9,11 @@ export const useFetchAnimales = () => {
     queryFn: AnimalApi.getAll,
   });
 };
+
+export const useFetchOneAnimal = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.ANIMALES, id],
+    queryFn: () => AnimalApi.getById?.(id),
+  });
+};
