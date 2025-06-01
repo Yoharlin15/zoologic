@@ -173,16 +173,8 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
             }}
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             label="Nuevo Animal"
-          />,
-
-          <Button
-            key="btn_menu"
-            icon="pi pi-bars"
-            className="ml-2"
-            onClick={(e) => menu.current?.toggle(e)}
-            aria-controls="popup_menu"
-            aria-haspopup
-          />,
+          />
+          
         ]}
         tableProps={{
           rows: 8,

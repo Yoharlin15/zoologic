@@ -86,7 +86,7 @@ const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
         header={<h1 className="font-semibold text-2xl text-900">Nuevo Animal</h1>}
       >
         <Form>
-          <FieldColumn label="Alias" columns={{ sm: 8 }}>
+          <FieldColumn label="Alias" columns={{ sm: 6 }}>
             <InputText
               name="Alias"
               control={control}
@@ -117,7 +117,18 @@ const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
               ]} />
           </FieldColumn>
 
-          <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 6 }}>
+          <FieldColumn label="Zona" columns={{ sm: 6 }}>
+            <Dropdown
+              name="ZonaId"
+              control={control}
+              placeholder="Seleccione una zona"
+              rules={{ required: "Campo obligatorio" }}
+              options={zonas || []}
+              optionLabel="NombreZona"
+              optionValue="ZonaId" />
+          </FieldColumn>
+
+          <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 12 }}>
             <Controller
               name="FechaNacimiento"
               control={control}
@@ -134,16 +145,7 @@ const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
               )} />
           </FieldColumn>
 
-          <FieldColumn label="Zona" columns={{ sm: 6 }}>
-            <Dropdown
-              name="ZonaId"
-              control={control}
-              placeholder="Seleccione una zona"
-              rules={{ required: "Campo obligatorio" }}
-              options={zonas || []}
-              optionLabel="NombreZona"
-              optionValue="ZonaId" />
-          </FieldColumn>
+          
 
           <FieldColumn label="Observaciones">
             <InputTextArea

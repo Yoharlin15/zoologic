@@ -43,7 +43,7 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
 
   const menuModel = [
     {
-      
+
     },
     {
       label: "Editar",
@@ -136,10 +136,9 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
               setSelectedEspecieId(null);
               setSidebarCreateVisible(true);
             }}
-          >
-            <i className="pi pi-plus mr-2"></i>
-            <span className="hidden md:flex">Nueva Especie</span>
-          </Button>,
+            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+            label="Nueva especie"
+          />
         ]}
         tableProps={{
           rows: 8,
