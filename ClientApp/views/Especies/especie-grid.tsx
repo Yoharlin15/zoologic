@@ -16,7 +16,7 @@ const EspecieGrid = ({ especies, searchText }: IEspecieGridProps) => {
   const filteredEspecies = React.useMemo(() => {
     if (!especies?.length) return [];
     return especies.filter((item) =>
-      matchesSearchText(searchText, `${item.Clase} ${item.Clase}`)
+      matchesSearchText(searchText, `${item.ClaseNombre} ${item.ClaseNombre}`)
     );
   }, [especies, searchText]);
 
