@@ -124,7 +124,7 @@ const Login = () => {
           <LoginHeader />
           <div className="flex flex-column">
             <Form onSubmit={handleSubmit(onSubmit)}>
-              <FieldColumn label="Correo electrónico">
+              <FieldColumn label="Correo">
                 <ControlledInputText
                   name="Correo"
                   control={control}
