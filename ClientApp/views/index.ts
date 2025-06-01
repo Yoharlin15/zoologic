@@ -6,17 +6,38 @@ export { VerifyView} from "./verificar";
 
 export { DashboardView } from "./dashboard";
 
-export { default as EspeciesList } from "./especies/especie-list";
-export { default as AnimalesList } from "./animales/animal-list";
-export { default as EmpleadosList } from "./empleados/empleado-list";
-export { default as TratamientosList } from "./tratamientos/tratamiento-list";
-export { default as NecropsiasList } from "./necropsias/necropsia-list";
-export { default as Ejemplares } from "./ejemplares/ejemplares";
-export { default as Salud } from "./salud/salud";
-export { default as UsuariosList } from "./usuarios/usuario-list";
-export { default as AnimalDetailView } from "./animales/animal-datails-view";
-export { default as InventarioList } from "./inventario/inventario-list";
-export { default as HabitatList } from "./habitats/habitat-list";
+import EspeciesList from "./especies/especie-list";
+export { EspeciesList };
+
+import AnimalesList from "./animales/animal-list";
+export { AnimalesList };
+
+import EmpleadosList from "./empleados/empleado-list";
+export { EmpleadosList };
+
+import TratamientosList from "./tratamientos/tratamiento-list";
+export { TratamientosList };
+
+import NecropsiasList from "./necropsias/necropsia-list";
+export { NecropsiasList };
+
+import Ejemplares from "./ejemplares/ejemplares";
+export { Ejemplares };
+
+import Salud from "./salud/salud";
+export { Salud };
+
+import UsuariosList from "./usuarios/usuario-list";
+export { UsuariosList };
+
+import AnimalDetailView from "./animales/animal-datails-view";
+export { AnimalDetailView };
+
+import InventarioList from "./inventario/inventario-list";
+export { InventarioList };
+
+import HabitatList from "./habitats/habitat-list";
+export { HabitatList };
 
 
 
