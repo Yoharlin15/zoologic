@@ -7,6 +7,7 @@ import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
 
 import {
 
+  ZoologicLandingPage,
   LoginView,
   SignupView,
   VerifyView,
@@ -18,7 +19,7 @@ import {
   AnimalDetailView,
   InventarioList,
   EmpleadosList,
-  HabitatList
+  HabitatList,
 
 } from "#views";
 
@@ -39,9 +40,15 @@ const Provider = () => {
 
   const routes: RouteObject[] = [
     {
+      id: "landing-page",
+      element: <ZoologicLandingPage />,
+      path: Routes.LANDING_ROUTE,
+
+    },
+    {
       id: "login-view",
       element: <LoginView />,
-      path: Routes.BASE_ROUTE,
+      path: Routes.login_ROUTE,
     },
 
     {

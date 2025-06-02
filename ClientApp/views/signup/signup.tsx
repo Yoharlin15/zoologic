@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useRegistrarUsuario } from "../../hooks/useMutation/useMutationSignup";
 import { RegistroDatos } from "#interfaces";
 import { Routes } from "#core";
+import { login_ROUTE } from "ClientApp/core/routes";
 
 interface SignupFormData {
   Username: string;
@@ -64,7 +65,7 @@ const Signup = () => {
   };
 
   const handleLoginClick = () => {
-    navigate(Routes.BASE_ROUTE, { replace: true });
+    navigate(Routes.login_ROUTE, { replace: true });
   };
 
   const SignupSideImage = () => (

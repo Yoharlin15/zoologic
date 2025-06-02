@@ -1,3 +1,6 @@
+import ZoologicLandingPage from "./landing/landingpage";
+export { ZoologicLandingPage };
+
 export { LoginView } from "./login";
 
 export { SignupView } from "./signup";
