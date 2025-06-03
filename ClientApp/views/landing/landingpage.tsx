@@ -112,7 +112,7 @@ const ZoologicVisitorLanding = () => {
     ];
 
     const handleLoginClick = () => {
-        navigate(Routes.login_ROUTE, { replace: true });
+        navigate(Routes.login_ROUTE);
       };
 
     return (
