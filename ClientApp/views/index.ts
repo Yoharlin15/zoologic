@@ -42,5 +42,6 @@ export { InventarioList };
 import HabitatList from "./habitats/habitat-list";
 export { HabitatList };
 
+export * from "./settings";
 
-
+export * from "./settings/roles";

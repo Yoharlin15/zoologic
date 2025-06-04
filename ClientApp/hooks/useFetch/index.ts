@@ -8,3 +8,4 @@ export * from "./useFetchZonas";
 export * from "./useFetchUsuarios";
 export * from "./useFetchInventario";
 export * from "./useFetchHabitats";
+export * from "./useFetchRoles";

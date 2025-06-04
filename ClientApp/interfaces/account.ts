@@ -19,3 +19,16 @@ export interface RespuestaServidor {
 
 // Confirmación de correo con token en URL
 export type ConfirmarCorreoParams = string;
+
+export interface IUsuario {
+  UsuarioId: number;
+  NombreUsuario: string;
+  Email: string;
+  RolId: number;
+  Nombre: string;
+}
+
+export interface IRoles {
+  RolId: number;
+  Nombre: string;
+}

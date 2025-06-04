@@ -71,14 +71,19 @@ const MainLayout = ({
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate(Routes.BASE_ROUTE, { replace: true });
+    navigate(Routes.login_ROUTE, { replace: true });
   };
 
-  const headerPropsWithLogout = {
+  const handleConfigNavigation = () => {
+    navigate(Routes.SETTINGS_ROUTE); 
+  };
+
+  const headerPropsWithActions = {
     ...headerProps,
     dropdown: {
       ...headerProps.dropdown,
       logoutAction: headerProps.dropdown?.logoutAction || handleLogout,
+      configAction: headerProps.dropdown?.configAction || handleConfigNavigation,
     },
   };
 
@@ -103,7 +108,7 @@ const MainLayout = ({
       </LayoutSidebar>
       <LayoutContent
         btnRef={btnRef}
-        headerProps={headerPropsWithLogout}
+        headerProps={headerPropsWithActions}
         removePadding={removePadding}
         withStyledContainer={withStyledContainer}
       >
@@ -121,7 +126,7 @@ const LayoutSidebar = ({ children }: React.PropsWithChildren) => (
   <div
     id="app-sidebar"
     className="h-screen hidden lg:flex flex-shrink-0 sticky left-0 top-0 z-1 border-right-1 surface-border select-none"
-    style={{ 
+    style={{
       width: '280px',
       boxShadow: '4px 0 10px rgba(0, 0, 0, 0.05)',
       transition: 'all 0.3s ease',
@@ -149,7 +154,7 @@ const Logo = ({ src, height, onClick, clickable = false }: ILogoProps) => (
 
 const SidebarItems = ({ items }: ISidebarItemsProps) => {
   const isLaptop = useMediaQuery("(max-width: 1200px)");
-  
+
   return (
     <div className="overflow-y-auto px-3 py-5 flex-1">
       <ul className="list-none m-0 p-0 flex flex-column gap-1">
@@ -172,13 +177,13 @@ const SidebarItems = ({ items }: ISidebarItemsProps) => {
                   <img
                     src={item.icon}
                     alt={item.label}
-                    style={{ 
+                    style={{
                       width: "24px",
                       filter: item.active ? "brightness(0) saturate(100%) invert(39%) sepia(71%) saturate(576%) hue-rotate(87deg) brightness(92%) contrast(89%)" : "none"
                     }}
                   />
                 ) : (
-                  <div style={{ 
+                  <div style={{
                     fontSize: '1.25rem',
                     color: item.active ? '#15803d' : 'var(--text-color-secondary)', // Verde oscuro cuando está activo
                     width: '24px',
@@ -280,21 +285,21 @@ const LayoutContent = ({
             </a>
           </li>
 
-          {Boolean(dropdown?.configAction) && (
-            <li className="border-top-1 surface-border">
-              <a
-                onClick={dropdown?.configAction}
-                className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer
-        transition-duration-150 transition-colors w-full"
-              >
-                <div className="flex text-base mr-2">
 
-                </div>
-                <span className=" font-medium">Configuración</span>
-                <Ripple />
-              </a>
-            </li>
-          )}
+          <li className="border-top-1 surface-border">
+            <a
+              onClick={dropdown?.configAction}
+              className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer
+        transition-duration-150 transition-colors w-full"
+            >
+              <div className="flex text-base mr-2">
+                <i className="pi pi-cog text-[28px]"></i>
+              </div>
+              <span className=" font-medium">Configuración</span>
+              <Ripple />
+            </a>
+          </li>
+
           <li className="border-top-1 surface-border">
             <a
               onClick={dropdown?.logoutAction}

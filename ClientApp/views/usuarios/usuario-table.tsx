@@ -69,16 +69,9 @@ import React, {
         {
           filter: true,
           sortable: true,
-          header: "ID",
-          field: "UsuarioId",
-          style: { minWidth: "10rem" },
-        },
-        {
-          filter: true,
-          sortable: true,
           header: "Nombre de usuario",
           field: "NombreUsuario",
-          style: { minWidth: "17rem" },
+          style: { minWidth: "10rem" },
         },
         {
           filter: true,
@@ -91,7 +84,7 @@ import React, {
           filter: true,
           sortable: true,
           header: "Rol",
-          field: "RolNombre",
+          field: "Nombre",
           style: { minWidth: "10rem" },
         },
       ],

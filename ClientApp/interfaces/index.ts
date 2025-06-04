@@ -5,7 +5,6 @@ export type * from "./empleado";
 export type * from "./tratamiento";
 export type * from "./necropsias";
 export type * from "./zona";
-export type * from "./usuario";
 export type * from "./animal";
 export type * from "./account";
 export type * from "./inventario";

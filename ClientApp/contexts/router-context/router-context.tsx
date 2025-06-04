@@ -6,7 +6,6 @@ import { CustomMainLayout } from "#components";
 import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
 
 import {
-
   ZoologicLandingPage,
   LoginView,
   SignupView,
@@ -20,7 +19,9 @@ import {
   InventarioList,
   EmpleadosList,
   HabitatList,
-
+  Settings,
+  Roles,
+  SettingsLayout,
 } from "#views";
 
 interface IRouterContextProps {
@@ -43,26 +44,22 @@ const Provider = () => {
       id: "landing-page",
       element: <ZoologicLandingPage />,
       path: Routes.LANDING_ROUTE,
-
     },
     {
       id: "login-view",
       element: <LoginView />,
       path: Routes.login_ROUTE,
     },
-
     {
       id: "signup-view",
       element: <SignupView />,
       path: Routes.SIGNUP_ROUTE,
     },
-
     {
       id: "verify-view",
       element: <VerifyView />,
       path: Routes.Verify_Route,
     },
-
     {
       path: "/",
       element: <PrivateRoute />, // Aquí se valida si está autenticado
@@ -107,6 +104,24 @@ const Provider = () => {
               path: Routes.HABITAT_ROUTE,
               element: <HabitatList />
             },
+            {
+              id: "settings-root",
+              path: Routes.SETTINGS_ROUTE,
+              element: <SettingsLayout />, // Aquí se incluye el layout con el menú
+              children: [
+                {
+                  path: "",
+                  id: "settings",
+                  element: <Settings />,
+                },
+                {
+                  id: "roles",
+                  path: Routes.ROLES_ROUTE,
+                  element: <Roles />,
+                },
+              ],
+            },
+
           ],
         },
       ],
