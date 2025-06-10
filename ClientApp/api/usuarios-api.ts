@@ -6,7 +6,7 @@ import {
 } from '../interfaces/account';
 
 const api = axios.create({
-  baseURL: 'https://zoologic-c3ggbphjefhreuex.canadacentral-01.azurewebsites.net', // Ajusta según tu entorno
+  baseURL: 'http://zoologic.us-east-2.elasticbeanstalk.com/', // Ajusta según tu entorno
   withCredentials: true,
 });
 
