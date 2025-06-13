@@ -6,15 +6,17 @@ export interface IAnimal {
     Sexo: string;
     FechaNacimiento: Date | string | null;
     Observaciones: string;
-    ZonaId: number;
-    NombreZona: string;
+    HabitatId: number;
+    Nombre: string;
 }
 
 export interface IAnimalCreate {
     Alias: string;
     EspecieId: number;
+    HabitatId: number;
+    AnimalPadreId: number;
     Sexo: string;
     FechaNacimiento: Date | null; // Solo Date o null
+    Color: string
     Observaciones: string;
-    ZonaId: number;
 }

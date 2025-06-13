@@ -1,6 +1,5 @@
 import { Endpoints } from "../core";
-import { Api, IEmpleado} from "#interfaces";
-import { WarnUtils } from "#utils";
+import { Api, IEstado} from "#interfaces";
 import API from "./api";
 
 interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
@@ -10,17 +9,12 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   getById?: (id: number) => Promise<any>;
 }
 
-const EmpleadoApi: ApiCustom<IEmpleado> = {
+const EstadoApi: ApiCustom<IEstado> = {
 
   getAll: async () => {
-    const result = await API().get(Endpoints.EMPLEADOS_GET);
+    const result = await API().get(Endpoints.ESTADO_GET);
     return result.data;
   },
+}
 
-  create: async (data) => {
-    const result = await API().post(Endpoints.EMPLEADOS_CREATE, data);
-    return result.data;
-  }
-};
-
-export default EmpleadoApi;
+export default EstadoApi;

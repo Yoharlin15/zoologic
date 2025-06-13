@@ -6,7 +6,7 @@ import {
 } from '../interfaces/account';
 
 const api = axios.create({
-  baseURL: 'http://zoologic.us-east-2.elasticbeanstalk.com/', // Ajusta según tu entorno
+  baseURL: 'https://localhost:7263/', // Ajusta según tu entorno
   withCredentials: true,
 });
 

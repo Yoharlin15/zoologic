@@ -5,4 +5,5 @@ export interface IHabitat
     CantidadAnimales: number;
     EstadoId: number;
     NombreEstado: string;
+    Descripcion: string;
 }

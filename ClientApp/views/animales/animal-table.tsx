@@ -121,7 +121,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Fecha de Llegada",
+        header: "Fecha de nacimiento",
         field: "FechaNacimiento",
         style: { minWidth: "12rem" },
         body: (rowData: IAnimal | null) => {
@@ -133,8 +133,8 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Zona",
-        field: "NombreZona",
+        header: "Habitat",
+        field: "Nombre",
         style: { minWidth: "15em" },
       },
     ],

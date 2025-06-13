@@ -15,7 +15,7 @@ import { FieldColumn, Form } from "ClientApp/components/form";
 import { IAnimalCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
 import { useCreateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales";
-import { useFetchEspecies, useFetchZonas } from "ClientApp/hooks/useFetch";
+import { useFetchEspecies, useFetchHabitats, useFetchPadres, useFetchZonas } from "ClientApp/hooks/useFetch";
 
 interface IAnimalSidebarProps {
   id?: number;
@@ -26,8 +26,9 @@ interface IAnimalSidebarProps {
 
 const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
   const toast = useRef<Toast>(null);
-  const { data: zonas, isLoading } = useFetchZonas();
-  const {data : especies } = useFetchEspecies(); // Moved inside the component
+  const { data: habitats } = useFetchHabitats();
+  const { data: padres } = useFetchPadres();
+  const { data: especies } = useFetchEspecies(); // Moved inside the component
   const createAnimal = useCreateAnimal();
 
   const { control, handleSubmit, reset } = useForm<IAnimalCreate, FieldValues>({
@@ -35,9 +36,11 @@ const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
     defaultValues: {
       Alias: "",
       EspecieId: undefined,
+      HabitatId: undefined,
+      AnimalPadreId: undefined,
       Sexo: "",
       FechaNacimiento: null,
-      ZonaId: undefined,
+      Color: "",
       Observaciones: "",
     },
   });
@@ -46,9 +49,11 @@ const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
     const payload = {
       Alias: data.Alias,
       EspecieId: Number(data.EspecieId),
+      HabitatId: Number(data.HabitatId),
+      AnimalPadreId: Number(data.AnimalPadreId),
       Sexo: data.Sexo,
       FechaNacimiento: data.FechaNacimiento?.toISOString() || null,
-      ZonaId: Number(data.ZonaId),
+      Color: data.Color,
       Observaciones: data.Observaciones
     };
 
@@ -105,6 +110,41 @@ const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
               optionValue="EspecieId" />
           </FieldColumn>
 
+          
+          <FieldColumn label="PadreAlias" columns={{ sm: 6 }}>
+            <Dropdown
+              name="AnimalPadreId"
+              control={control}
+              placeholder="Seleccione el padre"
+              rules={{ required: "Campo obligatorio" }}
+              options={padres || []}
+              optionLabel="PadreAlias"
+              optionValue="AnimalPadreId" />
+          </FieldColumn>
+
+          <FieldColumn label="MadreAlias" columns={{ sm: 6 }}>
+            <Dropdown
+              name="AnimalPadreId"
+              control={control}
+              placeholder="Seleccione una madre"
+              rules={{ required: "Campo obligatorio" }}
+              options={padres || []}
+              optionLabel="MadreAlias"
+              optionValue="AnimalPadreId" />
+          </FieldColumn>
+
+          <FieldColumn label="Habitat" columns={{ sm: 6 }}>
+            <Dropdown
+              name="HabitatId"
+              control={control}
+              placeholder="Seleccione un habitat"
+              rules={{ required: "Campo obligatorio" }}
+              options={habitats || []}
+              optionLabel="Nombre"
+              optionValue="HabitatId" />
+          </FieldColumn>
+
+
           <FieldColumn label="Sexo" columns={{ sm: 6 }}>
             <Dropdown
               name="Sexo"
@@ -117,18 +157,7 @@ const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
               ]} />
           </FieldColumn>
 
-          <FieldColumn label="Zona" columns={{ sm: 6 }}>
-            <Dropdown
-              name="ZonaId"
-              control={control}
-              placeholder="Seleccione una zona"
-              rules={{ required: "Campo obligatorio" }}
-              options={zonas || []}
-              optionLabel="NombreZona"
-              optionValue="ZonaId" />
-          </FieldColumn>
-
-          <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 12 }}>
+          <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 6 }}>
             <Controller
               name="FechaNacimiento"
               control={control}
@@ -145,7 +174,13 @@ const AnimalSidebarCreate = ({ onHide, visible }: IAnimalSidebarProps) => {
               )} />
           </FieldColumn>
 
-          
+          <FieldColumn label="Color" columns={{ sm: 6 }}>
+            <InputText
+              name="Color"
+              control={control}
+              placeholder="Color"
+              rules={{ required: "Campo obligatorio" }} />
+          </FieldColumn>
 
           <FieldColumn label="Observaciones">
             <InputTextArea

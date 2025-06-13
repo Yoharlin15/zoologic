@@ -15,6 +15,9 @@ export { EspeciesList };
 import AnimalesList from "./animales/animal-list";
 export { AnimalesList };
 
+import PadresList from "./padres/padres-list"
+export { PadresList }
+
 import EmpleadosList from "./empleados/empleado-list";
 export { EmpleadosList };
 

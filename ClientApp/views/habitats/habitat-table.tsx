@@ -107,6 +107,14 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
         field: "NombreEstado",
         style: { minWidth: "10rem" },
       },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Descipcion",
+        field: "Descripcion",
+        style: { minWidth: "10rem" },
+      }
     ],
     []
   );

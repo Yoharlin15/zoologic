@@ -1,6 +1,7 @@
 export * from "./useFetchDashboardData";
 export * from "./useFetchEspecies";
 export * from "./useFetchAnimales";
+export * from "./useFetchPadres";
 export * from "./useFetchEmpleados";
 export * from "./useFetchTratamientos";
 export * from "./useFetchNecropsias"
@@ -9,3 +10,4 @@ export * from "./useFetchUsuarios";
 export * from "./useFetchInventario";
 export * from "./useFetchHabitats";
 export * from "./useFetchRoles";
+export * from "./useFetchCargos";

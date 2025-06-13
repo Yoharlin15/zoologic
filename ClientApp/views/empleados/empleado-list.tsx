@@ -20,9 +20,11 @@ function EmpleadosList() {
   const [empleados, dispatch] = useReducer(EmpleadosReducer, initialEmpleados);
 
   return (
-    <>
-      <EmpleadoTable dispatch={dispatch} />
-    </>
+    <div className="p-3 max-w-6xl mx-auto">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <EmpleadoTable dispatch={dispatch} />
+      </div>
+    </div>
   );
 }
 

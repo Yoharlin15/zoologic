@@ -1,6 +1,7 @@
 const GET = "Get";
 const CREATE = "Create";
 const UPDATE = "Update";
+const ESTADO_BASE = "Estado"
 const DASHBOARD_BASE = "Dashboard";
 const ESPECIES_BASE = "Especie";
 const ANIMALES_BASE = "Animal";
@@ -20,6 +21,9 @@ const CONFIRMAR_CORREO = "ConfirmarCorreo";
 //Get Dashboard
 export const DASHBOARD_GET = `${DASHBOARD_BASE}/${GET}`;
 
+//GET Estado
+export const ESTADO_GET = `${ESTADO_BASE}/${GET}`;
+
 //CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;
 export const ESPECIES_CREATE = `${ESPECIES_BASE}/${CREATE}`;
@@ -29,6 +33,9 @@ export const ESPECIES_UPDATE = `${ESPECIES_BASE}/${UPDATE}`;
 //CRUD Animal
 export const ANIMALES_GET = `${ANIMALES_BASE}`;
 export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
+
+//CRUD Padre
+export const PADRES_GET = `${ANIMALES_BASE}/Animales-padres`;
 
 //CRUD Habitats
 export const HABITATS_GET = `${HABITATS_BASE}`;
@@ -41,6 +48,10 @@ export const DIETA_GET = `${DIETA_BASE}`;
 
 //Get Empleado
 export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;
+export const EMPLEADOS_CREATE = `${EMPLEADOS_BASE}/${CREATE}`;
+
+//Get Cargo
+export const CARGOS_GET = `${EMPLEADOS_BASE}/GetCargos`;
 
 //Get Tratamiento
 export const TRATAMIENTOS_GET = `${TRATAMIENTOS_BASE}/${GET}`;
