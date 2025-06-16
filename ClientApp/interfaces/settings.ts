@@ -4,6 +4,11 @@ export interface IRoles {
   Nombre: string;
 }
 
+export interface IRolCurrent {
+  RolId: number;
+  Nombre: string;
+}
+
 //Estados
 export interface IEstados {
     EstadoId: number;

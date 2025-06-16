@@ -30,6 +30,12 @@ export const ESTADO_GETBYID = `${ESTADO_BASE}/${GETBYID}`
 export const ESTADO_CREATE = `${ESTADO_BASE}/${CREATE}`;
 export const ESTADO_UPDATE = `${ESTADO_BASE}/${UPDATE}`
 
+//Get Roles
+export const ROLES_GET = `${USUARIOS_BASE}/get-roles`
+export const ROLES_GETBYID = `${USUARIOS_BASE}/GetRolById`
+export const ROLES_CREATE = `${USUARIOS_BASE}/create-rol`
+export const ROLES_UPDATE = `${USUARIOS_BASE}/UpdateRol`
+
 //CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;
 export const ESPECIES_CREATE = `${ESPECIES_BASE}/${CREATE}`;

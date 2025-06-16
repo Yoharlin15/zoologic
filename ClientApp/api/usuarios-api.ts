@@ -96,27 +96,6 @@ export const GetAllUsuarios = async () => {
     throw new Error("Error de conexión al obtener usuarios");
   }
 };
-
-export const GetAllRoles = async () => {
-  try {
-    const response = await api.get('/api/Usuario/get-roles');
-    
-    console.log("✅ Roles obtenidos exitosamente:", response.data);
-    return response.data; // ✅ Devolver directamente los datos
-    
-  } catch (error: any) {
-    console.log("📋 Error al obtener roles:", error);
-    
-    if (error.response && error.response.data) {
-      console.log("📊 Datos de respuesta de error:", error.response.data);
-      console.log("🔢 Status code:", error.response.status);
-      
-      throw new Error(error.response.data.mensaje || error.response.data.Message || "Error al obtener los roles");
-    }
-    
-    throw new Error("Error de conexión al obtener roles");
-  }
-};
   
 export const logoutUsuario = (): void => {
   localStorage.removeItem('token');

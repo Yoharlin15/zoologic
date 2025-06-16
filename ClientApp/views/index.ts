@@ -53,6 +53,6 @@ export { HabitatList };
 
 export * from "./settings";
 
-export * from "./settings/roles";
+export * from "./settings/roles/roles";
 
 export * from "./settings/estados/estados";

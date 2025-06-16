@@ -9,4 +9,5 @@ export { default as ZonaApi } from "./zona-api";
 export { default as InventarioApi } from "./inventario-api";
 export { default as HabitatApi } from "./habitat-api";
 export { default as EstadoApi} from "./estado-api";
+export { default as RolApi} from "./rol-api"
 export * as UsuarioApi from "./usuarios-api";

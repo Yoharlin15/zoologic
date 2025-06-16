@@ -5,7 +5,7 @@ import { matchesSearchText } from "#utils";
 import { Button } from "primereact/button";
 import { Reducers } from "#core";
 import { ContextMenu } from "primereact/contextmenu";
-import { AppQueryHooks, AppMutationHooks } from "#hooks";
+import { AppQueryHooks } from "#hooks";
 import { Card } from "primereact/card";
 import { Toolbar } from "primereact/toolbar";
 import { Skeleton } from "primereact/skeleton";
@@ -16,19 +16,19 @@ import {
 } from "primereact/datatable";
 import {
   CardTable,
-  RoleFormDialog,
   ICardTableProps,
 } from "#components";
+import { RolesFormDialog } from "./rolesFormDialog";
 
 const Roles = () => {
-  // Fetch roles data using the appropriate query hook
   const roles = AppQueryHooks.useFetchRoles();
 
   const [state, dispatch] = React.useReducer(Reducers.DialogsReducer, {
     id: 0,
     visible: false,
   });
-  const [selectedRole, setSelectedRole] = React.useState<IRoles>();
+
+  const [selectedRol, setSelectedRol] = React.useState<IRoles>();
   const cm = React.useRef<ContextMenu>(null);
   const [searchText, setSearchText] = React.useState("");
 
@@ -39,27 +39,27 @@ const Roles = () => {
       command: () =>
         dispatch({
           type: "OPEN_DIALOG",
-          payload: selectedRole?.RolId ?? 0,
+          payload: selectedRol?.RolId ?? 0,
         }),
     },
     {
       label: "Eliminar",
       icon: "pi pi-trash",
-      command: () => handleDeleteRole(),
+      command: () => handleDeleteRol(),
     },
   ];
 
-  const handleDeleteRole = () => {
+  const handleDeleteRol = () => {
     confirmDialog({
-      message: `¿Estás seguro de que deseas eliminar el rol "${selectedRole?.Nombre}"?`,
+      message: `¿Estás seguro de que deseas eliminar el estado "${selectedRol?.Nombre}"?`,
       header: "Confirmar Eliminación",
       icon: "pi pi-exclamation-triangle",
       acceptClassName: "p-button-danger",
       acceptLabel: "Sí, eliminar",
       rejectLabel: "Cancelar",
       accept: () => {
-        // Aquí iría la lógica para eliminar el rol
-        toast.success(`Rol "${selectedRole?.Nombre}" eliminado correctamente`);
+        // Aquí iría la lógica para eliminar el estado
+        toast.success(`Estado "${selectedRol?.Nombre}" eliminado correctamente`);
       },
     });
   };
@@ -69,10 +69,7 @@ const Roles = () => {
   };
 
   const handleOpenDialog = (id: number = 0) => {
-    dispatch({
-      type: "OPEN_DIALOG",
-      payload: id,
-    });
+    dispatch({ type: "OPEN_DIALOG", payload: id });
   };
 
   const handleCloseDialog = () => {
@@ -84,11 +81,11 @@ const Roles = () => {
       {
         filter: true,
         sortable: true,
-        header: "Nombre del Rol",
+        header: "Nombre del Estado",
         field: "Nombre",
         body: (rowData: IRoles) => (
           <div className="flex align-items-center gap-2">
-            <i className="pi pi-user text-primary"></i>
+            <i className="pi pi-flag text-primary"></i>
             <span className="font-medium">{rowData.Nombre}</span>
           </div>
         ),
@@ -103,8 +100,12 @@ const Roles = () => {
               severity="info"
               tooltip="Editar rol"
               tooltipOptions={{ position: "top" }}
-              onClick={() => handleOpenDialog(rowData.RolId)}
+              onClick={() => {
+                setSelectedRol(rowData); // ✅ Esto es lo que faltaba
+                handleOpenDialog(rowData.RolId);
+              }}
             />
+
             <Button
               icon="pi pi-trash"
               size="small"
@@ -112,8 +113,8 @@ const Roles = () => {
               tooltip="Eliminar rol"
               tooltipOptions={{ position: "top" }}
               onClick={() => {
-                setSelectedRole(rowData);
-                handleDeleteRole();
+                setSelectedRol(rowData);
+                handleDeleteRol();
               }}
             />
           </div>
@@ -126,22 +127,19 @@ const Roles = () => {
   const filteredRoles = React.useMemo(() => {
     if (!roles.data?.length) return [];
 
-    return roles.data?.filter((item: IRoles) => {
-      const fields = [item.Nombre];
-      return fields.some((field) => matchesSearchText(searchText, field));
-    });
+    return roles.data.filter((item) =>
+      matchesSearchText(searchText, item.Nombre),
+    );
   }, [searchText, roles.data]);
 
   const renderEmptyMessage = React.useCallback(() => {
     return (
       <div className="text-center p-6">
-        <i className="pi pi-users text-6xl text-400 mb-3"></i>
-        <div className="text-900 font-bold text-xl mb-2">No hay roles disponibles</div>
-        <div className="text-600 mb-4">
-          Comienza creando tu primer rol del sistema
-        </div>
+        <i className="pi pi-flag text-6xl text-400 mb-3"></i>
+        <div className="text-900 font-bold text-xl mb-2">No hay roles registrados</div>
+        <div className="text-600 mb-4">Comienza creando tu primer rol</div>
         <Button
-          label="Crear Nuevo Rol"
+          label="Crear Nuevo rol"
           icon="pi pi-plus"
           onClick={() => handleOpenDialog(0)}
         />
@@ -151,22 +149,18 @@ const Roles = () => {
 
   const startContent = (
     <div className="flex align-items-center gap-3">
-      <i className="pi pi-users text-2xl text-primary"></i>
+      <i className="pi pi-flag text-2xl text-primary"></i>
       <div>
         <h1 className="text-2xl font-bold text-900 m-0">Gestión de Roles</h1>
-        <p className="text-600 m-0 mt-1">
-          Administra los roles del sistema
-        </p>
+        <p className="text-600 m-0 mt-1">Administra los roles disponibles</p>
       </div>
     </div>
   );
 
   const endContent = (
     <div className="flex gap-2">
-      <span className="p-input-icon-left">
-      </span>
       <Button
-        label="Nuevo Rol"
+        label="Nuevo rol"
         icon="pi pi-plus"
         onClick={() => handleOpenDialog(0)}
         className="p-button-primary"
@@ -201,19 +195,13 @@ const Roles = () => {
       <ContextMenu
         ref={cm}
         model={menuModel}
-        onHide={() => setSelectedRole(undefined)}
+        onHide={() => setSelectedRol(undefined)}
       />
 
-      {/* Header */}
       <Card className="mb-2 bg-blue-50">
-        <Toolbar
-          start={startContent}
-          end={endContent}
-          className="border-none p-0"
-        />
+        <Toolbar start={startContent} end={endContent} className="border-none p-0" />
       </Card>
 
-      {/* Main Data Table */}
       <Card className="bg-blue-50">
         <CardTable<IRoles>
           title=""
@@ -230,20 +218,20 @@ const Roles = () => {
             scrollHeight: "500px",
             loading: roles.isFetching,
             emptyMessage: renderEmptyMessage(),
-            contextMenuSelection: selectedRole,
+            contextMenuSelection: selectedRol,
             rowsPerPageOptions: [10, 25, 50],
             paginator: filteredRoles.length > 10,
             className: "p-datatable-striped",
             onContextMenu: (e) => cm.current?.show(e.originalEvent),
             onContextMenuSelectionChange: (
               e: DataTableSelectionSingleChangeEvent<IRoles[]>,
-            ) => setSelectedRole(e.value),
-            onRowDoubleClick: (e) => handleOpenDialog(e.data.RolId),
+            ) => setSelectedRol(e.value),
+            onRowDoubleClick: (e) => handleOpenDialog(e.data.EstadoId),
           }}
         />
       </Card>
 
-      <RoleFormDialog
+      <RolesFormDialog
         id={state.id}
         visible={state.visible ?? false}
         onHide={handleCloseDialog}
