@@ -84,13 +84,12 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
                 field: "Alimentos", // campo base (puedes poner solo "Alimentos")
                 style: { minWidth: "12rem" },
                 body: (rowData: IDietaAplicada) => {
-                    if (!rowData.Alimentos || rowData.Alimentos.length === 0) return "";
-                    // Asumiendo que cada alimento tiene un campo Nombre
+                    if (!Array.isArray(rowData?.Alimentos) || rowData.Alimentos.length === 0)
+                        return "Sin alimentos";
                     return rowData.Alimentos.map(alimento => alimento.Nombre).join(", ");
                 },
+
             },
-
-
             {
                 filter: true,
                 sortable: true,
