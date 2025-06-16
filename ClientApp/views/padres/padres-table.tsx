@@ -20,6 +20,7 @@ import { CardTable, ICardTableProps } from "../../components/card-table";
 import dayjs from "dayjs";
 import { Reducers } from "#core";
 import { IPadre } from "ClientApp/interfaces/padre";
+import PadreSidebarCreate from "./padres-sidebar-create";
 
 interface IPadreTableProps {
     dispatch: React.Dispatch<any>;
@@ -76,7 +77,6 @@ const PadreTable = ({ dispatch }: IPadreTableProps) => {
                 field: "PadreAlias",
                 style: { minWidth: "12rem" },
             },
-
             {
                 filter: true,
                 sortable: true,
@@ -84,7 +84,6 @@ const PadreTable = ({ dispatch }: IPadreTableProps) => {
                 field: "MadreAlias",
                 style: { minWidth: "12rem" },
             },
-
             {
                 filter: true,
                 sortable: true,
@@ -92,20 +91,17 @@ const PadreTable = ({ dispatch }: IPadreTableProps) => {
                 field: "NombreComun",
                 style: { minWidth: "12rem" },
             },
-
-
             {
                 filter: true,
                 sortable: true,
                 header: "Fecha de nacimiento de la cria",
-                field: "FechaNacimientoCria",
+                field: "FechaNacimientoCrias",
                 style: { minWidth: "12rem" },
-                body: (rowData: IAnimal | null) => {
-                    if (!rowData?.FechaNacimiento) return "";
-                    return dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY");
+                body: (rowData: IPadre | null) => {
+                    if (!rowData?.FechaNacimientoCrias) return "";
+                    return dayjs(rowData.FechaNacimientoCrias).format("DD/MM/YYYY");
                 },
             },
-
             {
                 filter: true,
                 sortable: true,
@@ -113,7 +109,6 @@ const PadreTable = ({ dispatch }: IPadreTableProps) => {
                 field: "NumeroCrias",
                 style: { minWidth: "10fem" },
             },
-
         ],
         []
     );
@@ -151,7 +146,6 @@ const PadreTable = ({ dispatch }: IPadreTableProps) => {
                         className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
                         label="Nuevos padres"
                     />
-
                 ]}
                 tableProps={{
                     rows: 8,
@@ -166,6 +160,11 @@ const PadreTable = ({ dispatch }: IPadreTableProps) => {
                         e: DataTableSelectionSingleChangeEvent<IPadre[]>
                     ) => setSelectedPadre(e.value),
                 }}
+            />
+            <PadreSidebarCreate
+                visible={sidebarCreateVisible}
+                onHide={() => setSidebarCreateVisible(false)}
+                padreId={selectedPadreId ?? undefined}
             />
         </div>
     );

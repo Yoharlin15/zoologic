@@ -61,30 +61,6 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
     }
   ];
 
-  const optionsMenuModel = [
-    {
-      label: "Especies",
-      icon: "pi pi-info-circle",
-      command: () => {
-        console.log("Opción 1 Especies");
-      },
-    },
-    {
-      label: "Opción 2",
-      icon: "pi pi-cog",
-      command: () => {
-        console.log("Opción 2 seleccionada");
-      },
-    },
-    {
-      label: "Opción 3",
-      icon: "pi pi-external-link",
-      command: () => {
-        console.log("Opción 3 seleccionada");
-      },
-    },
-  ];
-
   const [confirmState, confirmDispatch] = useReducer(Reducers.DialogsReducer, {
     id: 0,
     visible: false,
@@ -155,7 +131,6 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         model={menuModel}
         onHide={() => setSelectedAnimal(undefined)}
       />
-      <Menu model={optionsMenuModel} popup ref={menu} />
       <CardTable<IAnimal>
         title="Lista de Animales"
         columns={columns}

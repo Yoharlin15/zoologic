@@ -42,6 +42,7 @@ export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
 
 //CRUD Padre
 export const PADRES_GET = `${ANIMALES_BASE}/Animales-padres`;
+export const PADRES_CREATE = `${ANIMALES_BASE}/Create-padre`;
 
 //CRUD Habitats
 export const HABITATS_GET = `${HABITATS_BASE}`;
