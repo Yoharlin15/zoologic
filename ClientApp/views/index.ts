@@ -18,6 +18,12 @@ export { AnimalesList };
 import PadresList from "./padres/padres-list"
 export { PadresList }
 
+import DietasAplicadasList from "./alimentacion/dietasAplicadas/dietaAplicada-list";
+export { DietasAplicadasList }
+
+import AlimentacionList from "./alimentacion/alimentacion"
+export { AlimentacionList }
+
 import EmpleadosList from "./empleados/empleado-list";
 export { EmpleadosList };
 
@@ -39,7 +45,7 @@ export { UsuariosList };
 import AnimalDetailView from "./animales/animal-datails-view";
 export { AnimalDetailView };
 
-import InventarioList from "./inventario/inventario-list";
+import InventarioList from "./alimentacion/inventario/inventario-list";
 export { InventarioList };
 
 import HabitatList from "./habitats/habitat-list";
@@ -48,3 +54,5 @@ export { HabitatList };
 export * from "./settings";
 
 export * from "./settings/roles";
+
+export * from "./settings/estados/estados";

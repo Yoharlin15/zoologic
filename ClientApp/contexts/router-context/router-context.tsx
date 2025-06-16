@@ -12,6 +12,8 @@ import {
   VerifyView,
   DashboardView,
   AnimalesList,
+  DietasAplicadasList,
+  AlimentacionList,
   Salud,
   UsuariosList,
   Ejemplares,
@@ -22,6 +24,7 @@ import {
   Settings,
   Roles,
   SettingsLayout,
+  Estados,
 } from "#views";
 
 interface IRouterContextProps {
@@ -101,6 +104,14 @@ const Provider = () => {
               element: <AnimalDetailView />,
             },
             {
+              path: Routes.DIETA_APLICADA_ROUTE,
+              element: <DietasAplicadasList />
+            },
+            {
+              path: Routes.ALIMENTACION_ROUTE,
+              element: <AlimentacionList />
+            },
+            {
               path: Routes.HABITAT_ROUTE,
               element: <HabitatList />
             },
@@ -119,6 +130,11 @@ const Provider = () => {
                   path: Routes.ROLES_ROUTE,
                   element: <Roles />,
                 },
+                {
+                  id: "estados",
+                  path: Routes.ESTADOS_ROUTE,
+                  element: <Estados />
+                }
               ],
             },
 

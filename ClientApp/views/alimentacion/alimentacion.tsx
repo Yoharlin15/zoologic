@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
-import DietasList from "../alimentacion/dietas/dieta-list";
-import TratamientosList from "../tratamientos/tratamiento-list";
+import AlimentosList from "./alimentos/alimento-list";
+import DietasList from "./dietas/dieta-list";
+import InventarioList from "./inventario/inventario-list";
 
-const AnimalInfo = () => {
-  const { projectId } = useParams();
+const Alimentacion = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleTabChange = (e: TabViewTabChangeEvent) => {
@@ -27,14 +26,21 @@ const AnimalInfo = () => {
           </div>
         </TabPanel>
 
-        <TabPanel header="Tratamientos" contentClassName="h-full overflow-hidden">
+        <TabPanel header="Alimentos" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
-            <TratamientosList />
+            <AlimentosList />
           </div>
         </TabPanel>
+        
+        <TabPanel header="Inventario" contentClassName="h-full overflow-hidden">
+          <div className="h-full overflow-hidden">
+            <InventarioList />
+          </div>
+        </TabPanel>
+
       </TabView>
     </div>
   );
 };
 
-export default AnimalInfo;
+export default Alimentacion;

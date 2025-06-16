@@ -7,7 +7,7 @@ export type * from "./necropsias";
 export type * from "./zona";
 export type * from "./animal";
 export type * from "./account";
-export type * from "./inventario";
-export type * from "./dieta";
 export type * from "./habitat";
 export type * from "./estado";
+export type * from "./settings"
+export type * from "./alimentacion"

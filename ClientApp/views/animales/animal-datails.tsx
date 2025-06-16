@@ -4,7 +4,7 @@ import { Card } from "primereact/card";
 import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import dayjs from "dayjs";
-import DietasList from "../dietas/dieta-list";
+import DietasList from "../alimentacion/dietas/dieta-list";
 import TratamientosList from "../tratamientos/tratamiento-list";
 import { useFetchOneDieta } from "ClientApp/hooks/useFetch/useFetchDietas";
 

@@ -3,6 +3,7 @@ export { default as EspecieApi } from "./especies-api";
 export { default as AnimalApi } from "./animal-api";
 export { default as PadreApi } from "./padres-api"
 export { default as EmpleadoApi } from "./empleados-api";
+export { default as AlimentoApi} from "./alimento-api";
 export { default as TratamientoApi } from "./tratamiento-api";
 export { default as ZonaApi } from "./zona-api";
 export { default as InventarioApi } from "./inventario-api";

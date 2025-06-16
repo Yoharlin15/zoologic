@@ -1,6 +1,5 @@
 import { Endpoints } from "../core";
 import { Api, IAnimal } from "#interfaces";
-import { WarnUtils } from "#utils";
 import API from "./api";
 
 

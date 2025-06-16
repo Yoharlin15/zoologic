@@ -11,3 +11,7 @@ export * from "./useFetchInventario";
 export * from "./useFetchHabitats";
 export * from "./useFetchRoles";
 export * from "./useFetchCargos";
+export * from "./useFetchEstados";
+export * from "./useFetchDietas";
+export * from "./useFecthDietasAplicadas";
+export * from "./useFetchAlimentos";

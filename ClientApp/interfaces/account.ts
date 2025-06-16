@@ -27,8 +27,3 @@ export interface IUsuario {
   RolId: number;
   Nombre: string;
 }
-
-export interface IRoles {
-  RolId: number;
-  Nombre: string;
-}

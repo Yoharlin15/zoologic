@@ -8,3 +8,11 @@ export const useFetchEstados = () => {
     queryFn: EstadoApi.getAll,
   });
 };
+
+export const useFetchOneEstado = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.ESTADOS, id],
+    queryFn: () => EstadoApi.getById?.(id),
+  });
+};

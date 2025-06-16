@@ -5,7 +5,7 @@ import React, {
   useReducer,
 } from "react";
 import { debounce } from "radash";
-import { IAnimal, IEmpleado } from "#interfaces";
+import { IEmpleado } from "#interfaces";
 import { AppQueryHooks } from "#hooks";
 import { Button } from "primereact/button";
 import { ContextMenu } from "primereact/contextmenu";
@@ -26,8 +26,8 @@ interface IEmpleadoTableProps {
 }
 
 const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
-  const animal = AppQueryHooks.useFetchEmpleados();
-  const [selectedAnimal, setSelectedEmpleado] = useState<IEmpleado>();
+  const empleado = AppQueryHooks.useFetchEmpleados();
+  const [selectedEmpleado, setSelectedEmpleado] = useState<IEmpleado>();
 
   const navigate = useNavigate();
 
@@ -36,52 +36,28 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
 
   const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
   const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
-  const [selectedEmpeladoId, setSelectedAnimalId] = useState<number | null>(null);
+  const [selectedEmpleadoId, setSelectedEmpleadoId] = useState<number | null>(null);
 
   const menuModel = [
     {
       label: "Editar",
       icon: "pi pi-pencil",
       command: () => {
-        if (selectedAnimal) {
-          setSelectedAnimalId(selectedAnimal.EmpleadoId);
+        if (selectedEmpleado) {
+          setSelectedEmpleadoId(selectedEmpleado.EmpleadoId);
           setSidebarUpdateVisible(true); // Abre el sidebar
         }
       },
     },
-    {
-      label: "Detalles",
-      icon: "pi pi-objects-column",
-      command: () => {
-        if (selectedAnimal) {
-          navigate(`/animales/${selectedAnimal.EmpleadoId}`);
-        }
-      },
-    }
-  ];
-
-  const optionsMenuModel = [
-    {
-      label: "Especies",
-      icon: "pi pi-info-circle",
-      command: () => {
-        console.log("Opción 1 Especies");
-      },
-    },
-    {
-      label: "Opción 2",
-      icon: "pi pi-cog",
-      command: () => {
-        console.log("Opción 2 seleccionada");
-      },
-    },
-    {
-      label: "Opción 3",
-      icon: "pi pi-external-link",
-      command: () => {
-        console.log("Opción 3 seleccionada");
-      },
-    },
+    // {
+    //   label: "Detalles",
+    //   icon: "pi pi-objects-column",
+    //   command: () => {
+    //     if (selectedEmpleado) {
+    //       navigate(`/animales/${selectedEmpleado.EmpleadoId}`);
+    //     }
+    //   },
+    // }
   ];
 
   const [confirmState, confirmDispatch] = useReducer(Reducers.DialogsReducer, {
@@ -146,11 +122,11 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
   );
 
   const filteredEmpleados = useMemo(() => {
-    if (!Array.isArray(animal.data)) return [];
-    return animal.data.filter((t) =>
+    if (!Array.isArray(empleado.data)) return [];
+    return empleado.data.filter((t) =>
       t.Sexo?.toLowerCase().includes(searchText.toLowerCase())
     );
-  }, [animal.data, searchText]);
+  }, [empleado.data, searchText]);
 
   return (
     <div className="h-full">
@@ -159,12 +135,11 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
         model={menuModel}
         onHide={() => setSelectedEmpleado(undefined)}
       />
-      <Menu model={optionsMenuModel} popup ref={menu} />
       <CardTable<IEmpleado>
         title="Lista de Empleados"
         columns={columns}
         value={filteredEmpleados}
-        skeletonLoading={animal.isPending}
+        skeletonLoading={empleado.isPending}
         onChangeSearch={debounce({ delay: 500 }, (e) =>
           setSearchText(e.target.value)
         )}
@@ -172,7 +147,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
           <Button
             key="btn_add"
             onClick={() => {
-              setSelectedAnimalId(null);
+              setSelectedEmpleadoId(null);
               setSidebarCreateVisible(true);
             }}
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
@@ -184,10 +159,10 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
           rows: 8,
           size: "small",
           filters,
-          dataKey: "AnimalId",
-          loading: animal.isFetching,
+          dataKey: "EmpleadoId",
+          loading: empleado.isFetching,
           paginator: filteredEmpleados.length > 8,
-          contextMenuSelection: selectedAnimal,
+          contextMenuSelection: selectedEmpleado,
           onContextMenu: (e) => cm.current?.show(e.originalEvent),
           onContextMenuSelectionChange: (
             e: DataTableSelectionSingleChangeEvent<IEmpleado[]>
@@ -197,7 +172,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
       <EmpleadoSidebarCreate
         visible={sidebarCreateVisible}
         onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedEmpeladoId ?? undefined}
+        especieId={selectedEmpleadoId ?? undefined}
       />
     </div>
   );

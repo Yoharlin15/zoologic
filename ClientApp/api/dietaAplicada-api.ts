@@ -1,7 +1,7 @@
 import { Endpoints } from "../core";
-import { Api } from "#interfaces";
+import { Api, IAnimal } from "#interfaces";
 import API from "./api";
-import { IInventario } from "ClientApp/interfaces/alimentacion";
+import { IDietaAplicada } from "ClientApp/interfaces/alimentacion";
 
 
 interface ApiCustom<T> extends Omit<Api<T>, "update"> {
@@ -11,12 +11,12 @@ interface ApiCustom<T> extends Omit<Api<T>, "update"> {
   getById?: (id: number) => Promise<any>;
 }
 
-const InventarioApi: ApiCustom<IInventario> = {
+const DietaAplicadaApi: ApiCustom<IDietaAplicada> = {
 
   getAll: async () => {
-    const result = await API().get(Endpoints.INVENTARIO_GET);
+    const result = await API().get(Endpoints.dietaAPLICADA_GET);
     return result.data;
   },
-};
+}
 
-export default InventarioApi;
+export default DietaAplicadaApi;

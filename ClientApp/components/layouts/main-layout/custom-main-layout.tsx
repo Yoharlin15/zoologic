@@ -14,7 +14,8 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
       [Routes.EMPLEADOS_ROUTE]: 1,
       [Routes.EJEMPLARES_ROUTE]: 2,
       [Routes.SALUD_ROUTE]: 3,
-      [Routes.INVENTARIO_ROUTE]: 4,
+      [Routes.DIETA_APLICADA_ROUTE]: 4,
+      [Routes.ALIMENTACION_ROUTE]: 4,
       [Routes.HABITAT_ROUTE]: 5,
     }),
     []
@@ -57,7 +58,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         {
           icon: <FontAwesomeIcon icon="bowl-food" />,
           label: "Dietas",
-          onClick: () => navigate(`${Routes.INVENTARIO_ROUTE}`),
+          onClick: () => navigate(`${Routes.DIETA_APLICADA_ROUTE}`),
         },
         {
           icon: <FontAwesomeIcon icon="tree" />,

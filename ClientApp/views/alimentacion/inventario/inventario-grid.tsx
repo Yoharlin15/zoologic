@@ -1,10 +1,8 @@
 import React from "react";
-import { Routes } from "#core";
 import { IInventario } from "#interfaces";
-import { Card } from "primereact/card";
 import { matchesSearchText } from "#utils";
 import { EmptyMessage, TopSearchResult } from "#components";
-import { useNavigate, generatePath } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
 
 interface IInventarioGridProps {
   searchText: string;

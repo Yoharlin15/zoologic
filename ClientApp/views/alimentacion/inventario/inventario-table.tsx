@@ -16,8 +16,7 @@ import {
   DataTableSelectionSingleChangeEvent,
 } from "primereact/datatable";
 
-import { CardTable, ICardTableProps } from "../../components/card-table";
-import dayjs from "dayjs";
+import { CardTable, ICardTableProps } from "../../../components/card-table";
 
 // import InventarioSidebarCreate from "./Inventario-sidebar-create";
 import { Reducers } from "#core";
@@ -113,7 +112,7 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
     []
   );
 
-  const filteredInventarioes = useMemo(() => {
+  const filteredInventarios = useMemo(() => {
     if (!Array.isArray(Inventario.data)) return [];
     return Inventario.data.filter((t) =>
       t.Nombre?.toLowerCase().includes(searchText.toLowerCase())
@@ -131,7 +130,7 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
       <CardTable<IInventario>
         title="Inventario de Alimentos"
         columns={columns}
-        value={filteredInventarioes}
+        value={filteredInventarios}
         skeletonLoading={Inventario.isPending}
         onChangeSearch={debounce({ delay: 500 }, (e) =>
           setSearchText(e.target.value)
@@ -163,7 +162,7 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
           filters,
           dataKey: "InventarioId",
           loading: Inventario.isFetching,
-          paginator: filteredInventarioes.length > 8,
+          paginator: filteredInventarios.length > 8,
           contextMenuSelection: selectedInventario,
           onContextMenu: (e) => cm.current?.show(e.originalEvent),
           onContextMenuSelectionChange: (
