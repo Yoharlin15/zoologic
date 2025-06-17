@@ -90,6 +90,16 @@ const Login = () => {
           detail: res.mensaje || "Has iniciado sesión correctamente.",
         });
 
+        const rol = res.usuario?.rol || "";
+
+        setTimeout(() => {
+          if (rol === "Cliente") {
+            navigate(Routes.LANDING_ROUTE, { replace: true }); // Cambia a la ruta de tu landing
+          } else {
+            navigate(Routes.DASHBOARD_ROUTE, { replace: true });
+          }
+        }, 2000);
+
         setTimeout(() => navigate(Routes.DASHBOARD_ROUTE, { replace: true }), 2000);
       },
 
