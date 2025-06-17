@@ -94,22 +94,20 @@ const Login = () => {
 
         setTimeout(() => {
           if (rol === 2) {
-            navigate(Routes.LANDING_ROUTE, { replace: true }); // Cambia a la ruta de tu landing
+            navigate(Routes.LANDING_ROUTE, { replace: true });
           } else {
             navigate(Routes.DASHBOARD_ROUTE, { replace: true });
           }
         }, 2000);
-
-        setTimeout(() => navigate(Routes.DASHBOARD_ROUTE, { replace: true }), 2000);
       },
 
-      onError: (error: any) => {
-        toast.current?.show({
-          severity: "error",
-          summary: "Error",
-          detail: error.message || "Hubo un error al iniciar sesión.",
-        });
-      },
+        onError: (error: any) => {
+          toast.current?.show({
+            severity: "error",
+            summary: "Error",
+            detail: error.message || "Hubo un error al iniciar sesión.",
+          });
+        },
     });
   };
 
