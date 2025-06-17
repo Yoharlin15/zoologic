@@ -90,7 +90,7 @@ const Login = () => {
           detail: res.mensaje || "Has iniciado sesión correctamente.",
         });
 
-        const rol = res.usuario?.rol || "";
+        const rol = res.RolId;
 
         setTimeout(() => {
           if (rol === 2) {
