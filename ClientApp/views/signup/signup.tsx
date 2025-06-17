@@ -22,7 +22,7 @@ interface SignupFormData {
 }
 
 const roles = [
-  { label: "Cliente", value: 1 },
+  { label: "Cliente", value: 2 },
 ];
 
 const Signup = () => {

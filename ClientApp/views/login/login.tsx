@@ -93,7 +93,7 @@ const Login = () => {
         const rol = res.usuario?.rol || "";
 
         setTimeout(() => {
-          if (rol === "Cliente") {
+          if (rol === 2) {
             navigate(Routes.LANDING_ROUTE, { replace: true }); // Cambia a la ruta de tu landing
           } else {
             navigate(Routes.DASHBOARD_ROUTE, { replace: true });
