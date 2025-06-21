@@ -9,7 +9,7 @@ export { VerifyView} from "./verificar";
 
 export { DashboardView } from "./dashboard";
 
-import EspeciesList from "./especies/especie-list";
+import EspeciesList from "./especies/especie/especie-list";
 export { EspeciesList };
 
 import AnimalesList from "./animales/animal-list";

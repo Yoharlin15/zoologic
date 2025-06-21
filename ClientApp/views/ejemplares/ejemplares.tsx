@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
-import EspeciesList from "../especies/especie-list";
+import EspeciesList from "../especies/especie/especie-list";
 import AnimalesList from "../animales/animal-list";
 import PadresList from "../padres/padres-list";
 

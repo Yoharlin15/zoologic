@@ -15,3 +15,6 @@ export * from "./useFetchEstados";
 export * from "./useFetchDietas";
 export * from "./useFecthDietasAplicadas";
 export * from "./useFetchAlimentos";
+export * from "./useFetchFamilias";
+export * from "./useFetchClases";
+export * from "./useFetchProcedencias";

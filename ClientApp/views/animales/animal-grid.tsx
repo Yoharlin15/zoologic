@@ -1,10 +1,7 @@
 import React from "react";
-import { Routes } from "#core";
 import { IAnimal } from "#interfaces";
-import { Card } from "primereact/card";
 import { matchesSearchText } from "#utils";
 import { EmptyMessage, TopSearchResult } from "#components";
-import { useNavigate, generatePath } from "react-router-dom";
 
 interface IAnimalGridProps {
   searchText: string;
@@ -12,7 +9,7 @@ interface IAnimalGridProps {
 }
 
 const AnimalGrid = ({ animales, searchText }: IAnimalGridProps) => {
-  const navigate = useNavigate();
+
   const filteredAnimales = React.useMemo(() => {
     if (!animales?.length) return [];
     return animales.filter((item) =>

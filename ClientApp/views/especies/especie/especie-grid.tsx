@@ -1,7 +1,5 @@
 import React from "react";
-import { Routes } from "#core";
 import { IEspecie } from "#interfaces";
-import { Card } from "primereact/card";
 import { matchesSearchText } from "#utils";
 import { EmptyMessage, TopSearchResult } from "#components";
 import { useNavigate, generatePath } from "react-router-dom";

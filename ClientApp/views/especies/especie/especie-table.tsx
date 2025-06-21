@@ -3,25 +3,20 @@ import React, {
   useRef,
   useMemo,
   useReducer,
-  useCallback,
 } from "react";
 import { debounce } from "radash";
 import { IEspecie } from "#interfaces";
 import { AppQueryHooks } from "#hooks";
 import { Button } from "primereact/button";
-import { Calendar } from "primereact/calendar";
-import { Skeleton } from "primereact/skeleton";
-import { Routes, Reducers } from "#core";
+import { Reducers } from "#core";
 import { ContextMenu } from "primereact/contextmenu";
-import { useNavigate, generatePath } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   DataTableFilterMeta,
   DataTableSelectionSingleChangeEvent,
 } from "primereact/datatable";
 
-import { ColumnFilterElementTemplateOptions } from "primereact/column";
-import { constants } from "buffer";
-import { CardTable, ICardTableProps } from "../../components/card-table";
+import { CardTable, ICardTableProps } from "../../../components/card-table";
 import EspecieSidebarCreate from "./especie-sidebar-Create";
 import EspecieSidebarUpdate from "./especie-sidebar-Update";
 
@@ -30,11 +25,9 @@ interface IEspecieTableProps {
 }
 
 const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
+  const navigate = useNavigate();
   const especie = AppQueryHooks.useFetchEspecies();
   const [selectedEspecie, setSelectedEspecie] = useState<IEspecie>();
-
-  const navigate = useNavigate();
-
   const cm = useRef<ContextMenu>(null);
 
   const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
@@ -42,16 +35,14 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
   const [selectedEspecieId, setSelectedEspecieId] = useState<number | null>(null);
 
   const menuModel = [
-    {
-
-    },
+    {},
     {
       label: "Editar",
       icon: "pi pi-pencil",
       command: () => {
         if (selectedEspecie) {
           setSelectedEspecieId(selectedEspecie.EspecieId);
-          setSidebarUpdateVisible(true); // Abre el sidebar
+          setSidebarUpdateVisible(true);
         }
       },
     },
@@ -61,9 +52,9 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
     id: 0,
     visible: false,
   });
+
   const [searchText, setSearchText] = useState("");
-  const [filters, setFilters] = useState<DataTableFilterMeta>(
-  );
+  const [filters, setFilters] = useState<DataTableFilterMeta>();
 
   const columns = useMemo<ICardTableProps<IEspecie>["columns"]>(
     () => [
@@ -95,7 +86,6 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
         field: "ClaseNombre",
         style: { minWidth: "12rem" },
       },
-
       {
         filter: true,
         sortable: true,
@@ -122,7 +112,7 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
         onHide={() => setSelectedEspecie(undefined)}
       />
       <CardTable<IEspecie>
-        title="Lista de Especies  "
+        title="Lista de Especies"
         columns={columns}
         value={filteredEspecies}
         skeletonLoading={especie.isPending}
@@ -138,8 +128,18 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
             }}
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             label="Nueva especie"
+          />,
+          <Button
+            key="btn_navigate"
+            onClick={() => navigate("/especie")}
+            icon="pi pi-list"
+            className="ml-2 bg-transparent border-0 shadow-none text-gray-600 hover:text-gray-800 icon-large"
+            text
+            rounded
+            aria-label="Ir a vista especie"
           />
         ]}
+
         tableProps={{
           rows: 8,
           size: "small",

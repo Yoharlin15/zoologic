@@ -50,3 +50,45 @@ export interface IEspecieCurrent {
     Procedencia: string;
     Observaciones: string;
 }
+
+export interface IFamilia {
+    FamiliaId: number;
+    FamiliaNombre: string;
+}
+
+export interface IFamiliaCurrent {
+    FamiliaId: number;
+    FamiliaNombre: string;
+}
+
+export interface IFamiliaCreate {
+    FamiliaNombre: string;
+}
+
+export interface IClase {
+    ClaseId: number;
+    ClaseNombre: string;
+}
+
+export interface IClaseCurrent {
+    ClaseId: number;
+    ClaseNombre: string;
+}
+
+export interface IClaseCreate {
+    ClaseNombre: string;
+}
+
+export interface IProcedencia {
+    ProcedenciaId: number;
+    ProcedenciaNombre: string;
+}
+
+export interface IProcedenciaCurrent {
+    ProcedenciaId: number;
+    ProcedenciaNombre: string;
+}
+
+export interface IProcedenciaCreate {
+    ProcedenciaNombre: string;
+}

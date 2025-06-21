@@ -42,6 +42,24 @@ export const ESPECIES_CREATE = `${ESPECIES_BASE}/${CREATE}`;
 export const ESPECIES_CREATE_GET = `${ESPECIES_BASE}/${CREATE}`;
 export const ESPECIES_UPDATE = `${ESPECIES_BASE}/${UPDATE}`;
 
+//CRUD Familias
+export const FAMILIAS_GET = `${ESPECIES_BASE}/GetFamilias`;
+export const FAMILIAS_GETBYID = `${ESPECIES_BASE}/GetFamiliaById`;
+export const FAMILIAS_CREATE = `${ESPECIES_BASE}/CreateFamilia`;
+export const FAMILIAS_UPDATE = `${ESPECIES_BASE}/UpdateFamilia`;
+
+//CRUD Clases
+export const CLASES_GET = `${ESPECIES_BASE}/GetClases`;
+export const CLASES_GETBYID = `${ESPECIES_BASE}/GetClaseById`;
+export const CLASES_CREATE = `${ESPECIES_BASE}/CreateClase`;
+export const CLASES_UPDATE = `${ESPECIES_BASE}/UpdateClase`;
+
+//CRUD Procedencias
+export const PROCEDENCIAS_GET = `${ESPECIES_BASE}/GetProcedencias`;
+export const PROCEDENCIAS_GETBYID = `${ESPECIES_BASE}/GetProcedenciaById`;
+export const PROCEDENCIAS_CREATE = `${ESPECIES_BASE}/CreateProcedencia`;
+export const PROCEDENCIAS_UPDATE = `${ESPECIES_BASE}/UpdateProcedencia`;
+
 //CRUD Animal
 export const ANIMALES_GET = `${ANIMALES_BASE}`;
 export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;

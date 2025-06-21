@@ -26,6 +26,10 @@ import {
   SettingsLayout,
   Estados,
 } from "#views";
+import EspecieLayout from "ClientApp/views/especies/especie";
+import Familias from "ClientApp/views/especies/familia/familia";
+import Clases from "ClientApp/views/especies/clase/clase";
+import Procedencias from "ClientApp/views/especies/procedencia/procedencia";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -82,6 +86,24 @@ const Provider = () => {
             {
               path: Routes.EJEMPLARES_ROUTE,
               element: <Ejemplares />,
+            },
+            {
+              path: Routes.ESPECIE_ROUTE,
+              element: <EspecieLayout />,
+              children: [
+                {
+                  path: Routes.FAMILIAS_ROUTE,
+                  element: <Familias />,
+                },
+                {
+                  path: Routes.CLASES_ROUTE,
+                  element: <Clases />
+                },
+                {
+                  path: Routes.PROCEDENCIAS_ROUTE,
+                  element: <Procedencias />
+                }
+              ]
             },
             {
               path: Routes.SALUD_ROUTE,
