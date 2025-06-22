@@ -86,7 +86,7 @@ const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
         <Form>
           <FieldColumn label="Nombre de usuario" columns={{ sm: 6 }}>
             <InputText
-              name="NombreUsuario"
+              name="Nombre"
               control={control}
               placeholder="Usuario"
               rules={{ required: "Campo obligatorio" }} />
@@ -104,7 +104,7 @@ const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
             <Dropdown
               name="RolId"
               control={control}
-              placeholder="Seleccione un habitat"
+              placeholder="Seleccione un rol"
               rules={{ required: "Campo obligatorio" }}
               options={roles || []}
               optionLabel="Nombre"
