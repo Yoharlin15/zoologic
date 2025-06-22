@@ -33,12 +33,6 @@ export { AlimentacionList }
 import InventarioList from "./alimentacion/inventario/inventario-list";
 export { InventarioList };
 
-import TratamientosList from "./salud/tratamientos/tratamiento-list";
-export { TratamientosList };
-
-import NecropsiasList from "./salud/necropsias/necropsia-list";
-export { NecropsiasList };
-
 import Salud from "./salud/salud";
 export { Salud };
 

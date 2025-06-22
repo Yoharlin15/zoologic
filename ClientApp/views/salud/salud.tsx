@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
-import TratamientosList from "./necropsias/necropsia-list";
-import NecropsiasList from "./necropsias/necropsia-list";
 import TratamientosAplicadosList from "./tratamientosAplicados/tratamientoAplicado-list";
 
 const Salud = () => {
@@ -23,10 +21,6 @@ const Salud = () => {
       >
         <TabPanel contentClassName="overflow-auto h-full" header="🧪Tratamientos">
           <TratamientosAplicadosList />
-        </TabPanel>
-
-        <TabPanel contentClassName="overflow-auto h-full" header="🩻 Necropsias">
-          <NecropsiasList/>
         </TabPanel>
         
       </TabView>

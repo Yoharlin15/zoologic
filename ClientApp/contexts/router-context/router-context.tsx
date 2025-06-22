@@ -21,7 +21,6 @@ import {
   InventarioList,
   EmpleadosList,
   HabitatList,
-  TratamientosList,
   Settings,
   Roles,
   SettingsLayout,

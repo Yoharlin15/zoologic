@@ -5,7 +5,6 @@ import { Tag } from "primereact/tag";
 import { Button } from "primereact/button";
 import dayjs from "dayjs";
 import DietasList from "../alimentacion/dietas/dieta-list";
-import TratamientosList from "../salud/tratamientos/tratamiento-list";
 import { useFetchOneDieta } from "ClientApp/hooks/useFetch/useFetchDietas";
 
 // Definimos el tipo para las columnas
@@ -141,7 +140,7 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animal, loading = false, on
           </TabPanel>
 
           <TabPanel header="Tratamientos" leftIcon="pi pi-heart mr-2">
-            <TratamientosList />
+            
           </TabPanel>
 
           <TabPanel header="Zona" leftIcon="pi pi-map-marker mr-2">
