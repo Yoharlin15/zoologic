@@ -6,7 +6,7 @@ import React, {
     useCallback,
   } from "react";
   import { debounce } from "radash";
-  import { ITratamiento } from "#interfaces";
+  import { INecropsia } from "#interfaces";
   import { AppQueryHooks } from "#hooks";
   import { Button } from "primereact/button";
   import { Calendar } from "primereact/calendar";
@@ -21,16 +21,16 @@ import React, {
   
   import { ColumnFilterElementTemplateOptions } from "primereact/column";
   import { constants } from "buffer";
-  import { CardTable, ICardTableProps } from "../../components/card-table";
+  import { CardTable, ICardTableProps } from "../../../components/card-table";
   import { fileURLToPath } from "url";
 
-  interface ITratamientoTableProps {
+  interface INecropsiaTableProps {
     dispatch: React.Dispatch<any>;
   }
   
-  const TratamientoTable = ({ dispatch }: ITratamientoTableProps) => {
-    const tratamiento = AppQueryHooks.useFetchTratamientos();
-    const [selectedTratamiento, setSelectedTratamiento] = useState<ITratamiento>();
+  const NecropsiaTable = ({ dispatch }: INecropsiaTableProps) => {
+    const necropsia = AppQueryHooks.useFetchNecropsias();
+    const [selectedNecropsia, setSelectedNecropsia] = useState<INecropsia>();
   
     const navigate = useNavigate();
   
@@ -38,7 +38,7 @@ import React, {
   
     const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
     const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
-    const [selectedTratamientoId, setSelectedTratamientoId] = useState<number | null>(null);
+    const [selectedTratamientoId, setSelectedNecropsiaId] = useState<number | null>(null);
   
     const menuModel = [
       {
@@ -48,8 +48,8 @@ import React, {
         label: "Editar",
         icon: "pi pi-pencil",
         command: () => {
-          if (selectedTratamiento) {
-            setSelectedTratamientoId(selectedTratamiento.TratamientoId);
+          if (selectedNecropsia) {
+            setSelectedNecropsiaId(selectedNecropsia.NecropsiaId);
             setSidebarUpdateVisible(true); // Abre el sidebar
           }
         },
@@ -64,22 +64,8 @@ import React, {
     const [filters, setFilters] = useState<DataTableFilterMeta>(
     );
   
-    const columns = useMemo<ICardTableProps<ITratamiento>["columns"]>(
+    const columns = useMemo<ICardTableProps<INecropsia>["columns"]>(
       () => [
-        {
-          filter: true,
-          sortable: true,
-          header: "ID",
-          field: "TratamientoId",
-          style: { minWidth: "10rem" },
-        },
-        {
-          filter: true,
-          sortable: true,
-          header: "Tratamiento",
-          field: "NombreTratamiento",
-          style: { minWidth: "17rem" },
-        },
         {
           filter: true,
           sortable: true,
@@ -90,15 +76,15 @@ import React, {
         {
           filter: true,
           sortable: true,
-          header: "Habitat",
-          field: "NombreHabitat",
+          header: "Fecha de Muerte",
+          field: "FechaMuerte",
           style: { minWidth: "10rem" },
         },
         {
           filter: true,
           sortable: true,
-          header: "FechaEntrada",
-          field: "FechaSalida",
+          header: "Procedencia",
+          field: "Procedencia",
           style: { minWidth: "10em" },
         },
         {
@@ -107,32 +93,58 @@ import React, {
           header: "Tratado por",
           field: "NombreUsuario",
           style: { minWidth: "18em" },
-          
-        }
-
+        },
+        {
+            filter: true,
+            sortable: true,
+            header: "Fecha de Necropsia",
+            field: "FechaNecropsia",
+            style: { minWidth: "10rem" },
+        },
+        {
+            filter: true,
+            sortable: true,
+            header: "Historia",
+            field: "Historia",
+            style: { minWidth: "10rem" },
+        },
+        {
+            filter: true,
+            sortable: true,
+            header: "Examen",
+            field: "Examen",
+            style: { minWidth: "10rem" },
+        },
+        {
+            filter: true,
+            sortable: true,
+            header: "Registrado por",
+            field: "NombreUsuario",
+            style: { minWidth: "10rem" },
+        },
       ],
       []
     );
   
-    const filteredTratamientos = useMemo(() => {
-      if (!Array.isArray(tratamiento.data)) return [];
-      return tratamiento.data.filter((t) =>
+    const filteredNecropsias = useMemo(() => {
+      if (!Array.isArray(necropsia.data)) return [];
+      return necropsia.data.filter((t) =>
         t.NombreComun?.toLowerCase().includes(searchText.toLowerCase())
       );
-    }, [tratamiento.data, searchText]);
+    }, [necropsia.data, searchText]);
   
     return (
       <div className="h-full p-4">
         <ContextMenu
           ref={cm}
           model={menuModel}
-          onHide={() => setSelectedTratamiento(undefined)}
+          onHide={() => setSelectedNecropsia(undefined)}
         />
-        <CardTable<ITratamiento>
-          title="Tratamientos realizados"
+        <CardTable<INecropsia>
+          title="Necropsias realizadas"
           columns={columns}
-          value={filteredTratamientos}
-          skeletonLoading={tratamiento.isPending}
+          value={filteredNecropsias}
+          skeletonLoading={necropsia.isPending}
           onChangeSearch={debounce({ delay: 500 }, (e) =>
             setSearchText(e.target.value)
           )}
@@ -140,7 +152,7 @@ import React, {
             <Button
               key="btn_add"
               onClick={() => {
-                setSelectedTratamientoId(null);
+                setSelectedNecropsiaId(null);
                 setSidebarCreateVisible(true);
               }}
             >
@@ -152,18 +164,18 @@ import React, {
             rows: 8,
             size: "small",
             filters,
-            dataKey: "TratamientoId",
-            loading: tratamiento.isFetching,
-            paginator: filteredTratamientos.length > 8,
-            contextMenuSelection: selectedTratamiento,
+            dataKey: "NecropsiaId",
+            loading: necropsia.isFetching,
+            paginator: filteredNecropsias.length > 8,
+            contextMenuSelection: selectedNecropsia,
             onContextMenu: (e) => cm.current?.show(e.originalEvent),
             onContextMenuSelectionChange: (
-              e: DataTableSelectionSingleChangeEvent<ITratamiento[]>
-            ) => setSelectedTratamiento(e.value),
+              e: DataTableSelectionSingleChangeEvent<INecropsia[]>
+            ) => setSelectedNecropsia(e.value),
           }}
         />
       </div>
     );
   };
   
-  export default TratamientoTable;
+  export default NecropsiaTable;

@@ -18,6 +18,7 @@ export const Verify_Route = "verificar";
 export const DETAILS_ROUTE = "animales/:id";
 export const INVENTARIO_ROUTE = "inventario";
 export const HABITAT_ROUTE = "habitat";
+export const COMPORTAMIENTO_ROUTE = "comportamiento";
 export const DIETA_APLICADA_ROUTE = "dietas"
 export const ALIMENTACION_ROUTE = "alimentacion"
 export const SETTINGS_ROUTE = "settings";

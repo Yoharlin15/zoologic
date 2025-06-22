@@ -5,7 +5,7 @@ import React, {
   useReducer,
 } from "react";
 import { debounce } from "radash";
-import { IEmpleado } from "#interfaces";
+import { IEmpleado, ITratamientoAplicado } from "#interfaces";
 import { AppQueryHooks } from "#hooks";
 import { Button } from "primereact/button";
 import { ContextMenu } from "primereact/contextmenu";
@@ -16,18 +16,18 @@ import {
   DataTableSelectionSingleChangeEvent,
 } from "primereact/datatable";
 
-import { CardTable, ICardTableProps } from "../../components/card-table";
+import { CardTable, ICardTableProps } from "../../../components/card-table";
 import dayjs from "dayjs";
 import { Reducers } from "#core";
-import EmpleadoSidebarCreate from "./empleado-sidebar-create";
+import TratamientoAplicadoSidebarCreate from "./tratamientoAplicado-sidebar-create";
 
-interface IEmpleadoTableProps {
+interface ITratamientoAplicadoTableProps {
   dispatch: React.Dispatch<any>;
 }
 
-const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
-  const empleado = AppQueryHooks.useFetchEmpleados();
-  const [selectedEmpleado, setSelectedEmpleado] = useState<IEmpleado>();
+const TratamientoAplicadoTable = ({ dispatch }: ITratamientoAplicadoTableProps) => {
+  const tratamientoAplicado = AppQueryHooks.useFetchTratamientosAplicados();
+  const [selectedTratamientoAplicado, setSelectedTratamientoAplicado] = useState<ITratamientoAplicado>();
 
   const navigate = useNavigate();
 
@@ -36,15 +36,15 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
 
   const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
   const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
-  const [selectedEmpleadoId, setSelectedEmpleadoId] = useState<number | null>(null);
+  const [selectedTratamientoAplicadoId, setSelectedEmpleadoId] = useState<number | null>(null);
 
   const menuModel = [
     {
       label: "Editar",
       icon: "pi pi-pencil",
       command: () => {
-        if (selectedEmpleado) {
-          setSelectedEmpleadoId(selectedEmpleado.EmpleadoId);
+        if (selectedTratamientoAplicado) {
+          setSelectedEmpleadoId(selectedTratamientoAplicado.TratamientoAplicadoId);
           setSidebarUpdateVisible(true); // Abre el sidebar
         }
       },
@@ -58,79 +58,95 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
   const [searchText, setSearchText] = useState("");
   const [filters, setFilters] = useState<DataTableFilterMeta>({});
 
-  const columns = useMemo<ICardTableProps<IEmpleado>["columns"]>(
+  const columns = useMemo<ICardTableProps<ITratamientoAplicado>["columns"]>(
     () => [
       {
         filter: true,
         sortable: true,
-        header: "Nombres",
-        field: "Nombres",
+        header: "Tratamiento",
+        field: "NombreTratamiento",
         style: { minWidth: "12rem" },
       },
 
       {
         filter: true,
         sortable: true,
-        header: "Apellidos",
-        field: "Apellidos",
+        header: "Animal (Alias)",
+        field: "Alias",
         style: { minWidth: "12rem" },
       },
 
       {
         filter: true,
         sortable: true,
-        header: "Cedula",
-        field: "Cedula",
+        header: "Habitat",
+        field: "Nombre",
         style: { minWidth: "12rem" },
       },
 
       {
         filter: true,
         sortable: true,
-        header: "Telefono",
-        field: "Telefono",
+        header: "Fecha de Entrada",
+        field: "FechaEntrada",
         style: { minWidth: "12em" },
       },
 
       {
         filter: true,
         sortable: true,
-        header: "Usuario",
+        header: "Fecha de Salida",
+        field: "FechaSalida",
+        style: { minWidth: "12em" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Atendido por",
         field: "NombreUsuario",
-        style: { minWidth: "12em" },
-      },
-
-      {
-        filter: true,
-        sortable: true,
-        header: "Estado",
-        field: "NombreEstado",
         style: { minWidth: "10fem" },
       },
-      
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Razon",
+        field: "Razon",
+        style: { minWidth: "10fem" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Procedencia",
+        field: "NombreUsuario",
+        style: { minWidth: "10fem" },
+      },
+
     ],
     []
   );
 
-  const filteredEmpleados = useMemo(() => {
-    if (!Array.isArray(empleado.data)) return [];
-    return empleado.data.filter((t) =>
-      t.Sexo?.toLowerCase().includes(searchText.toLowerCase())
+  const filteredTratamientosAplicados = useMemo(() => {
+    if (!Array.isArray(tratamientoAplicado.data)) return [];
+    return tratamientoAplicado.data.filter((t) =>
+      t.Alias?.toLowerCase().includes(searchText.toLowerCase())
     );
-  }, [empleado.data, searchText]);
+  }, [tratamientoAplicado.data, searchText]);
 
   return (
     <div className="h-full">
       <ContextMenu
         ref={cm}
         model={menuModel}
-        onHide={() => setSelectedEmpleado(undefined)}
+        onHide={() => setSelectedTratamientoAplicado(undefined)}
       />
-      <CardTable<IEmpleado>
-        title="Lista de Empleados"
+      <CardTable<ITratamientoAplicado>
+        title="Record de tratamientos aplicados"
         columns={columns}
-        value={filteredEmpleados}
-        skeletonLoading={empleado.isPending}
+        value={filteredTratamientosAplicados}
+        skeletonLoading={tratamientoAplicado.isPending}
         onChangeSearch={debounce({ delay: 500 }, (e) =>
           setSearchText(e.target.value)
         )}
@@ -142,31 +158,31 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
               setSidebarCreateVisible(true);
             }}
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
-            label="Nuevo empleado"
+            label="Aplicar Tratamiento"
           />
-          
+
         ]}
         tableProps={{
           rows: 8,
           size: "small",
           filters,
-          dataKey: "EmpleadoId",
-          loading: empleado.isFetching,
-          paginator: filteredEmpleados.length > 8,
-          contextMenuSelection: selectedEmpleado,
+          dataKey: "TratamientoAplicadoId",
+          loading: tratamientoAplicado.isFetching,
+          paginator: filteredTratamientosAplicados.length > 8,
+          contextMenuSelection: selectedTratamientoAplicado,
           onContextMenu: (e) => cm.current?.show(e.originalEvent),
           onContextMenuSelectionChange: (
-            e: DataTableSelectionSingleChangeEvent<IEmpleado[]>
-          ) => setSelectedEmpleado(e.value),
+            e: DataTableSelectionSingleChangeEvent<ITratamientoAplicado[]>
+          ) => setSelectedTratamientoAplicado(e.value),
         }}
       />
-      <EmpleadoSidebarCreate
+      <TratamientoAplicadoSidebarCreate
         visible={sidebarCreateVisible}
         onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedEmpleadoId ?? undefined}
+        especieId={selectedTratamientoAplicadoId ?? undefined}
       />
     </div>
   );
 };
 
-export default EmpleadoTable;
+export default TratamientoAplicadoTable;

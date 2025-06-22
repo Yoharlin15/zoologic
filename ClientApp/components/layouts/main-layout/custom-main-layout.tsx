@@ -17,6 +17,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
       [Routes.DIETA_APLICADA_ROUTE]: 4,
       [Routes.ALIMENTACION_ROUTE]: 4,
       [Routes.HABITAT_ROUTE]: 5,
+      [Routes.COMPORTAMIENTO_ROUTE]: 6,
     }),
     []
   );
@@ -68,7 +69,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         {
           icon: <FontAwesomeIcon icon="hippo" />,
           label: "Comportamiento",
-          onClick: () => navigate(""),
+          onClick: () => navigate(`${Routes.COMPORTAMIENTO_ROUTE}`),
         },
         {
           icon: <FontAwesomeIcon icon="person-chalkboard" />,

@@ -1,11 +1,9 @@
 import React, { useState } from "react";
-import { AppQueryHooks } from "#hooks";
-import { renderTooltip } from "#utils";
-import { Reducers } from "#core";
 import { useParams } from "react-router-dom";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
-import TratamientosList from "../tratamientos/tratamiento-list";
-import NecropsiasList from "../necropsias/necropsia-list";
+import TratamientosList from "./necropsias/necropsia-list";
+import NecropsiasList from "./necropsias/necropsia-list";
+import TratamientosAplicadosList from "./tratamientosAplicados/tratamientoAplicado-list";
 
 const Salud = () => {
   const { projectId } = useParams();
@@ -24,7 +22,7 @@ const Salud = () => {
         panelContainerClassName="p-0 h-full w-full"
       >
         <TabPanel contentClassName="overflow-auto h-full" header="🧪Tratamientos">
-          <TratamientosList />
+          <TratamientosAplicadosList />
         </TabPanel>
 
         <TabPanel contentClassName="overflow-auto h-full" header="🩻 Necropsias">

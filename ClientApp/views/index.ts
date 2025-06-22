@@ -9,11 +9,17 @@ export { VerifyView} from "./verificar";
 
 export { DashboardView } from "./dashboard";
 
-import EspeciesList from "./especies/especie/especie-list";
-export { EspeciesList };
+import EmpleadosList from "./empleados/empleado-list";
+export { EmpleadosList };
 
 import AnimalesList from "./animales/animal-list";
 export { AnimalesList };
+
+import EspeciesList from "./especies/especie/especie-list";
+export { EspeciesList };
+
+import Ejemplares from "./ejemplares/ejemplares";
+export { Ejemplares };
 
 import PadresList from "./padres/padres-list"
 export { PadresList }
@@ -24,32 +30,29 @@ export { DietasAplicadasList }
 import AlimentacionList from "./alimentacion/alimentacion"
 export { AlimentacionList }
 
-import EmpleadosList from "./empleados/empleado-list";
-export { EmpleadosList };
+import InventarioList from "./alimentacion/inventario/inventario-list";
+export { InventarioList };
 
-import TratamientosList from "./tratamientos/tratamiento-list";
+import TratamientosList from "./salud/tratamientos/tratamiento-list";
 export { TratamientosList };
 
-import NecropsiasList from "./necropsias/necropsia-list";
+import NecropsiasList from "./salud/necropsias/necropsia-list";
 export { NecropsiasList };
-
-import Ejemplares from "./ejemplares/ejemplares";
-export { Ejemplares };
 
 import Salud from "./salud/salud";
 export { Salud };
+
+import HabitatList from "./habitats/habitat-list";
+export { HabitatList };
+
+import ComportamientosList from "./comportamientos/comportamiento-list";
+export { ComportamientosList };
 
 import UsuariosList from "./usuarios/usuario-list";
 export { UsuariosList };
 
 import AnimalDetailView from "./animales/animal-datails-view";
 export { AnimalDetailView };
-
-import InventarioList from "./alimentacion/inventario/inventario-list";
-export { InventarioList };
-
-import HabitatList from "./habitats/habitat-list";
-export { HabitatList };
 
 export * from "./settings";
 

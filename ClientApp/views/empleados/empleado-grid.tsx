@@ -1,10 +1,7 @@
 import React from "react";
-import { Routes } from "#core";
 import { IEmpleado } from "#interfaces";
-import { Card } from "primereact/card";
 import { matchesSearchText } from "#utils";
 import { EmptyMessage, TopSearchResult } from "#components";
-import { useNavigate, generatePath } from "react-router-dom";
 
 interface IEmpleadoGridProps {
   searchText: string;
@@ -12,7 +9,7 @@ interface IEmpleadoGridProps {
 }
 
 const EmpleadoGrid = ({ empleados, searchText }: IEmpleadoGridProps) => {
-  const navigate = useNavigate();
+
   const filteredEmpleados = React.useMemo(() => {
     if (!empleados?.length) return [];
     return empleados.filter((item) =>

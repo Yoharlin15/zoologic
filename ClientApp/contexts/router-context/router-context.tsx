@@ -11,20 +11,22 @@ import {
   SignupView,
   VerifyView,
   DashboardView,
+  Ejemplares,
   AnimalesList,
   DietasAplicadasList,
   AlimentacionList,
   Salud,
   UsuariosList,
-  Ejemplares,
   AnimalDetailView,
   InventarioList,
   EmpleadosList,
   HabitatList,
+  TratamientosList,
   Settings,
   Roles,
   SettingsLayout,
   Estados,
+  ComportamientosList,
 } from "#views";
 import EspecieLayout from "ClientApp/views/especies/especie";
 import Familias from "ClientApp/views/especies/familia/familia";
@@ -136,6 +138,10 @@ const Provider = () => {
             {
               path: Routes.HABITAT_ROUTE,
               element: <HabitatList />
+            },
+            {
+              path: Routes.COMPORTAMIENTO_ROUTE,
+              element: <ComportamientosList />,
             },
             {
               id: "settings-root",

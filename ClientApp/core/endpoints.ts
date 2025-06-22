@@ -13,8 +13,10 @@ const ZONAS_BASE = "Zona";
 const ALIMENTO_BASE = "Alimentacion/GetAlimentos";
 const INVENTARIO_BASE = "Alimentacion/GetInventario";
 const DIETA_BASE = "Alimentacion/GetDietas";
-const DIETA_APLICADA_BASE = "Alimentacion/GetDietasAplicadas"
+const DIETA_APLICADA_BASE = "Alimentacion/GetDietasAplicadas";
 const HABITATS_BASE = "Habitat";
+const COMPORTAMIENTO_BASE = "Comportamiento";
+const DETALLECOMPORTAMIENTO_BASE = "DetalleComportamiento";
 const USUARIOS_BASE = "Usuario";
 const LOGIN = "Login";
 const LOGOUT = "Logout";
@@ -35,6 +37,21 @@ export const ROLES_GET = `${USUARIOS_BASE}/get-roles`
 export const ROLES_GETBYID = `${USUARIOS_BASE}/GetRolById`
 export const ROLES_CREATE = `${USUARIOS_BASE}/create-rol`
 export const ROLES_UPDATE = `${USUARIOS_BASE}/UpdateRol`
+
+//Get Empleado
+export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;
+export const EMPLEADOS_CREATE = `${EMPLEADOS_BASE}/${CREATE}`;
+
+//Get Cargo
+export const CARGOS_GET = `${EMPLEADOS_BASE}/GetCargos`;
+
+//CRUD Animal
+export const ANIMALES_GET = `${ANIMALES_BASE}`;
+export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
+
+//CRUD Padre
+export const PADRES_GET = `${ANIMALES_BASE}/Animales-padres`;
+export const PADRES_CREATE = `${ANIMALES_BASE}/Create-padre`;
 
 //CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;
@@ -60,17 +77,6 @@ export const PROCEDENCIAS_GETBYID = `${ESPECIES_BASE}/GetProcedenciaById`;
 export const PROCEDENCIAS_CREATE = `${ESPECIES_BASE}/CreateProcedencia`;
 export const PROCEDENCIAS_UPDATE = `${ESPECIES_BASE}/UpdateProcedencia`;
 
-//CRUD Animal
-export const ANIMALES_GET = `${ANIMALES_BASE}`;
-export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
-
-//CRUD Padre
-export const PADRES_GET = `${ANIMALES_BASE}/Animales-padres`;
-export const PADRES_CREATE = `${ANIMALES_BASE}/Create-padre`;
-
-//CRUD Habitats
-export const HABITATS_GET = `${HABITATS_BASE}`;
-
 //CRUD Alimentos
 export const ALIMENTO_GET = `${ALIMENTO_BASE}`
 
@@ -83,18 +89,26 @@ export const DIETA_GET = `${DIETA_BASE}`;
 //CRUD DietasAplicadas
 export const dietaAPLICADA_GET = `${DIETA_APLICADA_BASE}`
 
-//Get Empleado
-export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;
-export const EMPLEADOS_CREATE = `${EMPLEADOS_BASE}/${CREATE}`;
+//CRUD Habitats
+export const HABITATS_GET = `${HABITATS_BASE}`;
 
-//Get Cargo
-export const CARGOS_GET = `${EMPLEADOS_BASE}/GetCargos`;
+//CRUD Comportamiento
+export const COMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/Get`;
+export const COMPORTAMIENTO_CREATE = `${COMPORTAMIENTO_BASE}/CreateComportamiento`;
+
+//CRUD DetalleComportamiento
+export const DETALLECOMPORTAMIENTO_GET = `${DETALLECOMPORTAMIENTO_BASE}/Get`;
+export const DETALLECOMPORTAMIENTO_CREATE = `${DETALLECOMPORTAMIENTO_BASE}/CreateDetalleComportamiento`;
 
 //Get Tratamiento
-export const TRATAMIENTOS_GET = `${TRATAMIENTOS_BASE}/${GET}`;
+export const TRATAMIENTOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientos`;
+
+//CRUD TratamientoAplicado
+export const TRATAMIENTOSAPLICADOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientosAplicados`;
+export const TRATAMIENTOSAPLICADOS_CREATE = `${TRATAMIENTOS_BASE}/CreateTratamientoAplicado`;
 
 //Get Necropsias
-export const NECROPSIAS_GET = `${NECROPSIAS_BASE}/${GET}`;
+export const NECROPSIAS_GET = `${NECROPSIAS_BASE}/GetNecropsia`;
 
 //Get Zonas 
 export const ZONAS_GET = `${ZONAS_BASE}/${GET}`;

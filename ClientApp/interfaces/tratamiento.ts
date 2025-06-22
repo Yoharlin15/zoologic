@@ -1,14 +1,35 @@
 export interface ITratamiento {
     TratamientoId: number;
     NombreTratamiento: string;
-    EspecieId: number;
-    NombreComun: string;
+}
+
+export interface ITratamientoCreate {
+    NombreTratamiento: string;
+}
+
+export interface ITratamientoAplicado {
+    TratamientoAplicadoId: number;
+    TratamientoId: number;
+    NombreTratamiento: string;
+    AnimalId: number;
+    Alias: string
     HabitatId: number;
-    NombreHabitat: string;
-    FechaEntrada: Date | string | null;
-    FechaSalida: Date | string | null;
+    Nombre: string;
+    FechaEntrada: Date | string;
+    FechaSalida: Date | string;
     UsuarioId: number;
     NombreUsuario: string;
+    Razon: string;
+    Procedencia: string;
+}
+
+export interface ITratamientoAplicadoCreate {
+    TratamientoId: number;
+    AnimalId: number;
+    HabitatId: number;
+    FechaEntrada: Date | null;
+    FechaSalida: Date | null;
+    UsuarioId: number;
     Razon: string;
     Procedencia: string;
 }

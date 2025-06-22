@@ -18,3 +18,5 @@ export * from "./useFetchAlimentos";
 export * from "./useFetchFamilias";
 export * from "./useFetchClases";
 export * from "./useFetchProcedencias";
+export * from "./useFetchComportamientos";
+export * from "./useFetchTratamientosAplicados";

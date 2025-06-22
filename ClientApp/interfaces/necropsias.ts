@@ -1,7 +1,6 @@
 export interface INecropsia {
-    NecropsiaId: number,
-    EspecieId: number,
-    NombreComun: string;
+    AnimalId: number,
+    Alias: string;
     FechaMuerte: Date | string | null;
     Procedencia: string;
     FechaNecropsia: Date | string | null;

@@ -11,3 +11,4 @@ export type * from "./habitat";
 export type * from "./estado";
 export type * from "./settings"
 export type * from "./alimentacion"
+export type * from "./comportamiento";
