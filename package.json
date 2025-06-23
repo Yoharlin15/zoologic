@@ -37,6 +37,7 @@
     "react-hook-form": "^7.51.5",
     "react-hot-toast": "^2.4.1",
     "react-leaflet": "^5.0.0",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.23.1",
     "react-syntax-highlighter": "^15.5.0",
     "react-timer-hook": "^3.0.7",
