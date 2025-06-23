@@ -44,6 +44,7 @@ export const EMPLEADOS_CREATE = `${EMPLEADOS_BASE}/${CREATE}`;
 
 //Get Cargo
 export const CARGOS_GET = `${EMPLEADOS_BASE}/GetCargos`;
+export const CARGOS_CREATE = `${EMPLEADOS_BASE}/CreateCargo`;
 
 //CRUD Animal
 export const ANIMALES_GET = `${ANIMALES_BASE}`;

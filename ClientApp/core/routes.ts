@@ -24,5 +24,6 @@ export const ALIMENTACION_ROUTE = "alimentacion"
 export const SETTINGS_ROUTE = "settings";
 export const ROLES_ROUTE = "roles";
 export const ESTADOS_ROUTE = "estados"
+export const CARGOS_ROUTE = "cargos";
 
 

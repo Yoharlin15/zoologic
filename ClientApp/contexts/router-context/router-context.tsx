@@ -26,6 +26,7 @@ import {
   SettingsLayout,
   Estados,
   ComportamientosList,
+  Cargos,
 } from "#views";
 import EspecieLayout from "ClientApp/views/especies/especie";
 import Familias from "ClientApp/views/especies/familia/familia";
@@ -161,6 +162,11 @@ const Provider = () => {
                   id: "estados",
                   path: Routes.ESTADOS_ROUTE,
                   element: <Estados />
+                },
+                {
+                  id: "cargos",
+                  path: Routes.CARGOS_ROUTE,
+                  element: <Cargos />,
                 }
               ],
             },
