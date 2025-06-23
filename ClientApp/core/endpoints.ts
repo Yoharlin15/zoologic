@@ -55,7 +55,7 @@ export const PADRES_CREATE = `${ANIMALES_BASE}/Create-padre`;
 
 //CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;
-export const ESPECIES_CREATE = `${ESPECIES_BASE}/${CREATE}`;
+export const ESPECIES_CREATE = `${ESPECIES_BASE}/CreateEspecie`;
 export const ESPECIES_CREATE_GET = `${ESPECIES_BASE}/${CREATE}`;
 export const ESPECIES_UPDATE = `${ESPECIES_BASE}/${UPDATE}`;
 
