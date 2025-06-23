@@ -16,13 +16,9 @@ export interface IEspecieCreate {
     EspecieId: number;
     NombreCientifico : string;
     NombreComun: string;
-    Familia: string;
-    Clase: string;
-    Sexo: string;
-    Peso: string;
-    FechaLlegada: Date | null;
-    Procedencia: string;
-    Observaciones: string;
+    FamiliaId: number;
+    ClaseId: number;
+    ProcedenciaId: number;
 }
 
 export interface IEspecieUpdate {
