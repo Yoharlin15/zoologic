@@ -17,6 +17,11 @@ const AlimentoApi: ApiCustom<IAlimento> = {
     const result = await API().get(Endpoints.ALIMENTO_GET);
     return result.data;
   },
+
+  create: async (data) => {
+    const result = await API().post(Endpoints.ALIMENTO_CREATE, data);
+    return result.data;
+  }
 }
 
 export default AlimentoApi

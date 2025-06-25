@@ -17,6 +17,11 @@ const DietaAplicadaApi: ApiCustom<IDietaAplicada> = {
     const result = await API().get(Endpoints.dietaAPLICADA_GET);
     return result.data;
   },
+
+  create: async (data) => {
+    const result = await API().post(Endpoints.DIETA_APLICADA_CREATE, data);
+    return result.data;
+  }
 }
 
 export default DietaAplicadaApi;

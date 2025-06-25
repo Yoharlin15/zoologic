@@ -5,14 +5,31 @@ export interface IInventario {
     Cantidad: number;
 }
 
+export interface IInventarioCreate {
+    AlimentoId: number;
+    Cantidad: number;
+}
+
 export interface IDieta {
     DietaId: number;
     Nombre: string;
     Descripcion: string;
 }
 
+export interface IDietaCreate {
+    Nombre: string;
+    Descripcion: string;
+    AlimentoId: number[];
+    Cantidad: number;
+}
+
 export interface IAlimento {
     AlimentoId: number;
+    Nombre: string;
+    Descripcion: string;
+}
+
+export interface IAlimentoCreate {
     Nombre: string;
     Descripcion: string;
 }
@@ -32,5 +49,11 @@ export interface IDietaAplicada {
     DietaId: number;
     Nombre: string;
     Alimentos: IAlimento[];
+    FechaAplicacion: Date | null;
+}
+
+export interface IDietaAplicadaCreate {
+    AnimalId: number;
+    DietaId: number;
     FechaAplicacion: Date | null;
 }

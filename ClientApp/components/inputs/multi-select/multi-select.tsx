@@ -1,11 +1,9 @@
 import React from "react";
 import { MultiSelect } from "primereact/multiselect";
 import { Control, useController, UseControllerProps } from "react-hook-form";
-
 import { FieldErrorMessage } from "../field-error-message";
 
-type IMultiSelectProps = React.ComponentProps<typeof MultiSelect> &
-  UseControllerProps;
+type IMultiSelectProps = React.ComponentProps<typeof MultiSelect> & UseControllerProps;
 
 interface IControlledMultiSelectProps extends Omit<IMultiSelectProps, "id"> {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -30,8 +28,8 @@ const ControlledMultiSelect = ({
         {...restProps}
         {...field}
         id={name}
-        optionLabel="label"
-        onChange={field.onChange}
+        value={field.value}
+        onChange={(e) => field.onChange(e.value)} // <-- importante para multiselect
         invalid={!!fieldState.error}
       />
       <FieldErrorMessage message={fieldState.error?.message} />

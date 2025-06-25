@@ -21,6 +21,7 @@ import { CardTable, ICardTableProps } from "../../../components/card-table";
 import { Reducers, Routes } from "#core";
 import { IDietaAplicada } from "ClientApp/interfaces/alimentacion";
 import dayjs from "dayjs";
+import DietaAplicadaSidebarCreate from "./dietaAplicada-sidebar-create";
 
 interface IDietaAplicadaTableProps {
     dispatch: React.Dispatch<any>;
@@ -36,7 +37,7 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
 
     const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
     const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
-    const [selectedHabitatId, setSelectedDietaAplicadaId] = useState<number | null>(null);
+    const [selectedDietaAplicadaId, setSelectedDietaAplicadaId] = useState<number | null>(null);
 
     const menuModel = [
         {
@@ -160,11 +161,11 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
                     ) => setSelectedDietaAplicada(e.value),
                 }}
             />
-            {/* <HabitatSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedHabitatId ?? undefined}
-      /> */}
+            <DietaAplicadaSidebarCreate
+                visible={sidebarCreateVisible}
+                onHide={() => setSidebarCreateVisible(false)}
+                dietaAplicadaId={selectedDietaAplicadaId ?? undefined}
+            />
         </div>
     );
 };

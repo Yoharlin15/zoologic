@@ -5,3 +5,6 @@ export * from "./useMutationFamilias";
 export * from "./useMutationClases";
 export * from "./useMutationProcedencias";
 export * from "./useMutationCargos";
+export * from "./useMutationAlimentos";
+export * from "./useMutationDietas";
+export * from "./useMutationDietaAplicada";

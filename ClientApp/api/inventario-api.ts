@@ -17,6 +17,11 @@ const InventarioApi: ApiCustom<IInventario> = {
     const result = await API().get(Endpoints.INVENTARIO_GET);
     return result.data;
   },
+
+  create: async (data) => {
+    const result = await API().post(Endpoints.INVENTARIO_CREATE, data);
+    return result.data;
+  }
 };
 
 export default InventarioApi;

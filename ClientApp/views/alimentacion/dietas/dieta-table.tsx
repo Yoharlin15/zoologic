@@ -19,6 +19,7 @@ import { CardTable, ICardTableProps } from "../../../components/card-table";
 // import HabitatSidebarCreate from "./Habitat-sidebar-create";
 import { Reducers, Routes } from "#core";
 import { IDieta } from "ClientApp/interfaces/alimentacion";
+import DietaSidebarCreate from "./dieta-sidebar-create";
 
 interface IDietaTableProps {
     dispatch: React.Dispatch<any>;
@@ -86,11 +87,7 @@ const DietaTable = ({ dispatch }: IDietaTableProps) => {
 
     return (
         <div className="h-full">
-            <ContextMenu
-                ref={cm}
-                model={menuModel}
-                onHide={() => setSelectedDieta(undefined)}
-            />
+           
             <CardTable<IDieta>
                 title="Dietas"
                 columns={columns}
@@ -110,13 +107,6 @@ const DietaTable = ({ dispatch }: IDietaTableProps) => {
                         <i className="pi pi-plus mr-2"></i>
                         <span className="hidden md:flex">Crear dieta</span>
                     </Button>,
-
-                    <Button
-                        key="btn_navigate"
-                        icon="pi pi-bars"
-                        className="ml-2"
-                        onClick={() => navigate(`/${Routes.ALIMENTACION_ROUTE}`)}
-                    />
                 ]}
                 tableProps={{
                     rows: 8,
@@ -132,11 +122,11 @@ const DietaTable = ({ dispatch }: IDietaTableProps) => {
                     ) => setSelectedDieta(e.value),
                 }}
             />
-            {/* <HabitatSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedHabitatId ?? undefined}
-      /> */}
+            <DietaSidebarCreate
+                visible={sidebarCreateVisible}
+                onHide={() => setSidebarCreateVisible(false)}
+                dietaId={selectedDietaId ?? undefined}
+            />
         </div>
     );
 };

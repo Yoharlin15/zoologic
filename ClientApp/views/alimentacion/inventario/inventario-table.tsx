@@ -20,6 +20,7 @@ import { CardTable, ICardTableProps } from "../../../components/card-table";
 
 // import InventarioSidebarCreate from "./Inventario-sidebar-create";
 import { Reducers } from "#core";
+import InventarioSidebarCreate from "./inventario-sibebar-create";
 
 interface IInventarioTableProps {
   dispatch: React.Dispatch<any>;
@@ -144,17 +145,8 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
             }}
           >
             <i className="pi pi-plus mr-2"></i>
-            <span className="hidden md:flex">Nuevo Inventario</span>
+            <span className="hidden md:flex">Agregar alimento</span>
           </Button>,
-
-          <Button
-            key="btn_menu"
-            icon="pi pi-bars"
-            className="ml-2"
-            onClick={(e) => menu.current?.toggle(e)}
-            aria-controls="popup_menu"
-            aria-haspopup
-          />,
         ]}
         tableProps={{
           rows: 8,
@@ -170,11 +162,11 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
           ) => setSelectedInventario(e.value),
         }}
       />
-      {/* <InventarioSidebarCreate
+      <InventarioSidebarCreate
         visible={sidebarCreateVisible}
         onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedInventarioId ?? undefined}
-      /> */}
+        inventarioId={selectedInventarioId ?? undefined}
+      />
     </div>
   );
 };

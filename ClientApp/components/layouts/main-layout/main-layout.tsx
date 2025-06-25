@@ -75,7 +75,7 @@ const MainLayout = ({
   };
 
   const handleConfigNavigation = () => {
-    navigate(Routes.SETTINGS_ROUTE); 
+    navigate(Routes.SETTINGS_ROUTE);
   };
 
   const headerPropsWithActions = {
@@ -224,6 +224,9 @@ const LayoutContent = ({
       {children}
     </div>
   );
+
+  const [dropdownOpen, setDropdownOpen] = React.useState(false);
+
   return (
     <div className="flex flex-column relative flex-auto max-h-screen">
       {/* HEADER */}
@@ -232,88 +235,85 @@ const LayoutContent = ({
         className="flex justify-content-between align-items-center px-5 surface-0 border-bottom-1 surface-border absolute top-0 w-full z-5"
       >
         <span className="font-semibold text-lg text-700 flex">{title}</span>
-        <StyleClass
-          selector="@next"
-          nodeRef={btnRef}
-          leaveToClassName="hidden"
-          enterFromClassName="hidden"
-          enterActiveClassName="fadein"
-          leaveActiveClassName="fadeout"
-        >
+
+        <div className="relative">
           <a
             ref={btnRef}
+            onClick={() => setDropdownOpen((prev) => !prev)}
             className="p-ripple cursor-pointer text-700 select-none"
           >
             <div className="hidden lg:flex align-items-center">
               <div className="p-overlay-badge flex">
                 {/* <img
-                  alt="avatar"
-                  src={dropdown?.avatarSrc}
-                  style={{ width: 32, height: 32, borderRadius: 100 }}
-                /> */}
-                {/* <Badge severity="danger" /> */}
+                alt="avatar"
+                src={dropdown?.avatarSrc}
+                style={{ width: 32, height: 32, borderRadius: 100 }}
+              /> */}
               </div>
               <div className="font-semibold text-lg text-900 flex ml-2">
                 {dropdown?.title}
               </div>
-              <StyleClass
-                nodeRef={btnRef}
-                selector=".chevron-icon"
-                toggleClassName="chevron-down"
-              />
-              <div className="flex chevron-icon">
-                <i className="pi pi-chevron-right text-[28px]"></i>
+              <div className="flex">
+                <i
+                  className={`pi pi-chevron-${dropdownOpen ? "down" : "right"} text-[28px]`}
+                ></i>
               </div>
             </div>
             <div className="lg:hidden">
               <i className="pi pi-ellipsis-v text-[28px]"></i>
             </div>
           </a>
-        </StyleClass>
-        <ul className="list-none p-0 m-0 hidden select-none surface-section border-1  surface-border right-0 top-100 z-1 shadow-2 absolute border-round-lg w-16rem">
-          <li>
-            <a
-              onClick={dropdown?.accountAction}
-              className="p-ripple flex p-3 align-items-center hover:surface-100 font-medium border-round cursor-pointer
-        transition-duration-150 transition-colors w-full text-600 hover:text-900 "
-            >
-              <div className="flex text-base mr-2">
-                <i className="pi pi-user text-[28px]"></i>
-              </div>
-              <span className="font-medium">Cuenta</span>
-              <Ripple />
-            </a>
-          </li>
 
-
-          <li className="border-top-1 surface-border">
-            <a
-              onClick={dropdown?.configAction}
-              className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer
-        transition-duration-150 transition-colors w-full"
-            >
-              <div className="flex text-base mr-2">
-                <i className="pi pi-cog text-[28px]"></i>
-              </div>
-              <span className=" font-medium">Configuración</span>
-              <Ripple />
-            </a>
-          </li>
-
-          <li className="border-top-1 surface-border">
-            <a
-              onClick={dropdown?.logoutAction}
-              className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer
-        transition-duration-150 transition-colors w-full"
-            >
-              <div className="flex text-base mr-2">
-                <i className="pi pi-sign-out text-[28px]"></i>
-              </div>
-              <span className="font-medium">Cerrar sesión</span>
-              <Ripple />
-            </a>
-          </li>
-        </ul>
+          {dropdownOpen && (
+            <ul className="list-none p-0 m-0 select-none surface-section border-1 surface-border right-0 top-100 z-1 shadow-2 absolute border-round-lg w-16rem">
+              <li>
+                <a
+                  onClick={() => {
+                    dropdown?.accountAction?.();
+                    setDropdownOpen(false);
+                  }}
+                  className="p-ripple flex p-3 align-items-center hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors w-full text-600 hover:text-900"
+                >
+                  <div className="flex text-base mr-2">
+                    <i className="pi pi-user text-[28px]"></i>
+                  </div>
+                  <span className="font-medium">Cuenta</span>
+                  <Ripple />
+                </a>
+              </li>
+              <li className="border-top-1 surface-border">
+                <a
+                  onClick={() => {
+                    dropdown?.configAction?.();
+                    setDropdownOpen(false);
+                  }}
+                  className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors w-full"
+                >
+                  <div className="flex text-base mr-2">
+                    <i className="pi pi-cog text-[28px]"></i>
+                  </div>
+                  <span className="font-medium">Configuración</span>
+                  <Ripple />
+                </a>
+              </li>
+              <li className="border-top-1 surface-border">
+                <a
+                  onClick={() => {
+                    dropdown?.logoutAction?.();
+                    setDropdownOpen(false);
+                  }}
+                  className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors w-full"
+                >
+                  <div className="flex text-base mr-2">
+                    <i className="pi pi-sign-out text-[28px]"></i>
+                  </div>
+                  <span className="font-medium">Cerrar sesión</span>
+                  <Ripple />
+                </a>
+              </li>
+            </ul>
+          )}
+        </div>
       </div>
 
       {/* CONTENT */}
@@ -325,6 +325,7 @@ const LayoutContent = ({
       </div>
     </div>
   );
+
 };
 
 export default MainLayout;

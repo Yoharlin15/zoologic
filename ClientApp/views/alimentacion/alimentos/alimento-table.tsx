@@ -18,6 +18,7 @@ import {
 import { CardTable, ICardTableProps } from "../../../components/card-table";
 import { Reducers } from "#core";
 import { IAlimento } from "#interfaces";
+import AlimentoSidebarCreate from "./alimento-sidebar-create";
 
 interface IAlimentoTableProps {
     dispatch: React.Dispatch<any>;
@@ -124,11 +125,11 @@ const AlimentoTable = ({ dispatch }: IAlimentoTableProps) => {
                     ) => setSelectedDietaAplicada(e.value),
                 }}
             />
-            {/* <HabitatSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedHabitatId ?? undefined}
-      /> */}
+            <AlimentoSidebarCreate
+                visible={sidebarCreateVisible}
+                onHide={() => setSidebarCreateVisible(false)}
+                alimentoId={selectedAlimentoId ?? undefined}
+            />
         </div>
     );
 };

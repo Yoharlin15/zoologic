@@ -10,10 +10,10 @@ const EMPLEADOS_BASE = "Empleado";
 const TRATAMIENTOS_BASE = "Tratamiento";
 const NECROPSIAS_BASE = "Necropsia";
 const ZONAS_BASE = "Zona";
-const ALIMENTO_BASE = "Alimentacion/GetAlimentos";
-const INVENTARIO_BASE = "Alimentacion/GetInventario";
-const DIETA_BASE = "Alimentacion/GetDietas";
-const DIETA_APLICADA_BASE = "Alimentacion/GetDietasAplicadas";
+const ALIMENTO_BASE = "Alimentacion";
+const INVENTARIO_BASE = "Alimentacion";
+const DIETA_BASE = "Alimentacion";
+const DIETA_APLICADA_BASE = "Alimentacion";
 const HABITATS_BASE = "Habitat";
 const COMPORTAMIENTO_BASE = "Comportamiento";
 const DETALLECOMPORTAMIENTO_BASE = "DetalleComportamiento";
@@ -79,16 +79,20 @@ export const PROCEDENCIAS_CREATE = `${ESPECIES_BASE}/CreateProcedencia`;
 export const PROCEDENCIAS_UPDATE = `${ESPECIES_BASE}/UpdateProcedencia`;
 
 //CRUD Alimentos
-export const ALIMENTO_GET = `${ALIMENTO_BASE}`
+export const ALIMENTO_GET = `${ALIMENTO_BASE}/GetAlimentos`;
+export const ALIMENTO_CREATE = `${ALIMENTO_BASE}/CreateAlimento`;
 
 //CRUD Inventario
-export const INVENTARIO_GET = `${INVENTARIO_BASE}`;
+export const INVENTARIO_GET = `${INVENTARIO_BASE}/GetInventario`;
+export const INVENTARIO_CREATE = `${INVENTARIO_BASE}/CreateInventario`;
 
 //CRUD Dieta
-export const DIETA_GET = `${DIETA_BASE}`;
+export const DIETA_GET = `${DIETA_BASE}/GetDietas`;
+export const DIETA_CREATE = `${DIETA_BASE}/CreateDieta`;
 
 //CRUD DietasAplicadas
-export const dietaAPLICADA_GET = `${DIETA_APLICADA_BASE}`
+export const dietaAPLICADA_GET = `${DIETA_APLICADA_BASE}/GetDietasAplicadas`;
+export const DIETA_APLICADA_CREATE = `${DIETA_APLICADA_BASE}/CreateDietasAplicadas`;
 
 //CRUD Habitats
 export const HABITATS_GET = `${HABITATS_BASE}`;
