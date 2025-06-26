@@ -2,6 +2,8 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { RouterContextProvider } from './contexts/router-context';
 import queryClient from "./query.config";
 import { locale, addLocale } from 'primereact/api';
+import "primereact/resources/themes/lara-light-blue/theme.css";
+import "primereact/resources/primereact.min.css";
 
 import { setupFontAwesomeIcons } from './utils/font-awesome-icons'; // <--- importa el util
 setupFontAwesomeIcons();

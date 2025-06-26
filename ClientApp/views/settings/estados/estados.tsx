@@ -81,42 +81,12 @@ const Estados = () => {
       {
         filter: true,
         sortable: true,
-        header: "Nombre del Estado",
+        header: "Estados",
         field: "NombreEstado",
         body: (rowData: IEstados) => (
           <div className="flex align-items-center gap-2">
-            <i className="pi pi-flag text-primary"></i>
+            <i className="pi pi-flag text-green-500"></i>
             <span className="font-medium">{rowData.NombreEstado}</span>
-          </div>
-        ),
-      },
-      {
-        header: "Acciones",
-        body: (rowData: IEstados) => (
-          <div className="flex gap-2">
-            <Button
-              icon="pi pi-pencil"
-              size="small"
-              severity="info"
-              tooltip="Editar estado"
-              tooltipOptions={{ position: "top" }}
-              onClick={() => {
-                setSelectedEstado(rowData); // ✅ Esto es lo que faltaba
-                handleOpenDialog(rowData.EstadoId);
-              }}
-            />
-
-            <Button
-              icon="pi pi-trash"
-              size="small"
-              severity="danger"
-              tooltip="Eliminar estado"
-              tooltipOptions={{ position: "top" }}
-              onClick={() => {
-                setSelectedEstado(rowData);
-                handleDeleteEstado();
-              }}
-            />
           </div>
         ),
       },
@@ -149,7 +119,6 @@ const Estados = () => {
 
   const startContent = (
     <div className="flex align-items-center gap-3">
-      <i className="pi pi-flag text-2xl text-primary"></i>
       <div>
         <h1 className="text-2xl font-bold text-900 m-0">Gestión de Estados</h1>
         <p className="text-600 m-0 mt-1">Administra los estados disponibles</p>
@@ -163,7 +132,7 @@ const Estados = () => {
         label="Nuevo Estado"
         icon="pi pi-plus"
         onClick={() => handleOpenDialog(0)}
-        className="p-button-primary"
+        className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
       />
     </div>
   );

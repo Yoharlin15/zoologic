@@ -6,8 +6,6 @@ import { Button } from "primereact/button";
 import { Reducers } from "#core";
 import { ContextMenu } from "primereact/contextmenu";
 import { AppQueryHooks } from "#hooks";
-import { Card } from "primereact/card";
-import { Toolbar } from "primereact/toolbar";
 import { Skeleton } from "primereact/skeleton";
 import { confirmDialog } from "primereact/confirmdialog";
 
@@ -45,26 +43,22 @@ const Procedencias = () => {
     {
       label: "Eliminar",
       icon: "pi pi-trash",
-      command: () => handleDeleteProcedencia(),
+      command: () => handleDeleteFamilia(),
     },
   ];
 
-  const handleDeleteProcedencia = () => {
+  const handleDeleteFamilia = () => {
     confirmDialog({
-      message: `¿Estás seguro de que deseas eliminar la procedencia: "${selectedProcedencia?.ProcedenciaNombre}"?`,
+      message: `¿Estás seguro de que deseas eliminar el estado "${selectedProcedencia?.ProcedenciaNombre}"?`,
       header: "Confirmar Eliminación",
       icon: "pi pi-exclamation-triangle",
       acceptClassName: "p-button-danger",
       acceptLabel: "Sí, eliminar",
       rejectLabel: "Cancelar",
       accept: () => {
-        toast.success(`Procedencia "${selectedProcedencia?.ProcedenciaNombre}" eliminado correctamente`);
+        toast.success(`Estado "${selectedProcedencia?.ProcedenciaNombre}" eliminado correctamente`);
       },
     });
-  };
-
-  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
   };
 
   const handleOpenDialog = (id: number = 0) => {
@@ -80,42 +74,12 @@ const Procedencias = () => {
       {
         filter: true,
         sortable: true,
-        header: "Nombre de la procedencia",
+        header: "Procedencias",
         field: "ProcedenciaNombre",
         body: (rowData: IProcedencia) => (
           <div className="flex align-items-center gap-2">
-            <i className="pi pi-flag text-primary"></i>
+            <i className="pi pi-flag text-green-500"></i>
             <span className="font-medium">{rowData.ProcedenciaNombre}</span>
-          </div>
-        ),
-      },
-      {
-        header: "Acciones",
-        body: (rowData: IProcedencia) => (
-          <div className="flex gap-2">
-            <Button
-              icon="pi pi-pencil"
-              size="small"
-              severity="info"
-              tooltip="Editar procedencia"
-              tooltipOptions={{ position: "top" }}
-              onClick={() => {
-                setSelectedProcedencia(rowData); // ✅ Esto es lo que faltaba
-                handleOpenDialog(rowData.ProcedenciaId);
-              }}
-            />
-
-            <Button
-              icon="pi pi-trash"
-              size="small"
-              severity="danger"
-              tooltip="Eliminar procedencia"
-              tooltipOptions={{ position: "top" }}
-              onClick={() => {
-                setSelectedProcedencia(rowData);
-                handleDeleteProcedencia();
-              }}
-            />
           </div>
         ),
       },
@@ -145,14 +109,7 @@ const Procedencias = () => {
     );
   }, []);
 
-  const startContent = (
-    <div className="flex align-items-center gap-3">
-      <i className="pi pi-flag text-2xl text-primary"></i>
-      <div>
-        <h1 className="text-2xl font-bold text-900 m-0">Gestión de procedencias</h1>
-      </div>
-    </div>
-  );
+
 
   const endContent = (
     <div className="flex gap-2">
@@ -168,21 +125,18 @@ const Procedencias = () => {
   if (procedencias.isPending) {
     return (
       <div className="w-full">
-        <Card className="mb-2 bg-blue-50">
-          <Toolbar start={startContent} />
-        </Card>
-        <Card className="bg-blue-50">
-          <div className="p-4">
-            <Skeleton height="3rem" className="mb-3" />
-            <div className="grid">
-              {Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="col-12 md:col-6 lg:col-4">
-                  <Skeleton height="8rem" />
-                </div>
-              ))}
-            </div>
+
+        <div className="p-4">
+          <Skeleton height="3rem" className="mb-3" />
+          <div className="grid">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <div key={index} className="col-12 md:col-6 lg:col-4">
+                <Skeleton height="8rem" />
+              </div>
+            ))}
           </div>
-        </Card>
+        </div>
+
       </div>
     );
   }
@@ -194,39 +148,40 @@ const Procedencias = () => {
         model={menuModel}
         onHide={() => setSelectedProcedencia(undefined)}
       />
-
-      <Card className="mb-2 bg-blue-50">
-        <Toolbar start={startContent} end={endContent} className="border-none p-0" />
-      </Card>
-
-      <Card className="bg-blue-50">
-        <CardTable<IProcedencia>
-          title=""
-          columns={columns}
-          value={filteredProcedencias}
-          skeletonLoading={procedencias.isPending}
-          tableProps={{
-            rows: 10,
-            size: "small",
-            scrollable: true,
-            dataKey: "RolId",
-            removableSort: true,
-            paginatorLeft: true,
-            scrollHeight: "500px",
-            loading: procedencias.isFetching,
-            emptyMessage: renderEmptyMessage(),
-            contextMenuSelection: selectedProcedencia,
-            rowsPerPageOptions: [10, 25, 50],
-            paginator: filteredProcedencias.length > 10,
-            className: "p-datatable-striped",
-            onContextMenu: (e) => cm.current?.show(e.originalEvent),
-            onContextMenuSelectionChange: (
-              e: DataTableSelectionSingleChangeEvent<IProcedencia[]>,
-            ) => setSelectedProcedencia(e.value),
-            onRowDoubleClick: (e) => handleOpenDialog(e.data.EstadoId),
-          }}
-        />
-      </Card>
+      <CardTable<IProcedencia>
+        title=""
+        columns={columns}
+        value={filteredProcedencias}
+        skeletonLoading={procedencias.isPending}
+        headerEndContent={
+          <Button
+            label="Nueva procedencia"
+            icon="pi pi-plus"
+            onClick={() => handleOpenDialog(0)}
+            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+          />
+        }
+        tableProps={{
+          rows: 10,
+          size: "small",
+          scrollable: true,
+          dataKey: "ProcedenciaId",
+          removableSort: true,
+          paginatorLeft: true,
+          scrollHeight: "500px",
+          loading: procedencias.isFetching,
+          emptyMessage: renderEmptyMessage(),
+          contextMenuSelection: selectedProcedencia,
+          rowsPerPageOptions: [10, 25, 50],
+          paginator: filteredProcedencias.length > 10,
+          className: "p-datatable-striped",
+          onContextMenu: (e) => cm.current?.show(e.originalEvent),
+          onContextMenuSelectionChange: (
+            e: DataTableSelectionSingleChangeEvent<IProcedencia[]>,
+          ) => setSelectedProcedencia(e.value),
+          onRowDoubleClick: (e) => handleOpenDialog(e.data.EstadoId),
+        }}
+      />
 
       <ProcedenciaFormDialog
         id={state.id}

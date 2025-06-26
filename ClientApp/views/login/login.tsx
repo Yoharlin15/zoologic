@@ -96,7 +96,7 @@ const Login = () => {
           if (rol === 2) {
             navigate(Routes.LANDING_ROUTE, { replace: true });
           } else {
-            navigate(Routes.DASHBOARD_ROUTE, { replace: true });
+            navigate(Routes.EMPLEADOS_ROUTE, { replace: true });
           }
         }, 2000);
       },

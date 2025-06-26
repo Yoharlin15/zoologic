@@ -26,6 +26,8 @@ export interface ICardTableProps<TB extends object> {
   renderHeadActions?: React.JSX.Element[];
   onChangeSearch?: InputTextProps["onChange"];
   tableProps?: Omit<DataTableProps<TB[]>, "value" | "children">;
+  headerEndContent?: React.ReactNode;
+
 }
 const CardTable = <TB extends object>({
   title,
@@ -39,6 +41,7 @@ const CardTable = <TB extends object>({
   onChangeSearch,
   skeletonLoading,
   renderHeadActions,
+  headerEndContent, 
   placeholderSearch = "Búsqueda",
 }: ICardTableProps<TB>) => {
   const renderDataTableComponent = React.useCallback(() => {
@@ -100,6 +103,7 @@ const CardTable = <TB extends object>({
             />
           </span>
         )}
+        {headerEndContent}
         {buttons}
       </div>
     </div>

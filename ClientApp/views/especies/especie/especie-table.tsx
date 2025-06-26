@@ -20,6 +20,10 @@ import { CardTable, ICardTableProps } from "../../../components/card-table";
 import EspecieSidebarCreate from "./especie-sidebar-Create";
 import EspecieSidebarUpdate from "./especie-sidebar-Update";
 
+import { SplitButton } from 'primereact/splitbutton';
+        
+
+
 interface IEspecieTableProps {
   dispatch: React.Dispatch<any>;
 }
@@ -120,25 +124,26 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
           setSearchText(e.target.value)
         )}
         renderHeadActions={[
-          <Button
-            key="btn_add"
+          <SplitButton
+            key="btn_add_split"
+            label="Nueva especie"
+            severity="success"
+            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+            color="primary"
             onClick={() => {
               setSelectedEspecieId(null);
               setSidebarCreateVisible(true);
             }}
-            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
-            label="Nueva especie"
-          />,
-          <Button
-            key="btn_navigate"
-            onClick={() => navigate("/especie")}
-            icon="pi pi-list"
-            className="ml-2 bg-transparent border-0 shadow-none text-gray-600 hover:text-gray-800 icon-large"
-            text
-            rounded
-            aria-label="Ir a vista especie"
+            model={[
+              {
+                label: "Ir a vista especie",
+                icon: "pi pi-directions",
+                command: () => navigate("/especie"),
+              },
+            ]}
           />
         ]}
+
 
         tableProps={{
           rows: 8,

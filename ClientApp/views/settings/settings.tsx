@@ -7,7 +7,6 @@ import { MenuItem } from "primereact/menuitem";
 import { useNavigate, Routes, Route, Outlet } from "react-router-dom";
 import { Roles } from "./index"; // Asegúrate de que la ruta de importación sea correcta
 
-
 const SettingsLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
 
@@ -22,17 +21,22 @@ const SettingsLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   const items: MenuItem[] = [
     createMenuItem("roles", "Roles", "users"),
-    createMenuItem("Estados", "estados", "flag"),
+    createMenuItem("estados", "Estados", "flag"),
     createMenuItem("cargos", "Cargos", "briefcase"),
     // Puedes agregar más items aquí
   ];
 
   return (
     <div className="flex h-full border-round-md overflow-hidden">
-      <Menu model={items} className="w-fit p-0 border-round-md min-w-max" />
-      <div className="flex-1 p-4">
+      <Menu
+        model={items}
+        className="w-fit p-0 border-round-md min-w-max text-lg"
+        pt={{
+          action: { className: "px-4 py-3" },
+          icon: { className: "text-xl" },
+        }}
+      />
         <Outlet />
-      </div>
     </div>
   );
 };

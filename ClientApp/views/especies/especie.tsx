@@ -25,9 +25,7 @@ const EspecieLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
     <div className="flex h-full border-round-md overflow-hidden">
       <Menu model={items} className="w-fit p-0 border-round-md min-w-max" />
-      <div className="flex-1 p-4">
         <Outlet />
-      </div>
     </div>
   );
 };
