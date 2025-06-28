@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
 import TratamientosAplicadosList from "./tratamientosAplicados/tratamientoAplicado-list";
+import NecropsiasList from "./necropsias/necropsias-list";
 
-const Salud = () => {
-  const { projectId } = useParams();
+const SaludMenu = () => {
   const [activeIndex, setActiveIndex] = useState(0);
 
   const handleTabChange = (e: TabViewTabChangeEvent) => {
@@ -12,20 +11,25 @@ const Salud = () => {
   };
 
   return (
-    <div className="h-full">
+    <div className="flex flex-column h-full overflow-hidden">
       <TabView
-        className="h-full"
+        className="flex flex-column h-full"
         activeIndex={activeIndex}
         onTabChange={handleTabChange}
-        panelContainerClassName="p-0 h-full w-full"
+        panelContainerClassName="flex-grow-1 overflow-hidden"
+        renderActiveOnly={false}
       >
         <TabPanel contentClassName="overflow-auto h-full" header="🧪Tratamientos">
           <TratamientosAplicadosList />
         </TabPanel>
-        
+
+        <TabPanel contentClassName="overflow-auto h-full" header="Necropsias">
+          <NecropsiasList />
+        </TabPanel>
+
       </TabView>
     </div>
   );
 };
 
-export default Salud;
+export default SaludMenu;

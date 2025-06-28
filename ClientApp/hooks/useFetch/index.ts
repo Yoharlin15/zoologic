@@ -20,3 +20,4 @@ export * from "./useFetchClases";
 export * from "./useFetchProcedencias";
 export * from "./useFetchComportamientos";
 export * from "./useFetchTratamientosAplicados";
+export * from "./useFetchExamenes";

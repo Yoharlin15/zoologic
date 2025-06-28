@@ -121,10 +121,9 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
               setSelectedUsuarioId(null);
               setSidebarCreateVisible(true);
             }}
-          >
-            <i className="pi pi-plus mr-2"></i>
-            <span className="hidden md:flex">Nuevo usuario</span>
-          </Button>,
+            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+            label="Nuevo usuario"
+          />
         ]}
         tableProps={{
           rows: 8,

@@ -1,5 +1,5 @@
 import React from "react";
-import { ITratamiento } from "#interfaces";
+import { IRoles, IZona } from "#interfaces";
 import toast from "react-hot-toast";
 import { matchesSearchText } from "#utils";
 import { Button } from "primereact/button";
@@ -18,17 +18,17 @@ import {
   CardTable,
   ICardTableProps,
 } from "#components";
-import { TratamientosFormDialog } from "./tratamientoFormDialog";
+import { ZonasFormDialog } from "./zonasFormDialog";
 
-const Tratamientos = () => {
-  const tratamientos = AppQueryHooks.useFetchTratamientos();
+const Zonas = () => {
+  const zonas = AppQueryHooks.useFetchZonas();
 
   const [state, dispatch] = React.useReducer(Reducers.DialogsReducer, {
     id: 0,
     visible: false,
   });
 
-  const [selectedTratamiento, setSelectedTratamiento] = React.useState<ITratamiento>();
+  const [selectedZona, setSelectedZona] = React.useState<IZona>();
   const cm = React.useRef<ContextMenu>(null);
   const [searchText, setSearchText] = React.useState("");
 
@@ -39,27 +39,26 @@ const Tratamientos = () => {
       command: () =>
         dispatch({
           type: "OPEN_DIALOG",
-          payload: selectedTratamiento?.TratamientoId ?? 0,
+          payload: selectedZona?.ZonaId ?? 0,
         }),
     },
     {
       label: "Eliminar",
       icon: "pi pi-trash",
-      command: () => handleDeleteRol(),
+      command: () => handleDeleteZona(),
     },
   ];
 
-  const handleDeleteRol = () => {
+  const handleDeleteZona = () => {
     confirmDialog({
-      message: `¿Estás seguro de que deseas eliminar el estado "${selectedTratamiento?.NombreTratamiento}"?`,
+      message: `¿Estás seguro de que deseas eliminar la zona "${selectedZona?.NombreZona}"?`,
       header: "Confirmar Eliminación",
       icon: "pi pi-exclamation-triangle",
       acceptClassName: "p-button-danger",
       acceptLabel: "Sí, eliminar",
       rejectLabel: "Cancelar",
       accept: () => {
-        // Aquí iría la lógica para eliminar el estado
-        toast.success(`Estado "${selectedTratamiento?.NombreTratamiento}" eliminado correctamente`);
+        toast.success(`Zona "${selectedZona?.NombreZona}" eliminado correctamente`);
       },
     });
   };
@@ -76,17 +75,17 @@ const Tratamientos = () => {
     dispatch({ type: "CLOSE_DIALOG" });
   };
 
-  const columns = React.useMemo<ICardTableProps<ITratamiento>["columns"]>(
+  const columns = React.useMemo<ICardTableProps<IZona>["columns"]>(
     () => [
       {
         filter: true,
         sortable: true,
-        header: "Tratamientos",
-        field: "NombreTratamiento",
-        body: (rowData: ITratamiento) => (
+        header: "Zonas",
+        field: "NombreZona",
+        body: (rowData: IZona) => (
           <div className="flex align-items-center gap-2">
-            <i className="pi pi-user text-green-500"></i>
-            <span className="font-medium">{rowData.NombreTratamiento}</span>
+            <i className="pi pi-map-marker text-green-500"></i>
+            <span className="font-medium">{rowData.NombreZona}</span>
           </div>
         ),
       },
@@ -94,22 +93,22 @@ const Tratamientos = () => {
     [],
   );
 
-  const filteredTratamientos = React.useMemo(() => {
-    if (!tratamientos.data?.length) return [];
+  const filteredZonas = React.useMemo(() => {
+    if (!zonas.data?.length) return [];
 
-    return tratamientos.data.filter((item) =>
-      matchesSearchText(searchText, item.NombreTratamiento),
+    return zonas.data.filter((item) =>
+      matchesSearchText(searchText, item.NombreZona),
     );
-  }, [searchText, tratamientos.data]);
+  }, [searchText, zonas.data]);
 
   const renderEmptyMessage = React.useCallback(() => {
     return (
       <div className="text-center p-6">
         <i className="pi pi-flag text-6xl text-400 mb-3"></i>
-        <div className="text-900 font-bold text-xl mb-2">No hay tratamientos registrados</div>
-        <div className="text-600 mb-4">Comienza creando tu primer tratamiento</div>
+        <div className="text-900 font-bold text-xl mb-2">No hay zonas registrados</div>
+        <div className="text-600 mb-4">Comienza creando tu primera zona</div>
         <Button
-          label="Crear Nuevo tratamiento"
+          label="Crear Nuevo zona"
           icon="pi pi-plus"
           onClick={() => handleOpenDialog(0)}
         />
@@ -120,8 +119,8 @@ const Tratamientos = () => {
   const startContent = (
     <div className="flex align-items-center gap-3">
       <div>
-        <h1 className="text-2xl font-bold text-900 m-0">Gestión de Tratamientos</h1>
-        <p className="text-600 m-0 mt-1">Administra los tratamientos disponibles</p>
+        <h1 className="text-2xl font-bold text-900 m-0">Gestión de Zonas</h1>
+        <p className="text-600 m-0 mt-1">Administra las zonas disponibles</p>
       </div>
     </div>
   );
@@ -129,14 +128,14 @@ const Tratamientos = () => {
   const endContent = (
     <div className="flex gap-2">
       <Button
-        label="Nuevo tratamiento"
+        label="Nuevo zona"
         icon="pi pi-plus"
         onClick={() => handleOpenDialog(0)}
         className="bg-green-400 hover:bg-green-600 border-0 shadow-none" />
     </div>
   );
 
-  if (tratamientos.isPending) {
+  if (zonas.isPending) {
     return (
       <div className="w-full">
         <Card className="mb-2 bg-blue-50">
@@ -163,7 +162,7 @@ const Tratamientos = () => {
       <ContextMenu
         ref={cm}
         model={menuModel}
-        onHide={() => setSelectedTratamiento(undefined)}
+        onHide={() => setSelectedZona(undefined)}
       />
 
       <Card className="mb-2 bg-blue-50">
@@ -171,35 +170,35 @@ const Tratamientos = () => {
       </Card>
 
       <Card className="bg-blue-50">
-        <CardTable<ITratamiento>
+        <CardTable<IZona>
           title=""
           columns={columns}
-          value={filteredTratamientos}
-          skeletonLoading={tratamientos.isPending}
+          value={filteredZonas}
+          skeletonLoading={zonas.isPending}
           tableProps={{
             rows: 10,
             size: "small",
             scrollable: true,
-            dataKey: "TratamientoId",
+            dataKey: "RolId",
             removableSort: true,
             paginatorLeft: true,
             scrollHeight: "500px",
-            loading: tratamientos.isFetching,
+            loading: zonas.isFetching,
             emptyMessage: renderEmptyMessage(),
-            contextMenuSelection: selectedTratamiento,
+            contextMenuSelection: selectedZona,
             rowsPerPageOptions: [10, 25, 50],
-            paginator: filteredTratamientos.length > 10,
+            paginator: filteredZonas.length > 10,
             className: "p-datatable-striped",
             onContextMenu: (e) => cm.current?.show(e.originalEvent),
             onContextMenuSelectionChange: (
-              e: DataTableSelectionSingleChangeEvent<ITratamiento[]>,
-            ) => setSelectedTratamiento(e.value),
-            onRowDoubleClick: (e) => handleOpenDialog(e.data.TratamientoId),
+              e: DataTableSelectionSingleChangeEvent<IZona[]>,
+            ) => setSelectedZona(e.value),
+            onRowDoubleClick: (e) => handleOpenDialog(e.data.EstadoId),
           }}
         />
       </Card>
 
-      <TratamientosFormDialog
+      <ZonasFormDialog
         id={state.id}
         visible={state.visible ?? false}
         onHide={handleCloseDialog}
@@ -208,4 +207,4 @@ const Tratamientos = () => {
   );
 };
 
-export default Tratamientos;
+export default Zonas;

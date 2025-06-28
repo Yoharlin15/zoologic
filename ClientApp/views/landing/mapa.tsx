@@ -2,8 +2,6 @@ import React, { useRef, useState } from "react";
 import { OverlayPanel } from "primereact/overlaypanel";
 import { useFetchZonas } from "ClientApp/hooks/useFetch";
 import { IZona } from "#interfaces";
-import "primereact/resources/themes/lara-light-blue/theme.css";
-import "primereact/resources/primereact.min.css";
 
 const zonaCoordenadas: Record<number, { top: string; left: string; icono: string }> = {
   1: { top: "68%", left: "20%", icono: "🏢" }, // Oficinas administrativas
@@ -56,7 +54,7 @@ const MapaInteractivo = () => {
     op.current?.toggle(event);
   };
   return (
-    <div className="relative w-full mx-auto" style={{ maxWidth: '1400px' }}>
+    <div className="relative w-full mx-auto" style={{ maxWidth: '1000px' }}>
       <h1 className="text-center text-2xl font-bold mt-5">Mapa Interactivo del Zoologico</h1>
       <p className="text-center text-sm text-gray-800 mt-0 mb-0">Haz click sobre las diferentes Zonas para ver detalles</p>
       <div className="relative w-full flex justify-center mt-2">

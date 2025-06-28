@@ -8,3 +8,11 @@ export const useFetchZonas = () => {
     queryFn: ZonaApi.getAll,
   });
 };
+
+export const useFetchOneZona = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.ZONAS, id],
+    queryFn: () => ZonaApi.getById?.(id),
+  });
+};

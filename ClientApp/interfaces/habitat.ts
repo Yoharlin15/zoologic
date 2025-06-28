@@ -7,3 +7,10 @@ export interface IHabitat
     NombreEstado: string;
     Descripcion: string;
 }
+
+export interface IHabitatCreate {
+    Nombre: string;
+    CantidadAnimales: number;
+    EstadoId: number;
+    Descripcion: string;
+}

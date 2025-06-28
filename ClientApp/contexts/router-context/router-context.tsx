@@ -32,6 +32,11 @@ import EspecieLayout from "ClientApp/views/especies/especie";
 import Familias from "ClientApp/views/especies/familia/familia";
 import Clases from "ClientApp/views/especies/clase/clase";
 import Procedencias from "ClientApp/views/especies/procedencia/procedencia";
+import Zonas from "ClientApp/views/settings/zonas/zonas";
+import Tratamientos from "ClientApp/views/salud/tratamiento/tratamiento";
+import SaludLayout from "ClientApp/views/salud/opciones";
+import NecropsiasList from "ClientApp/views/salud/necropsias/necropsias-list";
+import Examenes from "ClientApp/views/salud/examenes/examen";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -112,6 +117,24 @@ const Provider = () => {
               element: <Salud />,
             },
             {
+              path: Routes.SALUD_MENU_ROUTE,
+              element: <SaludLayout />,
+              children: [
+                {
+                  path: Routes.TRATAMIENTOS_ROUTE,
+                  element: <Tratamientos />
+                },
+                {
+                  path: Routes.EXAMENES_ROUTE,
+                  element: <Examenes />
+                }
+              ]
+            },
+            {
+              path: Routes.NECROPSIAS_ROUTE,
+              element: <NecropsiasList />
+            },
+            {
               path: Routes.INVENTARIO_ROUTE,
               element: <InventarioList />,
             },
@@ -167,6 +190,11 @@ const Provider = () => {
                   id: "cargos",
                   path: Routes.CARGOS_ROUTE,
                   element: <Cargos />,
+                },
+                {
+                  id: "zonas",
+                  path: Routes.ZONAS_ROUTE,
+                  element: <Zonas />
                 }
               ],
             },

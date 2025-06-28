@@ -6,6 +6,8 @@ import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '#core';
+import ZooBanner from './banner';
+import MapaInteractivo from './mapa';
 
 interface CarouselItem {
     id: number;
@@ -56,29 +58,27 @@ const LandingPage = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Header modificado */}
-            <div className="bg-white shadow-md py-4 px-6 w-full">
+            <div className="bg-green-800 shadow-md py-4 px-6 w-full">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
                     {/* Logo a la izquierda */}
-                    <div className="text-2xl font-bold text-indigo-600">zoologic</div>
+                    <div className="text-4xl font-bold text-white">zoologic</div>
 
                     {/* Botón a la derecha */}
                     <Button
                         label="Iniciar Sesión"
                         icon="pi pi-user"
-                        className="p-button-rounded p-button-outlined ml-auto"
+                        className="p-button-rounded p-button-outlined ml-auto text-white border-white"
                         onClick={handleLoginClick}
                     />
                 </div>
             </div>
 
+
             {/* Banner Principal */}
-            <div className="relative h-96 w-full overflow-hidden">
-                <img
-                    src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1750950278/Captura_de_pantalla_2025-06-26_110405_zn44lh.png"
-                    alt="Banner Principal"
-                    className="w-full h-full object-cover"
-                />
-            </div>
+
+            <ZooBanner />
+            {/* Otros componentes */}
+
 
             {/* Carrusel de Eventos - Tamaño reducido */}
             <section className="py-12 px-6 max-w-6xl mx-auto">
@@ -96,8 +96,10 @@ const LandingPage = () => {
                 </div>
             </section>
 
+            <MapaInteractivo />
+
             {/* Sección de Boletas con imagen al lado */}
-            <section className="py-12 px-6 bg-indigo-50">
+            <section className="py-12 px-6 bg-indigo-50 mt-8">
                 <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
                     {/* Imagen al lado izquierdo */}
                     <div className="flex-1">

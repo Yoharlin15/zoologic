@@ -3,7 +3,17 @@ export interface ITratamiento {
     NombreTratamiento: string;
 }
 
+export interface ITratamientoCurrent {
+    TratamientoId: number;
+    NombreTratamiento: string;
+}
+
 export interface ITratamientoCreate {
+    NombreTratamiento: string;
+}
+
+export interface ITratamientoUpdate {
+    TratamientoId: number;
     NombreTratamiento: string;
 }
 
@@ -20,7 +30,6 @@ export interface ITratamientoAplicado {
     UsuarioId: number;
     NombreUsuario: string;
     Razon: string;
-    Procedencia: string;
 }
 
 export interface ITratamientoAplicadoCreate {
@@ -31,6 +40,5 @@ export interface ITratamientoAplicadoCreate {
     FechaSalida: Date | null;
     UsuarioId: number;
     Razon: string;
-    Procedencia: string;
 }
 

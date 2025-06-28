@@ -71,7 +71,7 @@ const MainLayout = ({
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate(Routes.login_ROUTE, { replace: true });
+    navigate(Routes.LANDING_ROUTE, { replace: true });
   };
 
   const handleConfigNavigation = () => {

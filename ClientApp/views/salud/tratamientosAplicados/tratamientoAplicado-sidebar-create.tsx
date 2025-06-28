@@ -8,13 +8,14 @@ import { useForm } from "react-hook-form";
 import {
     Dropdown,
     InputText,
+    InputTextArea,
 
 } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { ITratamientoAplicadoCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
 import { useFetchAnimales, useFetchHabitats, useFetchTratamientos, useFetchUsuarios } from "ClientApp/hooks/useFetch";
-import { useCreateEmpleado } from "ClientApp/hooks/useMutation/useMutationEmpleados";
+import { useCreateTratamientosAplicados } from "ClientApp/hooks/useMutation/useMutationTratamientosAplicados";
 
 interface ITratamientoAplicadoSidebarProps {
     id?: number;
@@ -29,7 +30,7 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
     const { data: animales } = useFetchAnimales();
     const { data: habitats } = useFetchHabitats();
     const { data: usuarios } = useFetchUsuarios();
-    const createEmpleado = useCreateEmpleado();
+    const createTratamientoAplicado = useCreateTratamientosAplicados();
 
 
     const { control, handleSubmit, reset } = useForm<ITratamientoAplicadoCreate, FieldValues>({
@@ -42,7 +43,6 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
             FechaSalida: null,
             UsuarioId: undefined,
             Razon: "",
-            Procedencia: "",
         },
     });
 
@@ -54,14 +54,13 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
             FechaEntrada: data.FechaEntrada?.toISOString() || null,
             FechaSalida: data.FechaSalida?.toISOString() || null,
             UsuarioId: Number(data.UsuarioId),
-            Razon: data.Razon,
-            Procedencia: data.Procedencia,
+            Razon: data.Razon
         };
 
         console.log("Payload:", payload);
         // para mostrar mensajes
         try {
-            const res = await createEmpleado.mutateAsync(payload);
+            const res = await createTratamientoAplicado.mutateAsync(payload);
             toast.current?.show({
                 severity: "success",
                 summary: "Éxito",
@@ -101,6 +100,17 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                             options={tratamientos || []}
                             optionLabel="NombreTratamiento"
                             optionValue="TratamientoId" />
+                    </FieldColumn>
+
+                    <FieldColumn label="Atendido por" columns={{ sm: 6 }}>
+                        <Dropdown
+                            name="UsuarioId"
+                            control={control}
+                            placeholder="Seleccione el usuario"
+                            rules={{ required: "Campo obligatorio" }}
+                            options={usuarios || []}
+                            optionLabel="NombreUsuario"
+                            optionValue="UsuarioId" />
                     </FieldColumn>
 
                      <FieldColumn label="Animal(alias)" columns={{ sm: 6 }}>
@@ -159,30 +169,11 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                             )} />
                     </FieldColumn>
 
-                     <FieldColumn label="Atendido por" columns={{ sm: 6 }}>
-                        <Dropdown
-                            name="UsarioId"
-                            control={control}
-                            placeholder="Seleccione el usuario"
-                            rules={{ required: "Campo obligatorio" }}
-                            options={usuarios || []}
-                            optionLabel="NombreUsuario"
-                            optionValue="UsuarioId" />
-                    </FieldColumn>
-
-                    <FieldColumn label="Razon" columns={{ sm: 6 }}>
-                        <InputText
+                    <FieldColumn label="Razon" columns={{ sm: 12 }}>
+                        <InputTextArea
                             name="Razon"
                             control={control}
                             placeholder="Razon"
-                            rules={{ required: "Campo obligatorio" }} />
-                    </FieldColumn>
-
-                    <FieldColumn label="Procedencia" columns={{ sm: 6 }}>
-                        <InputText
-                            name="Procedencia"
-                            control={control}
-                            placeholder="Procedencia"
                             rules={{ required: "Campo obligatorio" }} />
                     </FieldColumn>
                 </Form>

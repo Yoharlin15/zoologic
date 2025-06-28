@@ -8,3 +8,11 @@ export const useFetchTratamientos = () => {
     queryFn: TratamientoApi.getAll,
   });
 };
+
+export const useFetchOneTratamiento = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.ESTADOS, id],
+    queryFn: () => TratamientoApi.getById?.(id),
+  });
+};

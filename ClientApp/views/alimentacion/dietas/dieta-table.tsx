@@ -87,7 +87,7 @@ const DietaTable = ({ dispatch }: IDietaTableProps) => {
 
     return (
         <div className="h-full">
-           
+
             <CardTable<IDieta>
                 title="Dietas"
                 columns={columns}
@@ -103,10 +103,9 @@ const DietaTable = ({ dispatch }: IDietaTableProps) => {
                             setSelectedDietaId(null);
                             setSidebarCreateVisible(true);
                         }}
-                    >
-                        <i className="pi pi-plus mr-2"></i>
-                        <span className="hidden md:flex">Crear dieta</span>
-                    </Button>,
+                        className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+                        label="Nueva dieta"
+                    />
                 ]}
                 tableProps={{
                     rows: 8,

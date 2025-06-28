@@ -22,6 +22,7 @@ import { Reducers, Routes } from "#core";
 import { IDietaAplicada } from "ClientApp/interfaces/alimentacion";
 import dayjs from "dayjs";
 import DietaAplicadaSidebarCreate from "./dietaAplicada-sidebar-create";
+import { SplitButton } from "primereact/splitbutton";
 
 interface IDietaAplicadaTableProps {
     dispatch: React.Dispatch<any>;
@@ -129,23 +130,24 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
                     setSearchText(e.target.value)
                 )}
                 renderHeadActions={[
-                    <Button
-                        key="btn_add"
+                    <SplitButton
+                        key="btn_add_split"
+                        label="Nueva especie"
+                        severity="success"
+                        className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+                        color="primary"
                         onClick={() => {
                             setSelectedDietaAplicadaId(null);
                             setSidebarCreateVisible(true);
                         }}
-                    >
-                        <i className="pi pi-plus mr-2"></i>
-                        <span className="hidden md:flex">Aplicar dieta</span>
-                    </Button>,
-
-                    <Button
-                        key="btn_navigate"
-                        icon="pi pi-bars"
-                        className="ml-2"
-                        onClick={() => navigate(`/${Routes.ALIMENTACION_ROUTE}`)}
-                    />
+                        model={[
+                            {
+                                label: "Ir a vista especie",
+                                icon: "pi pi-directions",
+                                command: () => navigate("/alimentacion"),
+                            },
+                        ]}
+                    />,
                 ]}
                 tableProps={{
                     rows: 8,

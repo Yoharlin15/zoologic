@@ -45,12 +45,12 @@ body {
   transform: rotate(90deg);
 }
 
-.roadmap-card .p-card-body h2 {
+.zoologic-card .p-card-body h2 {
   transition: color 0.3s ease-in-out 50ms; /* Transition only the color property */
 }
 
-.roadmap-card .p-card-body:hover h2,
-.roadmap-card .p-card-body:hover i {
+.zoologic-card .p-card-body:hover h2,
+.zoologic-card .p-card-body:hover i {
   color: #29abe2;
 }
 

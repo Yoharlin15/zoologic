@@ -8,3 +8,6 @@ export * from "./useMutationCargos";
 export * from "./useMutationAlimentos";
 export * from "./useMutationDietas";
 export * from "./useMutationDietaAplicada";
+export * from "./useMutationZonas";
+export * from "./useMutationTratamientos";
+export * from "./useMutationExamenes";

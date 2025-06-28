@@ -10,8 +10,10 @@ export const CLASES_ROUTE = "clases";
 export const PROCEDENCIAS_ROUTE = "procedencias";
 export const EMPLEADOS_ROUTE = "/empleados";
 export const TRATAMIENTOS_ROUTE = "tratamientos";
+export const EXAMENES_ROUTE = "examenes";
 export const NECROPSIAS_ROUTE = "necropsias";
 export const SALUD_ROUTE = "salud";
+export const SALUD_MENU_ROUTE = "menu"
 export const USUARIOS_ROUTE = "usuarios"
 export const SIGNUP_ROUTE = "/signup";
 export const Verify_Route = "verificar";
@@ -25,5 +27,6 @@ export const SETTINGS_ROUTE = "settings";
 export const ROLES_ROUTE = "roles";
 export const ESTADOS_ROUTE = "estados"
 export const CARGOS_ROUTE = "cargos";
+export const ZONAS_ROUTE = "zonas";
 
 

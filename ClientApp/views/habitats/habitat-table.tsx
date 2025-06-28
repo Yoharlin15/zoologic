@@ -20,6 +20,7 @@ import { CardTable, ICardTableProps } from "../../components/card-table";
 
 // import HabitatSidebarCreate from "./Habitat-sidebar-create";
 import { Reducers } from "#core";
+import HabitatSidebarCreate from "./habitat-sidebar-create";
 
 interface IHabitatTableProps {
   dispatch: React.Dispatch<any>;
@@ -124,10 +125,9 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
               setSelectedHabitatId(null);
               setSidebarCreateVisible(true);
             }}
-          >
-            <i className="pi pi-plus mr-2"></i>
-            <span className="hidden md:flex">Nuevo Habitat</span>
-          </Button>,
+            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+            label="Nuevo habitat"
+          />
         ]}
         tableProps={{
           rows: 8,
@@ -143,11 +143,11 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
           ) => setSelectedHabitat(e.value),
         }}
       />
-      {/* <HabitatSidebarCreate
+      <HabitatSidebarCreate
         visible={sidebarCreateVisible}
         onHide={() => setSidebarCreateVisible(false)}
         especieId={selectedHabitatId ?? undefined}
-      /> */}
+      />
     </div>
   );
 };

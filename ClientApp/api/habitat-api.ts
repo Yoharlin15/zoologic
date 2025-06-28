@@ -1,6 +1,5 @@
 import { Endpoints } from "../core";
 import { Api } from "#interfaces";
-import { WarnUtils } from "#utils";
 import API from "./api";
 import { IHabitat } from "ClientApp/interfaces/habitat";
 
@@ -18,6 +17,11 @@ const HabitatApi: ApiCustom<IHabitat> = {
     const result = await API().get(Endpoints.HABITATS_GET);
     return result.data;
   },
+
+  create: async (data) => {
+        const result = await API().post(Endpoints.HABITATS_CREATE, data);
+        return result.data;
+    },
 }
 
 export default HabitatApi;

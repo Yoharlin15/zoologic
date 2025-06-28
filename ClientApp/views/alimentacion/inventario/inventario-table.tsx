@@ -143,10 +143,9 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
               setSelectedInventarioId(null);
               setSidebarCreateVisible(true);
             }}
-          >
-            <i className="pi pi-plus mr-2"></i>
-            <span className="hidden md:flex">Agregar alimento</span>
-          </Button>,
+            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+            label="Agregar alimento"
+          />
         ]}
         tableProps={{
           rows: 8,

@@ -1,5 +1,5 @@
 import React from "react";
-import { ITratamiento } from "#interfaces";
+import { IExamen, ITratamiento } from "#interfaces";
 import toast from "react-hot-toast";
 import { matchesSearchText } from "#utils";
 import { Button } from "primereact/button";
@@ -18,17 +18,17 @@ import {
   CardTable,
   ICardTableProps,
 } from "#components";
-import { TratamientosFormDialog } from "./tratamientoFormDialog";
+import { ExamenesFormDialog } from "./examenFormDialog";
 
-const Tratamientos = () => {
-  const tratamientos = AppQueryHooks.useFetchTratamientos();
+const Examenes = () => {
+  const examenes = AppQueryHooks.useFetchExamenes();
 
   const [state, dispatch] = React.useReducer(Reducers.DialogsReducer, {
     id: 0,
     visible: false,
   });
 
-  const [selectedTratamiento, setSelectedTratamiento] = React.useState<ITratamiento>();
+  const [selectedExamen, setSelectedExamen] = React.useState<IExamen>();
   const cm = React.useRef<ContextMenu>(null);
   const [searchText, setSearchText] = React.useState("");
 
@@ -39,19 +39,19 @@ const Tratamientos = () => {
       command: () =>
         dispatch({
           type: "OPEN_DIALOG",
-          payload: selectedTratamiento?.TratamientoId ?? 0,
+          payload: selectedExamen?.ExamenId ?? 0,
         }),
     },
     {
       label: "Eliminar",
       icon: "pi pi-trash",
-      command: () => handleDeleteRol(),
+      command: () => handleDeleteExamen(),
     },
   ];
 
-  const handleDeleteRol = () => {
+  const handleDeleteExamen = () => {
     confirmDialog({
-      message: `¿Estás seguro de que deseas eliminar el estado "${selectedTratamiento?.NombreTratamiento}"?`,
+      message: `¿Estás seguro de que deseas eliminar el estado "${selectedExamen?.Examen}"?`,
       header: "Confirmar Eliminación",
       icon: "pi pi-exclamation-triangle",
       acceptClassName: "p-button-danger",
@@ -59,7 +59,7 @@ const Tratamientos = () => {
       rejectLabel: "Cancelar",
       accept: () => {
         // Aquí iría la lógica para eliminar el estado
-        toast.success(`Estado "${selectedTratamiento?.NombreTratamiento}" eliminado correctamente`);
+        toast.success(`Estado "${selectedExamen?.Examen}" eliminado correctamente`);
       },
     });
   };
@@ -76,17 +76,17 @@ const Tratamientos = () => {
     dispatch({ type: "CLOSE_DIALOG" });
   };
 
-  const columns = React.useMemo<ICardTableProps<ITratamiento>["columns"]>(
+  const columns = React.useMemo<ICardTableProps<IExamen>["columns"]>(
     () => [
       {
         filter: true,
         sortable: true,
-        header: "Tratamientos",
-        field: "NombreTratamiento",
-        body: (rowData: ITratamiento) => (
+        header: "Examenes",
+        field: "Examen",
+        body: (rowData: IExamen) => (
           <div className="flex align-items-center gap-2">
             <i className="pi pi-user text-green-500"></i>
-            <span className="font-medium">{rowData.NombreTratamiento}</span>
+            <span className="font-medium">{rowData.Examen}</span>
           </div>
         ),
       },
@@ -94,22 +94,22 @@ const Tratamientos = () => {
     [],
   );
 
-  const filteredTratamientos = React.useMemo(() => {
-    if (!tratamientos.data?.length) return [];
+  const filteredExamenes = React.useMemo(() => {
+    if (!examenes.data?.length) return [];
 
-    return tratamientos.data.filter((item) =>
-      matchesSearchText(searchText, item.NombreTratamiento),
+    return examenes.data.filter((item) =>
+      matchesSearchText(searchText, item.Examen),
     );
-  }, [searchText, tratamientos.data]);
+  }, [searchText, examenes.data]);
 
   const renderEmptyMessage = React.useCallback(() => {
     return (
       <div className="text-center p-6">
         <i className="pi pi-flag text-6xl text-400 mb-3"></i>
-        <div className="text-900 font-bold text-xl mb-2">No hay tratamientos registrados</div>
-        <div className="text-600 mb-4">Comienza creando tu primer tratamiento</div>
+        <div className="text-900 font-bold text-xl mb-2">No hay examenes registrados</div>
+        <div className="text-600 mb-4">Comienza creando tu primer examen</div>
         <Button
-          label="Crear Nuevo tratamiento"
+          label="Crear Nuevo examen"
           icon="pi pi-plus"
           onClick={() => handleOpenDialog(0)}
         />
@@ -120,8 +120,8 @@ const Tratamientos = () => {
   const startContent = (
     <div className="flex align-items-center gap-3">
       <div>
-        <h1 className="text-2xl font-bold text-900 m-0">Gestión de Tratamientos</h1>
-        <p className="text-600 m-0 mt-1">Administra los tratamientos disponibles</p>
+        <h1 className="text-2xl font-bold text-900 m-0">Gestión de Examenes clinicos</h1>
+        <p className="text-600 m-0 mt-1">Administra los examenes clinicos disponibles</p>
       </div>
     </div>
   );
@@ -136,7 +136,7 @@ const Tratamientos = () => {
     </div>
   );
 
-  if (tratamientos.isPending) {
+  if (examenes.isPending) {
     return (
       <div className="w-full">
         <Card className="mb-2 bg-blue-50">
@@ -163,7 +163,7 @@ const Tratamientos = () => {
       <ContextMenu
         ref={cm}
         model={menuModel}
-        onHide={() => setSelectedTratamiento(undefined)}
+        onHide={() => setSelectedExamen(undefined)}
       />
 
       <Card className="mb-2 bg-blue-50">
@@ -171,35 +171,35 @@ const Tratamientos = () => {
       </Card>
 
       <Card className="bg-blue-50">
-        <CardTable<ITratamiento>
+        <CardTable<IExamen>
           title=""
           columns={columns}
-          value={filteredTratamientos}
-          skeletonLoading={tratamientos.isPending}
+          value={filteredExamenes}
+          skeletonLoading={examenes.isPending}
           tableProps={{
             rows: 10,
             size: "small",
             scrollable: true,
-            dataKey: "TratamientoId",
+            dataKey: "ExamenId",
             removableSort: true,
             paginatorLeft: true,
             scrollHeight: "500px",
-            loading: tratamientos.isFetching,
+            loading: examenes.isFetching,
             emptyMessage: renderEmptyMessage(),
-            contextMenuSelection: selectedTratamiento,
+            contextMenuSelection: selectedExamen,
             rowsPerPageOptions: [10, 25, 50],
-            paginator: filteredTratamientos.length > 10,
+            paginator: filteredExamenes.length > 10,
             className: "p-datatable-striped",
             onContextMenu: (e) => cm.current?.show(e.originalEvent),
             onContextMenuSelectionChange: (
-              e: DataTableSelectionSingleChangeEvent<ITratamiento[]>,
-            ) => setSelectedTratamiento(e.value),
-            onRowDoubleClick: (e) => handleOpenDialog(e.data.TratamientoId),
+              e: DataTableSelectionSingleChangeEvent<IExamen[]>,
+            ) => setSelectedExamen(e.value),
+            onRowDoubleClick: (e) => handleOpenDialog(e.data.ExamenId),
           }}
         />
       </Card>
 
-      <TratamientosFormDialog
+      <ExamenesFormDialog
         id={state.id}
         visible={state.visible ?? false}
         onHide={handleCloseDialog}
@@ -208,4 +208,4 @@ const Tratamientos = () => {
   );
 };
 
-export default Tratamientos;
+export default Examenes;

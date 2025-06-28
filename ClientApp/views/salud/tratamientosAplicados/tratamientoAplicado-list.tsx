@@ -20,11 +20,9 @@ function TratamientosAplicadosList() {
   const [TratamientosAplicados, dispatch] = useReducer(TratamientosAplicadosReducer, initialTratamientosAplicados);
 
   return (
-    <div className="p-3 max-w-6xl mx-auto">
-      <div className="bg-white rounded-lg shadow-md overflow-hidden">
-        <TratamientoAplicadoTable dispatch={dispatch} />
-      </div>
-    </div>
+    <>
+      <TratamientoAplicadoTable dispatch={dispatch} />
+    </>
   );
 }
 

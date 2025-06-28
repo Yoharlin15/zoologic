@@ -70,12 +70,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
           icon: <FontAwesomeIcon icon="hippo" />,
           label: "Comportamiento",
           onClick: () => navigate(`${Routes.COMPORTAMIENTO_ROUTE}`),
-        },
-        {
-          icon: <FontAwesomeIcon icon="person-chalkboard" />,
-          label: "Adiestramiento",
-          onClick: () => navigate(""),
-        },
+        },  
         {
           icon: <FontAwesomeIcon icon="users" />,
           label: "Visitantes",

@@ -30,13 +30,19 @@ export const DASHBOARD_GET = `${DASHBOARD_BASE}/${GET}`;
 export const ESTADO_GET = `${ESTADO_BASE}/${GET}`;
 export const ESTADO_GETBYID = `${ESTADO_BASE}/${GETBYID}`
 export const ESTADO_CREATE = `${ESTADO_BASE}/${CREATE}`;
-export const ESTADO_UPDATE = `${ESTADO_BASE}/${UPDATE}`
+export const ESTADO_UPDATE = `${ESTADO_BASE}/${UPDATE}/{id}`;
 
 //Get Roles
 export const ROLES_GET = `${USUARIOS_BASE}/get-roles`
 export const ROLES_GETBYID = `${USUARIOS_BASE}/GetRolById`
 export const ROLES_CREATE = `${USUARIOS_BASE}/create-rol`
 export const ROLES_UPDATE = `${USUARIOS_BASE}/UpdateRol`
+
+//Get Zonas 
+export const ZONAS_GET = `${ZONAS_BASE}/${GET}`;
+export const ZONAS_GETBYID = `${ZONAS_BASE}/${GETBYID}`
+export const ZONAS_CREATE =`${ZONAS_BASE}/${CREATE}`
+export const ZONAS_UPDATE = `${ZONAS_BASE}/${UPDATE}` 
 
 //Get Empleado
 export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;
@@ -96,6 +102,7 @@ export const DIETA_APLICADA_CREATE = `${DIETA_APLICADA_BASE}/CreateDietasAplicad
 
 //CRUD Habitats
 export const HABITATS_GET = `${HABITATS_BASE}`;
+export const HABITATS_CREATE = `${ZONAS_BASE}/${CREATE}`;
 
 //CRUD Comportamiento
 export const COMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/Get`;
@@ -107,6 +114,9 @@ export const DETALLECOMPORTAMIENTO_CREATE = `${DETALLECOMPORTAMIENTO_BASE}/Creat
 
 //Get Tratamiento
 export const TRATAMIENTOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientos`;
+export const TRATAMIENTO_GETBYID = `${TRATAMIENTOS_BASE}/GetTratamientoById`
+export const TRATAMIENTO_CREATE = `${TRATAMIENTOS_BASE}/CreateTratamiento`
+export const TRATAMIENTO_UPDATE = `${TRATAMIENTOS_BASE}/UpdateTratamiento`
 
 //CRUD TratamientoAplicado
 export const TRATAMIENTOSAPLICADOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientosAplicados`;
@@ -114,13 +124,16 @@ export const TRATAMIENTOSAPLICADOS_CREATE = `${TRATAMIENTOS_BASE}/CreateTratamie
 
 //Get Necropsias
 export const NECROPSIAS_GET = `${NECROPSIAS_BASE}/GetNecropsia`;
+export const NECROPCIAS_CREATE = `${NECROPSIAS_BASE}/CreateNecropsia`;
 
-//Get Zonas 
-export const ZONAS_GET = `${ZONAS_BASE}/${GET}`;
+//CRUD Examenes
+export const EXAMENES_GET = `${NECROPSIAS_BASE}/GetExamen`
+export const EXAMENES_GETBYID = `${NECROPSIAS_BASE}/GetExamenById`
+export const EXAMENES_CREATE = `${NECROPSIAS_BASE}/CreateExamen`
+export const EXAMENES_UPDATE = `${NECROPSIAS_BASE}/UpdateExamen`
 
 //Get Usuarios 
 export const USUARIOS_GET = `${USUARIOS_BASE}/${GET}`;
-
 
 //Account Endpoints
 export const USUARIOS_SIGNUP = `${USUARIOS_BASE}/${REGISTER}/signup`;

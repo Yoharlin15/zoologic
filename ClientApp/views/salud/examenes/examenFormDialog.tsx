@@ -3,17 +3,17 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
-import {ITratamiento } from "#interfaces";
+import { IExamen } from "#interfaces";
 import { AppMutationHooks, AppQueryHooks } from "#hooks";
 import toast from "react-hot-toast";
 
-interface TratamientosFormDialogProps {
+interface ExamenesFormDialogProps {
   id: number;
   visible: boolean;
   onHide: () => void;
 }
 
-export const TratamientosFormDialog: React.FC<TratamientosFormDialogProps> = ({
+export const ExamenesFormDialog: React.FC<ExamenesFormDialogProps> = ({
   id,
   visible,
   onHide,
@@ -21,45 +21,45 @@ export const TratamientosFormDialog: React.FC<TratamientosFormDialogProps> = ({
   const isEditMode = id > 0;
 
   const {
-    data: tratamientoData
-  } = AppQueryHooks.useFetchOneRol(id);
+    data: examenData
+  } = AppQueryHooks.useFetchOneExamen(id);
 
-  const createMutation = AppMutationHooks.useCreateTratamientos();
-  const updateMutation = AppMutationHooks.useUpdateTratamientos();
+  const createMutation = AppMutationHooks.useCreateExamenes();
+  const updateMutation = AppMutationHooks.useUpdateExamenes();
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ITratamiento>();
+  } = useForm<IExamen>();
 
   useEffect(() => {
-    if (isEditMode && tratamientoData) {
-      reset(tratamientoData);
+    if (isEditMode && examenData) {
+      reset(examenData);
     } else {
-      reset({ TratamientoId: 0, NombreTratamiento: "" });
+      reset({ ExamenId: 0, Examen: "" });
     }
-  }, [tratamientoData, isEditMode, reset]);
+  }, [examenData, isEditMode, reset]);
 
-  const onSubmit = async (data: ITratamiento) => {
+  const onSubmit = async (data: IExamen) => {
     try {
       if (isEditMode) {
         await updateMutation.mutateAsync(data);
-        toast.success("Tratamiento actualizado correctamente");
+        toast.success("Examen actualizado correctamente");
       } else {
         await createMutation.mutateAsync(data);
-        toast.success("Tratamiento creado correctamente");
+        toast.success("Examen creado correctamente");
       }
       onHide();
     } catch (error) {
-      toast.error("Ocurrió un error al guardar el tratamiento");
+      toast.error("Ocurrió un error al guardar el examen");
     }
   };
 
   return (
     <Dialog
-      header={isEditMode ? "Editar tratamiento" : "Crear tratamiento"}
+      header={isEditMode ? "Editar examen" : "Crear examen"}
       visible={visible}
       onHide={onHide}
       className="w-full sm:w-10 md:w-8 lg:w-6 xl:w-4"
@@ -67,20 +67,20 @@ export const TratamientosFormDialog: React.FC<TratamientosFormDialogProps> = ({
     >
       <form onSubmit={handleSubmit(onSubmit)} className="p-fluid space-y-4">
         <div>
-          <label htmlFor="Nombre" className="font-semibold block mb-2">
-            Nombre del tratamiento
+          <label htmlFor="Examen" className="font-semibold block mb-2">
+            Nombre del examen
           </label>
           <InputText
             id="Nombre"
-            {...register("NombreTratamiento", {
-              required: "El nombre del rol es obligatorio",
+            {...register("Examen", {
+              required: "El nombre del examen es obligatorio",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
             })}
-            className={errors.NombreTratamiento ? "p-invalid" : ""}
+            className={errors.Examen ? "p-invalid" : ""}
             autoFocus
           />
-          {errors.NombreTratamiento && (
-            <small className="p-error">{errors.NombreTratamiento.message}</small>
+          {errors.Examen && (
+            <small className="p-error">{errors.Examen.message}</small>
           )}
         </div>
 

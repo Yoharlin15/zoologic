@@ -1,5 +1,5 @@
 import { Endpoints } from "../core";
-import { Api, IEstado, IEstadoCurrent } from "#interfaces";
+import { Api, IEstadoCurrent, IEstados } from "#interfaces";
 import API from "./api";
 import { WarnUtils } from "#utils";
 
@@ -11,7 +11,7 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   update?: (data: Partial<IEstadoCurrent>) => Promise<IEstadoCurrent>;
 }
 
-const EstadoApi: ApiCustom<IEstado> = {
+const EstadoApi: ApiCustom<IEstados> = {
 
   getAll: async () => {
     const result = await API().get(Endpoints.ESTADO_GET);
@@ -28,18 +28,16 @@ const EstadoApi: ApiCustom<IEstado> = {
     return result.data;
   },
 
-  update: async (updatedEspecie) => {
-    if (!updatedEspecie.EstadoId)
+  update: async (updatedEstado) => {
+    if (!updatedEstado.EstadoId) {
       WarnUtils.missing(Endpoints.ESTADO_UPDATE, "Missing update ID");
+      return Promise.reject(new Error("Missing update ID"));
+    }
 
-    const payload = {
-      estado: updatedEspecie
-    };
+    const url = Endpoints.ESTADO_UPDATE.replace("{id}", updatedEstado.EstadoId.toString());
 
-    const response = await API().put(
-      `${Endpoints.ESTADO_UPDATE}/${updatedEspecie.EstadoId}`,
-      payload
-    );
+    const response = await API().put(url, updatedEstado);
+
     return response.data;
   }
 }

@@ -1,13 +1,10 @@
 import React from "react";
 import { Menu } from "primereact/menu";
-import { renderTooltip } from "#utils";
 import { Image } from "primereact/image";
-import { useMediaQuery } from "usehooks-ts";
 import { MenuItem } from "primereact/menuitem";
-import { useNavigate, Routes, Route, Outlet } from "react-router-dom";
-import { Roles } from "./index"; // Asegúrate de que la ruta de importación sea correcta
+import { useNavigate, Outlet } from "react-router-dom";
 
-const SettingsLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
+const SaludLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
 
   const createMenuItem = React.useCallback(
@@ -20,26 +17,18 @@ const SettingsLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   );
 
   const items: MenuItem[] = [
-    createMenuItem("roles", "Roles", "users"),
-    createMenuItem("estados", "Estados", "flag"),
-    createMenuItem("cargos", "Cargos", "briefcase"),
-    createMenuItem("zonas", "Zonas", "map-marker")
+    createMenuItem("tratamientos", "Tratamientos", "heart"),
+    createMenuItem("examenes", "Examenes", "bookmark")
+
     // Puedes agregar más items aquí
   ];
 
   return (
-    <div className="flex h-full border-round-md overflow-hidden">
-      <Menu
-        model={items}
-        className="w-fit p-0 border-round-md min-w-max text-lg"
-        pt={{
-          action: { className: "px-4 py-3" },
-          icon: { className: "text-xl" },
-        }}
-      />
-        <Outlet />
-    </div>
-  );
+      <div className="flex h-full border-round-md overflow-hidden">
+        <Menu model={items} className="w-fit p-0 border-round-md min-w-max" />
+          <Outlet />
+      </div>
+    );
 };
 
 export const Settings: React.FC = () => (
@@ -56,4 +45,4 @@ export const Settings: React.FC = () => (
   </div>
 );
 
-export default SettingsLayout;
+export default SaludLayout;
