@@ -101,7 +101,7 @@ export const dietaAPLICADA_GET = `${DIETA_APLICADA_BASE}/GetDietasAplicadas`;
 export const DIETA_APLICADA_CREATE = `${DIETA_APLICADA_BASE}/CreateDietasAplicadas`;
 
 //CRUD Habitats
-export const HABITATS_GET = `${HABITATS_BASE}`;
+export const HABITATS_GET = `${HABITATS_BASE}/${GET}`;
 export const HABITATS_CREATE = `${ZONAS_BASE}/${CREATE}`;
 
 //CRUD Comportamiento
