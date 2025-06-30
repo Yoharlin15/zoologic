@@ -37,6 +37,22 @@ const LandingPage = () => {
             id: 3,
             src: 'https://res.cloudinary.com/dlbb3qssp/image/upload/v1750949178/iguana_hwoqhy.jpg',
             alt: 'Iguana'
+        },
+        {
+            id: 4,
+            src: 'https://s3.amazonaws.com/cdn.conectate-new.com/wp-content/uploads/2019/06/25182827/RINOCERONTES-ZOODOM.jpg',
+            alt: 'Rinoceronte'
+        },
+        {
+            id: 5,
+            src: 'https://s3.amazonaws.com/cdn.conectate-new.com/wp-content/uploads/2018/01/18152007/JAGUAR-ZOODOM5.jpg',
+            alt: 'Tigre'
+        },
+
+        {
+            id: 6,
+            src: 'https://s3.amazonaws.com/cdn.conectate-new.com/wp-content/uploads/2018/01/18152007/JAGUAR-ZOODOM5.jpg',
+            alt: 'Tigre'
         }
     ];
 
