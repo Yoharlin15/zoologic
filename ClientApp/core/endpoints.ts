@@ -16,7 +16,6 @@ const DIETA_BASE = "Alimentacion";
 const DIETA_APLICADA_BASE = "Alimentacion";
 const HABITATS_BASE = "Habitat";
 const COMPORTAMIENTO_BASE = "Comportamiento";
-const DETALLECOMPORTAMIENTO_BASE = "DetalleComportamiento";
 const USUARIOS_BASE = "Usuario";
 const LOGIN = "Login";
 const LOGOUT = "Logout";
@@ -109,8 +108,10 @@ export const COMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/Get`;
 export const COMPORTAMIENTO_CREATE = `${COMPORTAMIENTO_BASE}/CreateComportamiento`;
 
 //CRUD DetalleComportamiento
-export const DETALLECOMPORTAMIENTO_GET = `${DETALLECOMPORTAMIENTO_BASE}/Get`;
-export const DETALLECOMPORTAMIENTO_CREATE = `${DETALLECOMPORTAMIENTO_BASE}/CreateDetalleComportamiento`;
+export const DETALLECOMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/GetDetallesComportamiento`;
+export const DETALLECOMPORTAMIENTO_GETBYID = `${COMPORTAMIENTO_BASE}GetById`
+export const DETALLECOMPORTAMIENTO_CREATE = `${COMPORTAMIENTO_BASE}/CreateDetalleComportamiento`;
+export const DETALLECOMPORTAMIENTO_UPDATE = `${COMPORTAMIENTO_BASE}/Update`;
 
 //Get Tratamiento
 export const TRATAMIENTOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientos`;

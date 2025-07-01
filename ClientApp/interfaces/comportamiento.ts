@@ -20,10 +20,20 @@ export interface IComportamientoCreate {
 }
 
 export interface IDetalleComportamiento {
-    DetalleComportamientoId: string;
+    DetalleComportamientoId: number;
+    DetallesComportamiento: string;
+}
+
+export interface IDetalleComportamientoCurrent {
+    DetalleComportamientoId: number;
     DetallesComportamiento: string;
 }
 
 export interface IDetalleComportamientoCreate {
+    DetallesComportamiento: number;
+}
+
+export interface IDetalleComportamientoUpdate {
+    DetalleComportamientoId: number;
     DetallesComportamiento: string;
 }

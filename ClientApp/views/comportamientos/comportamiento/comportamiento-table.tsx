@@ -16,10 +16,11 @@ import {
     DataTableSelectionSingleChangeEvent,
 } from "primereact/datatable";
 
-import { CardTable, ICardTableProps } from "../../components/card-table";
+import { CardTable, ICardTableProps } from "../../../components/card-table";
 import { Reducers } from "#core";
 import dayjs from "dayjs";
 import ComportamientoSidebarCreate from "./comportamiento-sidebar-create";
+import { SplitButton } from "primereact/splitbutton";
 
 interface IComportamientoTableProps {
     dispatch: React.Dispatch<any>;
@@ -36,7 +37,7 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
 
     const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
     const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
-    const [selectedComportamientoId, setSelectedEmpleadoId] = useState<number | null>(null);
+    const [selectedComportamientoId, setSelectedComportamientoId] = useState<number | null>(null);
 
     const menuModel = [
         {
@@ -44,7 +45,7 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
             icon: "pi pi-pencil",
             command: () => {
                 if (selectedComportamiento) {
-                    setSelectedEmpleadoId(selectedComportamiento.ComportamientoId);
+                    setSelectedComportamientoId(selectedComportamiento.ComportamientoId);
                     setSidebarUpdateVisible(true);
                 }
             },
@@ -130,14 +131,23 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
                     setSearchText(e.target.value)
                 )}
                 renderHeadActions={[
-                    <Button
-                        key="btn_add"
+                    <SplitButton
+                        key="btn_add_split"
+                        label="Registrar comportamiento"
+                        severity="success"
+                        className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+                        color="primary"
                         onClick={() => {
-                            setSelectedEmpleadoId(null);
+                            setSelectedComportamientoId(null);
                             setSidebarCreateVisible(true);
                         }}
-                        className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
-                        label="Nuevo comportamiento"
+                        model={[
+                            {
+                                label: "Ir a vista especie",
+                                icon: "pi pi-directions",
+                                command: () => navigate("/detalleComportamiento"),
+                            },
+                        ]}
                     />
 
                 ]}

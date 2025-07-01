@@ -6,6 +6,7 @@ import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 
 import { setupFontAwesomeIcons } from './utils/font-awesome-icons'; // <--- importa el util
+import { AuthProvider } from "./contexts/AuthContext/AuthContext";
 setupFontAwesomeIcons();
 
 
@@ -19,14 +20,16 @@ addLocale('es', {
     today: 'Hoy',
     clear: 'Limpiar', // Aquí agregas la traducción para el botón "clear"
     // Agrega más traducciones si es necesario
-  });
-  
-  locale('es');
+});
+
+locale('es');
 
 const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
-        <RouterContextProvider/>
+            <AuthProvider>   {/* Envuelve la app con AuthProvider */}
+                <RouterContextProvider />
+            </AuthProvider>
         </QueryClientProvider>
     );
 };

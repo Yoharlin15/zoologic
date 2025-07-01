@@ -17,18 +17,18 @@ import {
   CardTable,
   ICardTableProps,
 } from "#components";
-import { ICargo } from "ClientApp/interfaces/cargos";
-import { CargosFormDialog } from "./cargosFormDialog";
+import { IDetalleComportamiento } from "#interfaces";
+import { DetallesComportamientoFormDialog } from "./detalleComportamientoFormDialog";
 
-const Cargos = () => {
-  const cargos = AppQueryHooks.useFetchCargos();
+const DetallesComportamientos = () => {
+  const detallesComportamientos = AppQueryHooks.useFetchDetalleComportamiento();
 
   const [state, dispatch] = React.useReducer(Reducers.DialogsReducer, {
     id: 0,
     visible: false,
   });
 
-  const [selectedCargo, setSelectedCargo] = React.useState<ICargo>();
+  const [selectedDetalleComportamiento, setSelectedDetalleComportamiento] = React.useState<IDetalleComportamiento>();
   const cm = React.useRef<ContextMenu>(null);
   const [searchText, setSearchText] = React.useState("");
 
@@ -39,27 +39,27 @@ const Cargos = () => {
       command: () =>
         dispatch({
           type: "OPEN_DIALOG",
-          payload: selectedCargo?.CargoId ?? 0,
+          payload: selectedDetalleComportamiento?.DetalleComportamientoId ?? 0,
         }),
     },
     {
       label: "Eliminar",
       icon: "pi pi-trash",
-      command: () => handleDeleteCargo(),
+      command: () => handleDeleteDetalleComportamiento(),
     },
   ];
 
-  const handleDeleteCargo = () => {
+  const handleDeleteDetalleComportamiento = () => {
     confirmDialog({
-      message: `¿Estás seguro de que deseas eliminar el cargo "${selectedCargo?.Cargo}"?`,
+      message: `¿Estás seguro de que deseas eliminar el cargo "${selectedDetalleComportamiento?.DetallesComportamiento}"?`,
       header: "Confirmar Eliminación",
       icon: "pi pi-exclamation-triangle",
       acceptClassName: "p-button-danger",
       acceptLabel: "Sí, eliminar",
       rejectLabel: "Cancelar",
       accept: () => {
-        // Aquí iría la lógica para eliminar el estado
-        toast.success(`Estado "${selectedCargo?.Cargo}" eliminado correctamente`);
+
+        toast.success(`Comportamiento "${selectedDetalleComportamiento?.DetallesComportamiento}" eliminado correctamente`);
       },
     });
   };
@@ -76,17 +76,17 @@ const Cargos = () => {
     dispatch({ type: "CLOSE_DIALOG" });
   };
 
-  const columns = React.useMemo<ICardTableProps<ICargo>["columns"]>(
+  const columns = React.useMemo<ICardTableProps<IDetalleComportamiento>["columns"]>(
     () => [
       {
         filter: true,
         sortable: true,
-        header: "Nombre del cargo",
-        field: "Cargo",
-        body: (rowData: ICargo) => (
+        header: "Nombre del comportamiento",
+        field: "DetallesComportamiento",
+        body: (rowData: IDetalleComportamiento) => (
           <div className="flex align-items-center gap-2">
-            <i className="pi pi-briefcase text-green-500"></i>
-            <span className="font-medium">{rowData.Cargo}</span>
+            <i className="pi pi-pen-to-square text-green-500"></i>
+            <span className="font-medium">{rowData.DetallesComportamiento}</span>
           </div>
         ),
       },
@@ -94,22 +94,22 @@ const Cargos = () => {
     [],
   );
 
-  const filteredCargos = React.useMemo(() => {
-    if (!cargos.data?.length) return [];
+  const filteredDetallesComportamiento = React.useMemo(() => {
+    if (!detallesComportamientos.data?.length) return [];
 
-    return cargos.data.filter((item) =>
-      matchesSearchText(searchText, item.Cargo),
+    return detallesComportamientos.data.filter((item) =>
+      matchesSearchText(searchText, item.DetallesComportamiento),
     );
-  }, [searchText, cargos.data]);
+  }, [searchText, detallesComportamientos.data]);
 
   const renderEmptyMessage = React.useCallback(() => {
     return (
       <div className="text-center p-6">
         <i className="pi pi-flag text-6xl text-400 mb-3"></i>
-        <div className="text-900 font-bold text-xl mb-2">No hay cargos registrados</div>
-        <div className="text-600 mb-4">Comienza creando tu primer cargo</div>
+        <div className="text-900 font-bold text-xl mb-2">No hay comportamientos registrados</div>
+        <div className="text-600 mb-4">Comienza creando tu primer comportamiento</div>
         <Button
-          label="Crear Nuevo cargo"
+          label="Crear Nuevo comportamiento"
           icon="pi pi-plus"
           onClick={() => handleOpenDialog(0)}
         />
@@ -117,19 +117,10 @@ const Cargos = () => {
     );
   }, []);
 
-  const startContent = (
-    <div className="flex align-items-center gap-3">
-      <div>
-        <h1 className="text-2xl font-bold text-900 m-0">Gestión de cargos</h1>
-        <p className="text-600 m-0 mt-1">Administra los cargos disponibles</p>
-      </div>
-    </div>
-  );
-
   const endContent = (
     <div className="flex gap-2">
       <Button
-        label="Nuevo cargo"
+        label="Nuevo comportamiento"
         icon="pi pi-plus"
         onClick={() => handleOpenDialog(0)}
         className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
@@ -137,12 +128,9 @@ const Cargos = () => {
     </div>
   );
 
-  if (cargos.isPending) {
+  if (detallesComportamientos.isPending) {
     return (
       <div className="w-full">
-        <Card className="mb-2 bg-blue-50">
-          <Toolbar start={startContent} />
-        </Card>
         <Card className="bg-blue-50">
           <div className="p-4">
             <Skeleton height="3rem" className="mb-3" />
@@ -164,43 +152,48 @@ const Cargos = () => {
       <ContextMenu
         ref={cm}
         model={menuModel}
-        onHide={() => setSelectedCargo(undefined)}
+        onHide={() => setSelectedDetalleComportamiento(undefined)}
       />
 
-      <Card className="mb-2 bg-blue-50">
-        <Toolbar start={startContent} end={endContent} className="border-none p-0" />
-      </Card>
-
-      <Card className="bg-blue-50">
-        <CardTable<ICargo>
+      
+        <CardTable<IDetalleComportamiento>
           title=""
           columns={columns}
-          value={filteredCargos}
-          skeletonLoading={cargos.isPending}
+          value={filteredDetallesComportamiento}
+          skeletonLoading={detallesComportamientos.isPending}
+
+          headerEndContent={
+            <Button
+              label="Nueva familia"
+              icon="pi pi-plus"
+              onClick={() => handleOpenDialog(0)}
+              className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
+
+            />
+          }
           tableProps={{
             rows: 10,
             size: "small",
             scrollable: true,
-            dataKey: "CargoId",
+            dataKey: "DetalleComportamientoId",
             removableSort: true,
             paginatorLeft: true,
             scrollHeight: "500px",
-            loading: cargos.isFetching,
+            loading: detallesComportamientos.isFetching,
             emptyMessage: renderEmptyMessage(),
-            contextMenuSelection: selectedCargo,
+            contextMenuSelection: selectedDetalleComportamiento,
             rowsPerPageOptions: [10, 25, 50],
-            paginator: filteredCargos.length > 10,
+            paginator: filteredDetallesComportamiento.length > 10,
             className: "p-datatable-striped",
             onContextMenu: (e) => cm.current?.show(e.originalEvent),
             onContextMenuSelectionChange: (
-              e: DataTableSelectionSingleChangeEvent<ICargo[]>,
-            ) => setSelectedCargo(e.value),
-            onRowDoubleClick: (e) => handleOpenDialog(e.data.EstadoId),
+              e: DataTableSelectionSingleChangeEvent<IDetalleComportamiento[]>,
+            ) => setSelectedDetalleComportamiento(e.value),
+            onRowDoubleClick: (e) => handleOpenDialog(e.data.DetalleComportamientoId),
           }}
         />
-      </Card>
 
-      <CargosFormDialog
+      <DetallesComportamientoFormDialog
         id={state.id}
         visible={state.visible ?? false}
         onHide={handleCloseDialog}
@@ -209,4 +202,4 @@ const Cargos = () => {
   );
 };
 
-export default Cargos;
+export default DetallesComportamientos;

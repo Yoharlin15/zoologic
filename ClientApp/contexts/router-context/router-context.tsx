@@ -37,6 +37,8 @@ import Tratamientos from "ClientApp/views/salud/tratamiento/tratamiento";
 import SaludLayout from "ClientApp/views/salud/opciones";
 import NecropsiasList from "ClientApp/views/salud/necropsias/necropsias-list";
 import Examenes from "ClientApp/views/salud/examenes/examen";
+import ComportamientoLayout from "ClientApp/views/comportamientos/comportamiento";
+import DetallesComportamientos from "ClientApp/views/comportamientos/detalleComportamiento/detalleComportamiento";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -165,6 +167,17 @@ const Provider = () => {
             {
               path: Routes.COMPORTAMIENTO_ROUTE,
               element: <ComportamientosList />,
+            },
+
+            {
+              path: Routes.DETALLE_COMPORTAMIENTO_ROUTE,
+              element: <ComportamientoLayout />,
+              children: [
+                {
+                  path: Routes.COMPORTAMIENTO_DETALLE_ROUTE,
+                  element: <DetallesComportamientos />
+                }
+              ]
             },
             {
               id: "settings-root",

@@ -15,6 +15,8 @@ export interface RespuestaServidor {
   mensaje: string;
   exito: boolean;
   TokenJwt?: string; 
+  NombreUsuario?: string;
+  RolId: number;
 }
 
 // Confirmación de correo con token en URL
