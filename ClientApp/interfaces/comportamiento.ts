@@ -7,7 +7,7 @@ export interface IComportamiento {
     Fecha: Date | string | null;
     HabitatId: number;
     Nombre: string
-    DetalleComportamientoId: string;
+    DetalleComportamientoId: number;
     DetallesComportamiento: string;
 }
 

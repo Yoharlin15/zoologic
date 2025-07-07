@@ -48,7 +48,7 @@ const ComportamientoSidebarCreate = ({ onHide, visible }: IComportamientoSidebar
       HabitatId: Number(data.HabitatId),
       UsuarioId: Number(data.UsuarioId),
       Fecha: data.Fecha?.toISOString() || null,
-      DetalleComportamientoId: data.DetalleComportamientoId,
+      DetalleComportamientoId: Number(data.DetalleComportamientoId)
     };
 
     console.log("Payload:", payload);

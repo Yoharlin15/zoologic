@@ -104,7 +104,7 @@ export const HABITATS_GET = `${HABITATS_BASE}/${GET}`;
 export const HABITATS_CREATE = `${ZONAS_BASE}/${CREATE}`;
 
 //CRUD Comportamiento
-export const COMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/Get`;
+export const COMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/${GET}`;
 export const COMPORTAMIENTO_CREATE = `${COMPORTAMIENTO_BASE}/CreateComportamiento`;
 
 //CRUD DetalleComportamiento
