@@ -95,8 +95,8 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Usuario",
-        field: "NombreUsuario",
+        header: "Departamento",
+        field: "NombreDepartamento",
         style: { minWidth: "12em" },
       },
 

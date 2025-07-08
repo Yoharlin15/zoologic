@@ -39,7 +39,7 @@ export { Salud };
 import HabitatList from "./habitats/habitat-list";
 export { HabitatList };
 
-import ComportamientosList from "./comportamientos/comportamiento/comportamiento-list";
+import ComportamientosList from "./comportamientos/comportamientos/comportamiento-list";
 export { ComportamientosList };
 
 import UsuariosList from "./usuarios/usuario-list";

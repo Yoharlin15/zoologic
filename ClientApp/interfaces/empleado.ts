@@ -11,8 +11,8 @@ export interface IEmpleado {
     CargoId: number;
     Cargo: string,
     FechaContratacion: Date;
-    UsuarioId: number;
-    NombreUsuario: string;
+    DepartamentoId: number;
+    NombreDepartamento: string;
     EstadoId: number;
     NombreEstado: string;
 }
@@ -28,6 +28,6 @@ export interface IEmpleadoCreate {
     Direccion: string;
     CargoId: Number;
     FechaContratacion: Date | null;
-    UsuarioId: number;
+    DepartamentoId: number;
     EstadoId: number;
 }

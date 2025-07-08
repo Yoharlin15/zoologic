@@ -20,7 +20,7 @@ interface IComportamientoSidebarProps {
   id?: number;
   visible: boolean;
   onHide: () => void;
-  especieId: number | undefined;
+  comportamientoId: number | undefined;
 }
 
 const ComportamientoSidebarCreate = ({ onHide, visible }: IComportamientoSidebarProps) => {

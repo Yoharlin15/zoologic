@@ -88,6 +88,13 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
         field: "Nombre",
         style: { minWidth: "10rem" },
       },
+      {
+        filter: true,
+        sortable: true,
+        header: "Empleado",
+        field: "Nombres",
+        style: { minWidth: "10rem" },
+      }
     ],
     []
   );

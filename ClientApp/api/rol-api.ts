@@ -29,17 +29,15 @@ const RolApi: ApiCustom<IRoles> = {
   },
 
   update: async (updatedRol) => {
-    if (!updatedRol.RolId)
+    if (!updatedRol.RolId) {
       WarnUtils.missing(Endpoints.ROLES_UPDATE, "Missing update ID");
+      return Promise.reject(new Error("Missing update ID"));
+    }
 
-    const payload = {
-      estado: updatedRol
-    };
+    const url = Endpoints.ROLES_UPDATE.replace("{id}", updatedRol.RolId.toString());
 
-    const response = await API().put(
-      `${Endpoints.ESTADO_UPDATE}/${updatedRol.RolId}`,
-      payload
-    );
+    const response = await API().put(url, updatedRol);
+
     return response.data;
   }
 }

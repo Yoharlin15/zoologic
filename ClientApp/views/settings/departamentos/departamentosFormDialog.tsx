@@ -5,15 +5,15 @@ import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
 import { AppMutationHooks, AppQueryHooks } from "#hooks";
 import toast from "react-hot-toast";
-import { ICargo } from "ClientApp/interfaces/cargos";
+import { IDepartamento } from "ClientApp/interfaces/departamento";
 
-interface CargosFormDialogProps {
+interface DepartamentosFormDialogProps {
   id: number;
   visible: boolean;
   onHide: () => void;
 }
 
-export const CargosFormDialog: React.FC<CargosFormDialogProps> = ({
+export const DepartamentosFormDialog: React.FC<DepartamentosFormDialogProps> = ({
   id,
   visible,
   onHide,
@@ -21,45 +21,45 @@ export const CargosFormDialog: React.FC<CargosFormDialogProps> = ({
   const isEditMode = id > 0;
 
   const {
-    data: estadoData
-  } = AppQueryHooks.useFetchOneCargo(id);
+    data: departamentoData
+  } = AppQueryHooks.useFetchOneDepartamento(id);
 
-  const createMutation = AppMutationHooks.useCreateCargos();
-  const updateMutation = AppMutationHooks.useUpdateCargos();
+  const createMutation = AppMutationHooks.useCreateDepartamentos();
+  const updateMutation = AppMutationHooks.useUpdateDepartamentos();
 
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ICargo>();
+  } = useForm<IDepartamento>();
 
   useEffect(() => {
-    if (isEditMode && estadoData) {
-      reset(estadoData);
+    if (isEditMode && departamentoData) {
+      reset(departamentoData);
     } else {
-      reset({ CargoId: 0, Cargo: "" });
+      reset({ DepartamentoId: 0, Nombre: "" });
     }
-  }, [estadoData, isEditMode, reset]);
+  }, [departamentoData, isEditMode, reset]);
 
-  const onSubmit = async (data: ICargo) => {
+  const onSubmit = async (data: IDepartamento) => {
     try {
       if (isEditMode) {
         await updateMutation.mutateAsync(data);
-        toast.success("Cargo actualizado correctamente");
+        toast.success("Departamento actualizado correctamente");
       } else {
         await createMutation.mutateAsync(data);
-        toast.success("Cargo creado correctamente");
+        toast.success("Departamento creado correctamente");
       }
       onHide();
     } catch (error) {
-      toast.error("Ocurrió un error al guardar el cargo");
+      toast.error("Ocurrió un error al guardar el departamento");
     }
   };
 
   return (
     <Dialog
-      header={isEditMode ? "Editar cargo" : "Crear cargo"}
+      header={isEditMode ? "Editar departamento" : "Crear departamento"}
       visible={visible}
       onHide={onHide}
       className="w-full sm:w-10 md:w-8 lg:w-6 xl:w-4"
@@ -68,19 +68,19 @@ export const CargosFormDialog: React.FC<CargosFormDialogProps> = ({
       <form onSubmit={handleSubmit(onSubmit)} className="p-fluid space-y-4">
         <div>
           <label htmlFor="Nombre" className="font-semibold block mb-2">
-            Nombre del cargo
+            Nombre del departamento
           </label>
           <InputText
             id="Nombre"
-            {...register("Cargo", {
-              required: "El nombre del cargo es obligatorio",
+            {...register("Nombre", {
+              required: "El nombre del departamento es obligatorio",
               minLength: { value: 2, message: "Mínimo 2 caracteres" },
             })}
-            className={errors.Cargo ? "p-invalid" : ""}
+            className={errors.Nombre ? "p-invalid" : ""}
             autoFocus
           />
-          {errors.Cargo && (
-            <small className="p-error">{errors.Cargo.message}</small>
+          {errors.Nombre && (
+            <small className="p-error">{errors.Nombre.message}</small>
           )}
         </div>
 

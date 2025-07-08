@@ -17,7 +17,7 @@ const ComportamientoLayout: React.FC<React.PropsWithChildren> = ({ children }) =
   );
 
   const items: MenuItem[] = [
-    createMenuItem("detalle", "Comportamientos", "pen-to-square")
+    createMenuItem("detalleComportamiento", "Comportamientos", "pen-to-square")
   ];
 
   return (

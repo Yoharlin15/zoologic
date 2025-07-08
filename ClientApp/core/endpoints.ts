@@ -35,7 +35,7 @@ export const ESTADO_UPDATE = `${ESTADO_BASE}/${UPDATE}/{id}`;
 export const ROLES_GET = `${USUARIOS_BASE}/get-roles`
 export const ROLES_GETBYID = `${USUARIOS_BASE}/GetRolById`
 export const ROLES_CREATE = `${USUARIOS_BASE}/create-rol`
-export const ROLES_UPDATE = `${USUARIOS_BASE}/UpdateRol`
+export const ROLES_UPDATE = `${USUARIOS_BASE}/UpdateRol/{id}`
 
 //Get Zonas 
 export const ZONAS_GET = `${ZONAS_BASE}/${GET}`;
@@ -47,9 +47,17 @@ export const ZONAS_UPDATE = `${ZONAS_BASE}/${UPDATE}`
 export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;
 export const EMPLEADOS_CREATE = `${EMPLEADOS_BASE}/${CREATE}`;
 
-//Get Cargo
+//CRUD Cargo
 export const CARGOS_GET = `${EMPLEADOS_BASE}/GetCargos`;
+export const CARGO_GETBYID = `${EMPLEADOS_BASE}/GetCargoById`
 export const CARGOS_CREATE = `${EMPLEADOS_BASE}/CreateCargo`;
+export const CARGOS_UPDATE = `${EMPLEADOS_BASE}/UpdateCargo/{id}`;
+
+//CRUD Departamento
+export const DEPARTAMENTOS_GET = `${EMPLEADOS_BASE}/GetDepartamentos`
+export const DEPARTAMENTOS_GETBYID = `${EMPLEADOS_BASE}/GetDepartamentoById`
+export const DEPARTAMENTOS_CREATE = `${EMPLEADOS_BASE}/CreateDepartamento`
+export const DEPARTAMENTOS_UPDATE = `${EMPLEADOS_BASE}/UpdateDepartamento/{id}`
 
 //CRUD Animal
 export const ANIMALES_GET = `${ANIMALES_BASE}`;

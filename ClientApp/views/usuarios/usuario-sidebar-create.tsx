@@ -1,23 +1,22 @@
 import React, { useRef } from "react";
-import { Calendar } from "primereact/calendar";
-import "react-datepicker/dist/react-datepicker.css";
-import { Controller, FieldValues } from "react-hook-form";
+import { Controller, FieldValues, useForm, useWatch } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
-import { useForm } from "react-hook-form";
+import { Toast } from "primereact/toast";
+import { Password } from "primereact/password";
+
 import {
   Dropdown,
-  InputNumber,
   InputText,
-  InputTextArea,
 } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
-import { IAnimalCreate, RegistroDatos } from "#interfaces";
-import { Toast } from "primereact/toast";
-import { useCreateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales";
-import { useFetchEspecies, useFetchHabitats, useFetchPadres, useFetchRoles, useFetchZonas } from "ClientApp/hooks/useFetch";
+import { RegistroDatos } from "#interfaces";
+
 import { useRegistrarUsuario } from "ClientApp/hooks/useMutation/useMutationSignup";
-import { Password } from "primereact/password";
+import {
+  useFetchEmpleados,
+  useFetchRoles,
+} from "ClientApp/hooks/useFetch";
 
 interface IUsuarioSidebarProps {
   id?: number;
@@ -29,29 +28,36 @@ interface IUsuarioSidebarProps {
 const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
   const toast = useRef<Toast>(null);
   const { data: roles } = useFetchRoles();
+  const { data: empleados } = useFetchEmpleados();
 
   const createUser = useRegistrarUsuario();
 
-  const { control, handleSubmit, reset } = useForm<RegistroDatos, FieldValues>({
+  const {
+    control,
+    handleSubmit,
+    reset,
+  } = useForm<RegistroDatos & { ConfirmPassword: string }, FieldValues>({
     mode: "onChange",
     defaultValues: {
       Nombre: "",
       Email: "",
       Password: "",
-      RolId: undefined
+      ConfirmPassword: "",
+      RolId: undefined,
     },
   });
 
-  const onSubmit = async (data: RegistroDatos) => {
+  const passwordValue = useWatch({ control, name: "Password" });
+
+  const onSubmit = async (data: RegistroDatos & { ConfirmPassword: string }) => {
     const payload = {
       Nombre: data.Nombre,
       Email: data.Email,
       RolId: Number(data.RolId),
       Password: data.Password,
+      EmpleadoId: Number(data.EmpleadoId),
     };
 
-    console.log("Payload:", payload);
-    // para mostrar mensajes
     try {
       const res = await createUser.mutateAsync(payload);
       toast.current?.show({
@@ -72,7 +78,8 @@ const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
   };
 
   return (
-    <><Toast ref={toast} />
+    <>
+      <Toast ref={toast} />
       <Sidebar
         position="right"
         visible={visible}
@@ -89,7 +96,8 @@ const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
               name="Nombre"
               control={control}
               placeholder="Usuario"
-              rules={{ required: "Campo obligatorio" }} />
+              rules={{ required: "Campo obligatorio" }}
+            />
           </FieldColumn>
 
           <FieldColumn label="Email" columns={{ sm: 6 }}>
@@ -97,7 +105,8 @@ const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
               name="Email"
               control={control}
               placeholder="Email"
-              rules={{ required: "Campo obligatorio" }} />
+              rules={{ required: "Campo obligatorio" }}
+            />
           </FieldColumn>
 
           <FieldColumn label="Rol" columns={{ sm: 6 }}>
@@ -108,15 +117,58 @@ const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
               rules={{ required: "Campo obligatorio" }}
               options={roles || []}
               optionLabel="Nombre"
-              optionValue="RolId" />
+              optionValue="RolId"
+            />
+          </FieldColumn>
+
+          <FieldColumn label="Empleado" columns={{ sm: 6 }}>
+            <Dropdown
+              name="EmpleadoId"
+              control={control}
+              placeholder="Seleccione un empleado"
+              rules={{ required: "Campo obligatorio" }}
+              options={empleados || []}
+              optionLabel="Nombres"
+              optionValue="EmpleadoId"
+            />
           </FieldColumn>
 
           <FieldColumn label="Contraseña" columns={{ sm: 6 }}>
-            <InputText
+            <Controller
               name="Password"
               control={control}
-              placeholder="Contraseña"
-              rules={{ required: "Campo obligatorio" }} />
+              rules={{ required: "Campo obligatorio" }}
+              render={({ field, fieldState }) => (
+                <Password
+                  {...field}
+                  placeholder="Contraseña"
+                  toggleMask
+                  feedback
+                  className={fieldState.error ? "p-invalid" : ""}
+                />
+              )}
+            />
+          </FieldColumn>
+
+          <FieldColumn label="Confirmar contraseña" columns={{ sm: 6 }}>
+            <Controller
+              name="ConfirmPassword"
+              control={control}
+              rules={{
+                required: "Campo obligatorio",
+                validate: (value) =>
+                  value === passwordValue || "Las contraseñas no coinciden",
+              }}
+              render={({ field, fieldState }) => (
+                <Password
+                  {...field}
+                  placeholder="Confirmar contraseña"
+                  toggleMask
+                  feedback={false}
+                  className={fieldState.error ? "p-invalid" : ""}
+                />
+              )}
+            />
           </FieldColumn>
         </Form>
 
@@ -127,13 +179,16 @@ const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
             onClick={() => {
               reset();
               onHide();
-            }} />
+            }}
+          />
           <Button
             label="Guardar"
             severity="success"
-            onClick={handleSubmit(onSubmit)} />
+            onClick={handleSubmit(onSubmit)}
+          />
         </div>
-      </Sidebar></>
+      </Sidebar>
+    </>
   );
 };
 

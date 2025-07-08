@@ -39,6 +39,7 @@ import NecropsiasList from "ClientApp/views/salud/necropsias/necropsias-list";
 import Examenes from "ClientApp/views/salud/examenes/examen";
 import ComportamientoLayout from "ClientApp/views/comportamientos/comportamiento";
 import DetallesComportamientos from "ClientApp/views/comportamientos/detalleComportamiento/detalleComportamiento";
+import Departamentos from "ClientApp/views/settings/departamentos/departamentos";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -170,11 +171,11 @@ const Provider = () => {
             },
 
             {
-              path: Routes.DETALLE_COMPORTAMIENTO_ROUTE,
+              path: Routes.COMPORTAMIENTO_DETALLE_ROUTE,
               element: <ComportamientoLayout />,
               children: [
                 {
-                  path: Routes.COMPORTAMIENTO_DETALLE_ROUTE,
+                  path: Routes.DETALLE_COMPORTAMIENTO_ROUTE,
                   element: <DetallesComportamientos />
                 }
               ]
@@ -203,6 +204,11 @@ const Provider = () => {
                   id: "cargos",
                   path: Routes.CARGOS_ROUTE,
                   element: <Cargos />,
+                },  
+                {
+                  id: "departamentos",
+                  path: Routes.DEPARTAMENTOS_ROUTE,
+                  element: <Departamentos />
                 },
                 {
                   id: "zonas",

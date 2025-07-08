@@ -17,9 +17,9 @@ export const useCreateCargos = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: CargoApi.update,
-    mutationKey: [Tags.ROLES, Tags.MUTATION_UPDATE],
+    mutationKey: [Tags.CARGOS, Tags.MUTATION_UPDATE],
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [Tags.ROLES] });
+      queryClient.invalidateQueries({ queryKey: [Tags.CARGOS] });
     },
   });
 };

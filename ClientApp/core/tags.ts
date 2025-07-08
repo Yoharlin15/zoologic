@@ -23,6 +23,12 @@ export const USUARIOS = "Usuarios";
 export const ROLES = "Roles";
 
 //--------------------------------------------------------------------------------------//
+//                                     Departamentos                                    //
+//--------------------------------------------------------------------------------------//
+
+export const DEPARTAMENTOS = "Departamentos";
+
+//--------------------------------------------------------------------------------------//
 //                                       Empleados                                      //
 //--------------------------------------------------------------------------------------//
 
@@ -140,7 +146,7 @@ export const COMPORTAMIENTOS = "Comportamientos";
 //                                       DetallesComportamientos                        //
 //--------------------------------------------------------------------------------------//
 
-export const DETALLECOMPORTAMIENTOS = "Comportamientos";
+export const DETALLECOMPORTAMIENTOS = "DetallesComportamientos";
 
 //--------------------------------------------------------------------------------------//
 //                                      Mutations                                       //

@@ -13,7 +13,7 @@ import {
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { IEmpleadoCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
-import { useFetchCargos, useFetchUsuarios } from "ClientApp/hooks/useFetch";
+import { useFetchCargos, useFetchDepartamentos, useFetchUsuarios } from "ClientApp/hooks/useFetch";
 import { useFetchEstados } from "ClientApp/hooks/useFetch/useFetchEstados";
 import { useCreateEmpleado } from "ClientApp/hooks/useMutation/useMutationEmpleados";
 
@@ -28,7 +28,7 @@ const EmpleadoSidebarCreate = ({ onHide, visible }: IEmpleadoSidebarProps) => {
     const toast = useRef<Toast>(null);
     const { data: cargos } = useFetchCargos();
     const { data: estados } = useFetchEstados();
-    const { data: usuarios } = useFetchUsuarios();
+    const { data: departamentos } = useFetchDepartamentos();
     const createEmpleado = useCreateEmpleado();
 
 
@@ -45,7 +45,7 @@ const EmpleadoSidebarCreate = ({ onHide, visible }: IEmpleadoSidebarProps) => {
             Direccion: "",
             CargoId: undefined,
             FechaContratacion: null,
-            UsuarioId: undefined,
+            DepartamentoId: undefined,
             EstadoId: undefined
         },
     });
@@ -62,7 +62,7 @@ const EmpleadoSidebarCreate = ({ onHide, visible }: IEmpleadoSidebarProps) => {
             Direccion: data.Direccion,
             CargoId: Number(data.CargoId),
             FechaContratacion: data.FechaContratacion?.toISOString() || null,
-            UsuarioId: Number(data.UsuarioId),
+            UsuarioId: Number(data.DepartamentoId),
             EstadoId: Number(data.EstadoId),
         };
 
@@ -82,7 +82,7 @@ const EmpleadoSidebarCreate = ({ onHide, visible }: IEmpleadoSidebarProps) => {
             toast.current?.show({
                 severity: "error",
                 summary: "Error",
-                detail: error.response?.data?.mensaje || "Hubo un error al crear el animal.",
+                detail: error.response?.data?.mensaje || "Hubo un error al crear el empleado.",
             });
         }
     };
@@ -142,12 +142,16 @@ const EmpleadoSidebarCreate = ({ onHide, visible }: IEmpleadoSidebarProps) => {
                     </FieldColumn>
 
                     <FieldColumn label="Sexo" columns={{ sm: 6 }}>
-                        <InputText
-                            name="Sexo"
-                            control={control}
-                            placeholder="Sexo"
-                            rules={{ required: "Campo obligatorio" }} />
-                    </FieldColumn>
+                                <Dropdown
+                                  name="Sexo"
+                                  control={control}
+                                  placeholder="Seleccione sexo"
+                                  rules={{ required: "Campo obligatorio" }}
+                                  options={[
+                                    { label: "Masculino", value: "Masculino" },
+                                    { label: "Femenino", value: "Femenino" },
+                                  ]} />
+                              </FieldColumn>
 
                     <FieldColumn label="Telefono" columns={{ sm: 6 }}>
                         <InputText
@@ -201,14 +205,14 @@ const EmpleadoSidebarCreate = ({ onHide, visible }: IEmpleadoSidebarProps) => {
                             )} />
                     </FieldColumn>
 
-                    <FieldColumn label="Usuario" columns={{ sm: 6 }}>
+                    <FieldColumn label="Departamento" columns={{ sm: 6 }}>
                         <Dropdown
-                            name="UsuarioId"
+                            name="DepartamentoId"
                             control={control}
-                            placeholder="Seleccione el usuario"
-                            options={usuarios || []}
-                            optionLabel="NombreUsuario"
-                            optionValue="UsuarioId" />
+                            placeholder="Seleccione el departamento"
+                            options={departamentos || []}
+                            optionLabel="Nombre"
+                            optionValue="DepartamentoId" />
                     </FieldColumn>
 
                     <FieldColumn label="Estado" columns={{ sm: 6 }}>

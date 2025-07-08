@@ -2,7 +2,8 @@ export interface RegistroDatos {
   Nombre: string;
   Email: string;
   Password: string;
-  RolId: number; // Agrega RolId si es requerido
+  RolId: number;
+  EmpleadoId?: number;
 }
 // Datos para iniciar sesión
 export interface LoginDatos {
@@ -28,4 +29,6 @@ export interface IUsuario {
   Email: string;
   RolId: number;
   Nombre: string;
+  EmpleadoId: number;
+  Nombres: string;
 }

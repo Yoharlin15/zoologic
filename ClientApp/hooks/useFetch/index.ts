@@ -22,3 +22,4 @@ export * from "./useFetchComportamientos";
 export * from "./useFetchTratamientosAplicados";
 export * from "./useFetchExamenes";
 export * from "./useFetchDetalleComportamiento";
+export * from "./useFetchDepartamentos";

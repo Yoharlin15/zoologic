@@ -12,3 +12,4 @@ export * from "./useMutationZonas";
 export * from "./useMutationTratamientos";
 export * from "./useMutationExamenes";
 export * from "./useMutationDetalleComportamiento";
+export * from "./useMutationDepartamentos";

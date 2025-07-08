@@ -20,7 +20,7 @@ const CargoApi: ApiCustom<ICargo> = {
   },
 
   getById: async (id: number) => {
-    const result = await API().get(`${Endpoints.ROLES_GETBYID}/${id}`);
+    const result = await API().get(`${Endpoints.CARGO_GETBYID}/${id}`);
     return result.data;
   },
 
@@ -29,18 +29,16 @@ const CargoApi: ApiCustom<ICargo> = {
     return result.data;
   },
 
-  update: async (updatedRol) => {
-    if (!updatedRol.CargoId)
-      WarnUtils.missing(Endpoints.ROLES_UPDATE, "Missing update ID");
+  update: async (updatedCargo) => {
+    if (!updatedCargo.CargoId) {
+      WarnUtils.missing(Endpoints.CARGOS_UPDATE, "Missing update ID");
+      return Promise.reject(new Error("Missing update ID"));
+    }
 
-    const payload = {
-      estado: updatedRol
-    };
+    const url = Endpoints.CARGOS_UPDATE.replace("{id}", updatedCargo.CargoId.toString());
 
-    const response = await API().put(
-      `${Endpoints.ESTADO_UPDATE}/${updatedRol.CargoId}`,
-      payload
-    );
+    const response = await API().put(url, updatedCargo);
+
     return response.data;
   }
 };

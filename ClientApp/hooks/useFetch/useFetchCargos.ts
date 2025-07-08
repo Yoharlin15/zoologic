@@ -8,3 +8,11 @@ export const useFetchCargos = () => {
     queryFn: CargoApi.getAll,
   });
 };
+
+export const useFetchOneCargo = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.CARGOS, id],
+    queryFn: () => CargoApi.getById?.(id),
+  });
+};
