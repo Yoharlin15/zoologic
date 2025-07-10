@@ -3,7 +3,7 @@ export interface RegistroDatos {
   Email: string;
   Password: string;
   RolId: number;
-  EmpleadoId?: number;
+  EmpleadoId: number | null;
 }
 // Datos para iniciar sesión
 export interface LoginDatos {

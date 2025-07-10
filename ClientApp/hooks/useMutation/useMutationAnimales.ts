@@ -13,3 +13,14 @@ export const useCreateAnimal = () => {
     },
   });
 };
+
+export const useUpdateAnimal= () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: AnimalApi.update,
+    mutationKey: [Tags.ANIMALES, Tags.MUTATION_UPDATE],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Tags.ANIMALES] });
+    },
+  });
+};

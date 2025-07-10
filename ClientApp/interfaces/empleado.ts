@@ -9,7 +9,7 @@ export interface IEmpleado {
     Nacionalidad: string;
     Direccion: string;
     CargoId: number;
-    Cargo: string,
+    CargoNombre: string,
     FechaContratacion: Date;
     DepartamentoId: number;
     NombreDepartamento: string;

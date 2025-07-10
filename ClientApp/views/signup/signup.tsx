@@ -19,6 +19,7 @@ interface SignupFormData {
   Password: string;
   ConfirmPassword: string;
   Rol: number;
+  EmpleadoId: null;
 }
 
 const roles = [
@@ -45,6 +46,7 @@ const Signup = () => {
       Email: data.Email,
       Password: data.Password,
       RolId: data.Rol,
+      EmpleadoId: null
     };
 
     registrarUsuario(datos, {
@@ -86,8 +88,8 @@ const Signup = () => {
       </p>
       <span className="text-xl font-semibold mb-4">"Protegiendo el futuro de la vida silvestre"</span>
       <div className="flex justify-content-center gap-4">
-        <img src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742418550/MEDIO-AMBIENTE_ftjbxt.png" alt="Logo 1" className="w-2 h-auto" />
-        <img src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742419070/zoodom_atpfei.png" alt="Logo 2" className="w-2 h-auto" />
+        <img src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742418550/MEDIO-AMBIENTE_ftjbxt.png" alt="Logo 1" style={{ width: '120px', height: 'auto' }} />
+        <img src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742419070/zoodom_atpfei.png" alt="Logo 2" style={{ width: '120px', height: 'auto' }} />
       </div>
     </div>
   );

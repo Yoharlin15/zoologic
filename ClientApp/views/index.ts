@@ -21,9 +21,6 @@ export { EspeciesList };
 import Ejemplares from "./ejemplares/ejemplares";
 export { Ejemplares };
 
-import PadresList from "./padres/padres-list"
-export { PadresList }
-
 import DietasAplicadasList from "./alimentacion/dietasAplicadas/dietaAplicada-list";
 export { DietasAplicadasList }
 

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
 import EspeciesList from "../especies/especie/especie-list";
 import AnimalesList from "../animales/animal-list";
-import PadresList from "../padres/padres-list";
 
 const Ejemplares = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -23,12 +22,6 @@ const Ejemplares = () => {
         <TabPanel header="Animales" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
             <AnimalesList />
-          </div>
-        </TabPanel>
-
-        <TabPanel header="Padres" contentClassName="h-full overflow-hidden">
-          <div className="h-full overflow-hidden">
-            <PadresList />
           </div>
         </TabPanel>
 

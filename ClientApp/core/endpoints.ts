@@ -60,12 +60,10 @@ export const DEPARTAMENTOS_CREATE = `${EMPLEADOS_BASE}/CreateDepartamento`
 export const DEPARTAMENTOS_UPDATE = `${EMPLEADOS_BASE}/UpdateDepartamento/{id}`
 
 //CRUD Animal
-export const ANIMALES_GET = `${ANIMALES_BASE}`;
+export const ANIMALES_GET = `${ANIMALES_BASE}/${GET}`;
+export const ANIMALES_GETBYID = `${ANIMALES_BASE}/${GETBYID}`
 export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
-
-//CRUD Padre
-export const PADRES_GET = `${ANIMALES_BASE}/Animales-padres`;
-export const PADRES_CREATE = `${ANIMALES_BASE}/Create-padre`;
+export const ANIMLAES_UPDATE = `${ANIMALES_BASE}/${UPDATE}/{id}`
 
 //CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;

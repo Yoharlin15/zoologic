@@ -19,8 +19,9 @@ import {
 import { CardTable, ICardTableProps } from "../../components/card-table";
 import dayjs from "dayjs";
 
-import AnimalSidebarCreate from "./animal-sidebar-create";
+import AnimalSidebarCreate from "./animal-sidebar-form";
 import { Reducers } from "#core";
+import AnimalSidebarForm from "./animal-sidebar-form";
 
 interface IAnimalTableProps {
   dispatch: React.Dispatch<any>;
@@ -35,8 +36,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
   const cm = useRef<ContextMenu>(null);
   const menu = useRef<Menu>(null);
 
-  const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
-  const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedAnimalId, setSelectedAnimalId] = useState<number | null>(null);
 
   const menuModel = [
@@ -46,7 +46,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
       command: () => {
         if (selectedAnimal) {
           setSelectedAnimalId(selectedAnimal.AnimalId);
-          setSidebarUpdateVisible(true); // Abre el sidebar
+          setSidebarVisible(true);
         }
       },
     },
@@ -70,6 +70,23 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
 
   const columns = useMemo<ICardTableProps<IAnimal>["columns"]>(
     () => [
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Codigo",
+        field: "IdentificadorUnico",
+        style: { minWidth: "12rem" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Identificador",
+        field: "TipoIdentificador",
+        style: { minWidth: "12rem" },
+      },
+
       {
         filter: true,
         sortable: true,
@@ -82,7 +99,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         filter: true,
         sortable: true,
         header: "Especie",
-        field: "NombreCientifico",
+        field: "NombreComun",
         style: { minWidth: "12rem" },
       },
 
@@ -109,8 +126,15 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Habitat",
-        field: "Nombre",
+        header: "Padre",
+        field: "Padre",
+        style: { minWidth: "15em" },
+      },
+      {
+        filter: true,
+        sortable: true,
+        header: "Madre",
+        field: "Madre",
         style: { minWidth: "15em" },
       },
     ],
@@ -144,12 +168,12 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
             key="btn_add"
             onClick={() => {
               setSelectedAnimalId(null);
-              setSidebarCreateVisible(true);
+              setSidebarVisible(true);
             }}
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             label="Nuevo Animal"
           />
-          
+
         ]}
         tableProps={{
           rows: 8,
@@ -165,11 +189,13 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
           ) => setSelectedAnimal(e.value),
         }}
       />
-      <AnimalSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedAnimalId ?? undefined}
+      <AnimalSidebarForm
+        id={selectedAnimalId ?? undefined} // importante para edición
+        visible={sidebarVisible}
+        onHide={() => setSidebarVisible(false)}
+        especieId={undefined}
       />
+
     </div>
   );
 };

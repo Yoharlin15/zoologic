@@ -22,10 +22,11 @@ interface IUsuarioSidebarProps {
   id?: number;
   visible: boolean;
   onHide: () => void;
-  especieId: number | undefined;
+  usuarioId: number | undefined;
+  onCreateSuccess?: () => void;
 }
 
-const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
+const UsuarioSidebarCreate = ({ onHide, visible, onCreateSuccess }: IUsuarioSidebarProps) => {
   const toast = useRef<Toast>(null);
   const { data: roles } = useFetchRoles();
   const { data: empleados } = useFetchEmpleados();
@@ -67,6 +68,7 @@ const UsuarioSidebarCreate = ({ onHide, visible }: IUsuarioSidebarProps) => {
       });
       reset();
       onHide();
+      onCreateSuccess?.();
     } catch (error: any) {
       console.error("Error:", error.response?.data || error);
       toast.current?.show({

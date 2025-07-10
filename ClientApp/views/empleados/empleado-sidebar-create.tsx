@@ -21,7 +21,7 @@ interface IEmpleadoSidebarProps {
     id?: number;
     visible: boolean;
     onHide: () => void;
-    especieId: number | undefined;
+    empleadoId: number | undefined;
 }
 
 const EmpleadoSidebarCreate = ({ onHide, visible }: IEmpleadoSidebarProps) => {
@@ -62,7 +62,7 @@ const EmpleadoSidebarCreate = ({ onHide, visible }: IEmpleadoSidebarProps) => {
             Direccion: data.Direccion,
             CargoId: Number(data.CargoId),
             FechaContratacion: data.FechaContratacion?.toISOString() || null,
-            UsuarioId: Number(data.DepartamentoId),
+            DepartamentoId: Number(data.DepartamentoId),
             EstadoId: Number(data.EstadoId),
         };
 

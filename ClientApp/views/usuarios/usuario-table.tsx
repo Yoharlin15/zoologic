@@ -149,7 +149,8 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
       <UsuarioSidebarCreate
         visible={sidebarCreateVisible}
         onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedUsuarioId ?? undefined}
+        usuarioId={selectedUsuarioId ?? undefined}
+        onCreateSuccess={() => usuario.refetch()}
       />
     </div>
   );

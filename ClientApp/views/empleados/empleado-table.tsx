@@ -87,9 +87,73 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
       {
         filter: true,
         sortable: true,
+        header: "Fecha de nacimiento",
+        field: "FechaNacimiento",
+        style: { minWidth: "12rem" },
+        body: (rowData: IEmpleado | null) => {
+          if (!rowData?.FechaNacimiento) return "";
+          return dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY");
+        },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Sexo",
+        field: "Sexo",
+        style: { minWidth: "12rem" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
         header: "Telefono",
         field: "Telefono",
         style: { minWidth: "12em" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Nacionalidad",
+        field: "Nacionalidad",
+        style: { minWidth: "12rem" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Nacionalidad",
+        field: "Nacionalidad",
+        style: { minWidth: "12rem" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Dirección",
+        field: "Direccion",
+        style: { minWidth: "12rem" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Cargo",
+        field: "CargoNombre",
+        style: { minWidth: "12rem" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Fecha de contratacion",
+        field: "FechaContratacion",
+        style: { minWidth: "12rem" },
+        body: (rowData: IEmpleado | null) => {
+          if (!rowData?.FechaNacimiento) return "";
+          return dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY");
+        },
       },
 
       {
@@ -107,7 +171,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
         field: "NombreEstado",
         style: { minWidth: "10fem" },
       },
-      
+
     ],
     []
   );
@@ -144,7 +208,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             label="Nuevo empleado"
           />
-          
+
         ]}
         tableProps={{
           rows: 8,
@@ -163,7 +227,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
       <EmpleadoSidebarCreate
         visible={sidebarCreateVisible}
         onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedEmpleadoId ?? undefined}
+        empleadoId={selectedEmpleadoId ?? undefined}
       />
     </div>
   );

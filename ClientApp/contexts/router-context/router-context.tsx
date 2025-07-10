@@ -142,10 +142,6 @@ const Provider = () => {
               element: <InventarioList />,
             },
             {
-              path: Routes.INVENTARIO_ROUTE,
-              element: <AnimalesList />,
-            },
-            {
               path: Routes.USUARIOS_ROUTE,
               element: <UsuariosList />,
             },
