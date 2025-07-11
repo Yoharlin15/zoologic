@@ -113,14 +113,14 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                             optionValue="UsuarioId" />
                     </FieldColumn>
 
-                     <FieldColumn label="Animal(alias)" columns={{ sm: 6 }}>
+                     <FieldColumn label="Animal (codigo)" columns={{ sm: 6 }}>
                         <Dropdown
                             name="AnimalId"
                             control={control}
                             placeholder="Seleccione el animal"
                             rules={{ required: "Campo obligatorio" }}
                             options={animales || []}
-                            optionLabel="Alias"
+                            optionLabel="IdentificadorUnico"
                             optionValue="AnimalId" />
                     </FieldColumn>
 

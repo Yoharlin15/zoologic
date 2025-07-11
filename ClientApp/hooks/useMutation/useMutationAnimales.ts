@@ -24,3 +24,14 @@ export const useUpdateAnimal= () => {
     },
   });
 };
+
+export const useUpdateAnimalHabitat= () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: AnimalApi.asignarHabitat,
+    mutationKey: [Tags.ANIMALES, Tags.MUTATION_UPDATE],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Tags.ANIMALES] });
+    },
+  });
+};

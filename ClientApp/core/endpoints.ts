@@ -1,3 +1,5 @@
+import { ANIMALES } from "./tags";
+
 const GET = "Get";
 const GETBYID = "GetById";
 const CREATE = "Create";
@@ -45,7 +47,9 @@ export const ZONAS_UPDATE = `${ZONAS_BASE}/${UPDATE}`
 
 //Get Empleado
 export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;
+export const EMPLEADOS_GETBYID = `${EMPLEADOS_BASE}/GetEmpleadoById`
 export const EMPLEADOS_CREATE = `${EMPLEADOS_BASE}/${CREATE}`;
+export const EMPLEADOS_UPDATE = `${EMPLEADOS_BASE}/UpdateEmpleado/{id}`
 
 //CRUD Cargo
 export const CARGOS_GET = `${EMPLEADOS_BASE}/GetCargos`;
@@ -64,6 +68,7 @@ export const ANIMALES_GET = `${ANIMALES_BASE}/${GET}`;
 export const ANIMALES_GETBYID = `${ANIMALES_BASE}/${GETBYID}`
 export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
 export const ANIMLAES_UPDATE = `${ANIMALES_BASE}/${UPDATE}/{id}`
+export const ANIMALES_HABITATS_UPDATE = `${ANIMALES_BASE}/UpdateAnimalHabitat/{id}`
 
 //CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;

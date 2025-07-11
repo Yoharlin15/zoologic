@@ -22,7 +22,7 @@ export interface ITratamientoAplicado {
     TratamientoId: number;
     NombreTratamiento: string;
     AnimalId: number;
-    Alias: string
+    IdentificadorUnico: string
     HabitatId: number;
     Nombre: string;
     FechaEntrada: Date | string;

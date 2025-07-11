@@ -58,3 +58,8 @@ export interface IAnimalUpdate {
     Color: string
     Observaciones: string;
 }
+
+export interface IAnimalHabitatUpdate {
+    AnimalId: number;
+    HabitatId: number;
+}

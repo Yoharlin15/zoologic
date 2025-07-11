@@ -3,11 +3,12 @@ import React from "react";
 import { Skeleton } from "primereact/skeleton";
 import { DataTable, DataTableProps } from "primereact/datatable";
 import { InputText, InputTextProps } from "primereact/inputtext";
+import { IconField } from "primereact/iconfield";
+import { InputIcon } from "primereact/inputicon";
 import {
   Column,
   ColumnProps as ColumnPropsPrimeReact,
 } from "primereact/column";
-
 
 type ColumnProps<T> = ColumnPropsPrimeReact & {
   field?: keyof T;
@@ -27,8 +28,8 @@ export interface ICardTableProps<TB extends object> {
   onChangeSearch?: InputTextProps["onChange"];
   tableProps?: Omit<DataTableProps<TB[]>, "value" | "children">;
   headerEndContent?: React.ReactNode;
-
 }
+
 const CardTable = <TB extends object>({
   title,
   value,
@@ -41,12 +42,12 @@ const CardTable = <TB extends object>({
   onChangeSearch,
   skeletonLoading,
   renderHeadActions,
-  headerEndContent, 
-  placeholderSearch = "Búsqueda",
+  headerEndContent,
+  placeholderSearch = "Buscar",
 }: ICardTableProps<TB>) => {
   const renderDataTableComponent = React.useCallback(() => {
     if (skeletonLoading) {
-      const skeletonRows = tableProps?.rows ?? 8;
+      const skeletonRows = tableProps?.rows ?? 6;
       return (
         <DataTable
           style={{ minHeight: 300 }}
@@ -61,47 +62,54 @@ const CardTable = <TB extends object>({
     }
 
     return (
-      <DataTable
-      value={value}
-      className="border-1 border-gray-200 rounded-lg overflow-hidden"
-      {...(tableProps as DataTableProps<TB[]>)}
-      paginatorClassName={clsx(tableProps?.paginatorClassName, "border-none")}
-    >
-      {columns.map((column) => (
-        <Column
-          key={column.field}
-          {...column}
-          filter={false}
-          headerClassName="border border-gray-200"
-          bodyClassName="border border-gray-200"
-        />
-      ))}
-    </DataTable>
+      <>
+        <DataTable
+          value={value}
+          paginator
+          
+          rowsPerPageOptions={[5, 7]}
+          className="border-1 border-gray-200 rounded-lg overflow-hidden"
+          {...(tableProps as DataTableProps<TB[]>)}
+          rows={7}
+          paginatorClassName={clsx(tableProps?.paginatorClassName, "border-none")}
+        >
+          {columns.map((column) => (
+            <Column
+              key={column.field}
+              {...column}
+              filter={false}
+              headerClassName="border border-gray-200"
+              bodyClassName="border border-gray-200"
+            />
+          ))}
+        </DataTable>
+        <div className="text-right text-sm text-gray-600 mt-2 px-2">
+          Total de registros: <strong>{value?.length ?? 0}</strong>
+        </div>
+      </>
     );
   }, [columns, skeletonLoading, tableProps, value]);
 
-  const buttons = React.useMemo(() => {
-    return (renderHeadActions ?? []).map((button) => button);
-  }, [renderHeadActions]);
+  const buttons = React.useMemo(() => renderHeadActions ?? [], [renderHeadActions]);
 
   const header = (
-    <div className="flex flex-column sm:flex-row gap-2 flex-wrap align-items-center justify-content-between gap-2">
+    <div className="flex flex-column sm:flex-row gap-2 flex-wrap align-items-center justify-content-between">
       <div className="flex flex-column">
         <span>{title}</span>
         <span className="text-lg font-medium text-600">{subTitle}</span>
       </div>
       <div className="flex gap-2 flex-wrap justify-content-center sm:justify-content-end">
         {!hideSearch && (
-          <span className="p-input-icon-left">
-            
+          <IconField iconPosition="left">
+            <InputIcon className="pi pi-search" />
             <InputText
               type="text"
               onChange={onChangeSearch}
-              style={{ height: "100%" }}
               placeholder={placeholderSearch}
-              className="surface-section text-600 w-full pl-5"
+              className="surface-section text-600 w-full"
+              style={{ height: "100%" }}
             />
-          </span>
+          </IconField>
         )}
         {headerEndContent}
         {buttons}
@@ -128,8 +136,8 @@ const Card = ({
       className,
     )}
   >
-    <div className="text-2xl font-bold mb-0 p-3">{header}</div>
-    {children}
+    <div className="text-2xl font-bold mb-0 p-2">{header}</div>
+    <div className="p-2">{children}</div>
   </div>
 );
 

@@ -10,6 +10,7 @@ interface ApiCustom<T> extends Omit<Api<T>, "update"> {
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
   update?: (data: Partial<IAnimalCurrent>) => Promise<IAnimalCurrent>;
+  asignarHabitat?: (data: Partial<IAnimalCurrent>) => Promise<IAnimalCurrent>;
 }
 
 const AnimalApi: ApiCustom<IAnimal> = {
@@ -40,7 +41,21 @@ const AnimalApi: ApiCustom<IAnimal> = {
     const response = await API().put(url, updatedAnimal);
 
     return response.data;
-  }
+  },
+
+  asignarHabitat: async (updatedAnimal) => {
+    if (!updatedAnimal.AnimalId) {
+      WarnUtils.missing(Endpoints.ANIMALES_HABITATS_UPDATE, "Missing update ID");
+      return Promise.reject(new Error("Missing update ID"));
+    }
+
+    const url = Endpoints.ANIMALES_HABITATS_UPDATE.replace("{id}", updatedAnimal.AnimalId.toString());
+
+    const response = await API().put(url, updatedAnimal);
+
+    return response.data;
+  },
+
 
 };
 

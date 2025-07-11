@@ -22,12 +22,17 @@ import dayjs from "dayjs";
 import AnimalSidebarCreate from "./animal-sidebar-form";
 import { Reducers } from "#core";
 import AnimalSidebarForm from "./animal-sidebar-form";
+import HabitatModalUpdate from "./animal-habitat-form";
 
 interface IAnimalTableProps {
   dispatch: React.Dispatch<any>;
 }
 
 const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
+
+  const [habitatModalVisible, setHabitatModalVisible] = useState(false);
+  const [animalIdToAssignHabitat, setAnimalIdToAssignHabitat] = useState<number | undefined>(undefined);
+
   const animal = AppQueryHooks.useFetchAnimales();
   const [selectedAnimal, setSelectedAnimal] = useState<IAnimal>();
 
@@ -58,7 +63,19 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
           navigate(`/animales/${selectedAnimal.AnimalId}`);
         }
       },
+    },
+
+    {
+      label: "Asignar habitat",
+      icon: "pi pi-clipboard",
+      command: () => {
+        if (selectedAnimal) {
+          setAnimalIdToAssignHabitat(selectedAnimal.AnimalId);
+          setHabitatModalVisible(true);
+        }
+      },
     }
+
   ];
 
   const [confirmState, confirmDispatch] = useReducer(Reducers.DialogsReducer, {
@@ -90,7 +107,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Alias",
+        header: "Animal(Alias)",
         field: "Alias",
         style: { minWidth: "12rem" },
       },
@@ -144,7 +161,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
   const filteredAnimales = useMemo(() => {
     if (!Array.isArray(animal.data)) return [];
     return animal.data.filter((t) =>
-      t.Sexo?.toLowerCase().includes(searchText.toLowerCase())
+      t.IdentificadorUnico?.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [animal.data, searchText]);
 
@@ -194,6 +211,12 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         visible={sidebarVisible}
         onHide={() => setSidebarVisible(false)}
         especieId={undefined}
+      />
+      
+      <HabitatModalUpdate
+        visible={habitatModalVisible}
+        idAnimal={animalIdToAssignHabitat}
+        onHide={() => setHabitatModalVisible(false)}
       />
 
     </div>

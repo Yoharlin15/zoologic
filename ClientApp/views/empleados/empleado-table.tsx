@@ -19,7 +19,8 @@ import {
 import { CardTable, ICardTableProps } from "../../components/card-table";
 import dayjs from "dayjs";
 import { Reducers } from "#core";
-import EmpleadoSidebarCreate from "./empleado-sidebar-create";
+import EmpleadoSidebarCreate from "./empleado-sidebar-form";
+import EmpleadoSidebarForm from "./empleado-sidebar-form";
 
 interface IEmpleadoTableProps {
   dispatch: React.Dispatch<any>;
@@ -34,8 +35,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
   const cm = useRef<ContextMenu>(null);
   const menu = useRef<Menu>(null);
 
-  const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
-  const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedEmpleadoId, setSelectedEmpleadoId] = useState<number | null>(null);
 
   const menuModel = [
@@ -45,7 +45,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
       command: () => {
         if (selectedEmpleado) {
           setSelectedEmpleadoId(selectedEmpleado.EmpleadoId);
-          setSidebarUpdateVisible(true); // Abre el sidebar
+          setSidebarVisible(true);
         }
       },
     },
@@ -203,7 +203,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
             key="btn_add"
             onClick={() => {
               setSelectedEmpleadoId(null);
-              setSidebarCreateVisible(true);
+              setSidebarVisible(true);
             }}
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             label="Nuevo empleado"
@@ -224,10 +224,11 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
           ) => setSelectedEmpleado(e.value),
         }}
       />
-      <EmpleadoSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        empleadoId={selectedEmpleadoId ?? undefined}
+      <EmpleadoSidebarForm
+        id={selectedEmpleadoId ?? undefined} // importante para edición
+        visible={sidebarVisible}
+        onHide={() => setSidebarVisible(false)}
+        animalId={undefined}
       />
     </div>
   );

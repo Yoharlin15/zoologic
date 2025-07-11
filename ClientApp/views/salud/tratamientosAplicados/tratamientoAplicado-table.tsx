@@ -69,8 +69,8 @@ const TratamientoAplicadoTable = ({ dispatch }: ITratamientoAplicadoTableProps) 
       {
         filter: true,
         sortable: true,
-        header: "Animal (Alias)",
-        field: "Alias",
+        header: "Animal(codigo)",
+        field: "IdentificadorUnico",
         style: { minWidth: "12rem" },
       },
 
@@ -128,7 +128,7 @@ const TratamientoAplicadoTable = ({ dispatch }: ITratamientoAplicadoTableProps) 
   const filteredTratamientosAplicados = useMemo(() => {
     if (!Array.isArray(tratamientoAplicado.data)) return [];
     return tratamientoAplicado.data.filter((t) =>
-      t.Alias?.toLowerCase().includes(searchText.toLowerCase())
+      t.IdentificadorUnico?.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [tratamientoAplicado.data, searchText]);
 
