@@ -6,7 +6,7 @@ import {
 } from '../interfaces/account';
 
 const api = axios.create({
-  baseURL: 'https://zoologic4.azurewebsites.net/', // Ajusta según tu entorno
+  baseURL: 'https://zoologic.azurewebsites.net/', // Ajusta según tu entorno
   withCredentials: true,
 });
 
