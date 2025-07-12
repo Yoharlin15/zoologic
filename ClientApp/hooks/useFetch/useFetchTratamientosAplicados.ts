@@ -8,3 +8,12 @@ export const useFetchTratamientosAplicados = () => {
     queryFn: TratamientoAplicadoApi.getAll,
   });
 };
+
+export const useFetchTratamientosAplicadosByAnimalId = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.TRATAMIENTOSAPLICADOS, id],
+    queryFn: () => TratamientoAplicadoApi.getTratamientoByAnimalId?.(id),
+  });
+};
+

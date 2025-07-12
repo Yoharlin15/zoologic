@@ -6,6 +6,7 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   create?: (data: any) => Promise<any>;
   nullify?: (id: number) => Promise<number>;
   activate?: (id: number) => Promise<number>;
+  getTratamientoByAnimalId?: (id: number) => Promise<any>;
 }
 
 const TratamientoAplicadoApi: ApiCustom<ITratamientoAplicado> = {
@@ -18,7 +19,12 @@ const TratamientoAplicadoApi: ApiCustom<ITratamientoAplicado> = {
   create: async (data) => {
     const result = await API().post(Endpoints.TRATAMIENTOSAPLICADOS_CREATE, data);
     return result.data;
-  }
+  },
+
+  getTratamientoByAnimalId: async (id: number) => {
+    const result = await API().get(`${Endpoints.TRATAMIENTOSAPLICADOS_BY_ANIMALID}/${id}`);
+    return result.data;
+  },
 };
 
 export default TratamientoAplicadoApi;

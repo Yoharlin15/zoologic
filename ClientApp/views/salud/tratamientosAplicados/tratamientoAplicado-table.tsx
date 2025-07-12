@@ -47,6 +47,15 @@ const TratamientoAplicadoTable = ({ dispatch }: ITratamientoAplicadoTableProps) 
         }
       },
     },
+    {
+      label: "Detalles",
+      icon: "pi pi-objects-column",
+      command: () => {
+        if (selectedTratamientoAplicado) {
+          navigate(`/tratamientos/${selectedTratamientoAplicado.AnimalId}`);
+        }
+      },
+    },
   ];
 
   const [confirmState, confirmDispatch] = useReducer(Reducers.DialogsReducer, {

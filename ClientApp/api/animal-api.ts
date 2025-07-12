@@ -9,6 +9,7 @@ interface ApiCustom<T> extends Omit<Api<T>, "update"> {
   nullify?: (id: number) => Promise<number>;
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
+  getHabitatByAnimalId: (id: number) => Promise<any>;
   update?: (data: Partial<IAnimalCurrent>) => Promise<IAnimalCurrent>;
   asignarHabitat?: (data: Partial<IAnimalCurrent>) => Promise<IAnimalCurrent>;
 }
@@ -22,6 +23,11 @@ const AnimalApi: ApiCustom<IAnimal> = {
 
   getById: async (id: number) => {
     const result = await API().get(`${Endpoints.ANIMALES_GETBYID}/${id}`);
+    return result.data;
+  },
+
+  getHabitatByAnimalId: async (id: number) => {
+    const result = await API().get(`${Endpoints.ANIMALES_BY_HABITATID}/${id}`);
     return result.data;
   },
 

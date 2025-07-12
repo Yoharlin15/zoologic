@@ -63,3 +63,9 @@ export interface IAnimalHabitatUpdate {
     AnimalId: number;
     HabitatId: number;
 }
+
+export interface IHabitaByAnimal {
+    AnimalId: number;
+    HabitatId: number;
+    Nombre: string;
+}

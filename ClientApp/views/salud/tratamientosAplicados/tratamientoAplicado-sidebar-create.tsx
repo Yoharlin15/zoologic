@@ -1,20 +1,23 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Calendar } from "primereact/calendar";
-import "react-datepicker/dist/react-datepicker.css";
-import { Controller, FieldValues } from "react-hook-form";
+import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
-import { useForm } from "react-hook-form";
+import { Toast } from "primereact/toast";
+
 import {
     Dropdown,
-    InputText,
     InputTextArea,
-
 } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
-import { ITratamientoAplicadoCreate } from "#interfaces";
-import { Toast } from "primereact/toast";
-import { useFetchAnimales, useFetchHabitats, useFetchTratamientos, useFetchUsuarios } from "ClientApp/hooks/useFetch";
+import { IHabitaByAnimal, ITratamientoAplicadoCreate } from "#interfaces";
+
+import {
+    useFetchAnimales,
+    useFetchTratamientos,
+    useFetchUsuarios,
+    useFetchHabitatByAnimalId,
+} from "ClientApp/hooks/useFetch";
 import { useCreateTratamientosAplicados } from "ClientApp/hooks/useMutation/useMutationTratamientosAplicados";
 
 interface ITratamientoAplicadoSidebarProps {
@@ -28,12 +31,14 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
     const toast = useRef<Toast>(null);
     const { data: tratamientos } = useFetchTratamientos();
     const { data: animales } = useFetchAnimales();
-    const { data: habitats } = useFetchHabitats();
     const { data: usuarios } = useFetchUsuarios();
-    const createTratamientoAplicado = useCreateTratamientosAplicados();
 
-
-    const { control, handleSubmit, reset } = useForm<ITratamientoAplicadoCreate, FieldValues>({
+    const {
+        control,
+        handleSubmit,
+        reset,
+        watch,
+    } = useForm<ITratamientoAplicadoCreate, FieldValues>({
         mode: "onChange",
         defaultValues: {
             TratamientoId: undefined,
@@ -46,19 +51,34 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
         },
     });
 
+    const selectedAnimalId = watch("AnimalId");
+    const { data: habitatByAnimal } = useFetchHabitatByAnimalId(selectedAnimalId);
+    const [filteredHabitats, setFilteredHabitats] = useState<IHabitaByAnimal[]>([]);
+
+    useEffect(() => {
+        if (habitatByAnimal) {
+            // If habitatByAnimal is already an array, use it directly; otherwise, wrap it in an array
+            setFilteredHabitats(Array.isArray(habitatByAnimal) ? habitatByAnimal : [habitatByAnimal]);
+        } else {
+            setFilteredHabitats([]);
+        }
+    }, [habitatByAnimal]);
+
+
+
+    const createTratamientoAplicado = useCreateTratamientosAplicados();
+
     const onSubmit = async (data: ITratamientoAplicadoCreate) => {
         const payload = {
-            TratamientoId : Number(data.TratamientoId),
+            TratamientoId: Number(data.TratamientoId),
             AnimalId: Number(data.AnimalId),
             HabitatId: Number(data.HabitatId),
             FechaEntrada: data.FechaEntrada?.toISOString() || null,
             FechaSalida: data.FechaSalida?.toISOString() || null,
             UsuarioId: Number(data.UsuarioId),
-            Razon: data.Razon
+            Razon: data.Razon,
         };
 
-        console.log("Payload:", payload);
-        // para mostrar mensajes
         try {
             const res = await createTratamientoAplicado.mutateAsync(payload);
             toast.current?.show({
@@ -79,7 +99,8 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
     };
 
     return (
-        <><Toast ref={toast} />
+        <>
+            <Toast ref={toast} />
             <Sidebar
                 position="right"
                 visible={visible}
@@ -99,7 +120,8 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                             rules={{ required: "Campo obligatorio" }}
                             options={tratamientos || []}
                             optionLabel="NombreTratamiento"
-                            optionValue="TratamientoId" />
+                            optionValue="TratamientoId"
+                        />
                     </FieldColumn>
 
                     <FieldColumn label="Atendido por" columns={{ sm: 6 }}>
@@ -110,10 +132,11 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                             rules={{ required: "Campo obligatorio" }}
                             options={usuarios || []}
                             optionLabel="NombreUsuario"
-                            optionValue="UsuarioId" />
+                            optionValue="UsuarioId"
+                        />
                     </FieldColumn>
 
-                     <FieldColumn label="Animal (codigo)" columns={{ sm: 6 }}>
+                    <FieldColumn label="Animal (código)" columns={{ sm: 6 }}>
                         <Dropdown
                             name="AnimalId"
                             control={control}
@@ -121,18 +144,21 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                             rules={{ required: "Campo obligatorio" }}
                             options={animales || []}
                             optionLabel="IdentificadorUnico"
-                            optionValue="AnimalId" />
+                            optionValue="AnimalId"
+                        />
                     </FieldColumn>
 
-                    <FieldColumn label="Habitat" columns={{ sm: 6 }}>
+                    <FieldColumn label="Hábitat" columns={{ sm: 6 }}>
                         <Dropdown
                             name="HabitatId"
                             control={control}
-                            placeholder="Seleccione el habitat"
+                            placeholder="Seleccione el hábitat"
                             rules={{ required: "Campo obligatorio" }}
-                            options={habitats || []}
+                            options={filteredHabitats || []}
                             optionLabel="Nombre"
-                            optionValue="HabitatId" />
+                            optionValue="HabitatId"
+                            disabled={!selectedAnimalId}
+                        />
                     </FieldColumn>
 
                     <FieldColumn label="Fecha de entrada" columns={{ sm: 6 }}>
@@ -148,8 +174,10 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                                     placeholder="Seleccione una fecha"
                                     className="w-full"
                                     showButtonBar
-                                    required />
-                            )} />
+                                    required
+                                />
+                            )}
+                        />
                     </FieldColumn>
 
                     <FieldColumn label="Fecha de salida" columns={{ sm: 6 }}>
@@ -165,16 +193,19 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                                     placeholder="Seleccione una fecha"
                                     className="w-full"
                                     showButtonBar
-                                    required />
-                            )} />
+                                    required
+                                />
+                            )}
+                        />
                     </FieldColumn>
 
-                    <FieldColumn label="Razon" columns={{ sm: 12 }}>
+                    <FieldColumn label="Razón" columns={{ sm: 12 }}>
                         <InputTextArea
                             name="Razon"
                             control={control}
-                            placeholder="Razon"
-                            rules={{ required: "Campo obligatorio" }} />
+                            placeholder="Razón del tratamiento"
+                            rules={{ required: "Campo obligatorio" }}
+                        />
                     </FieldColumn>
                 </Form>
 
@@ -185,13 +216,16 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                         onClick={() => {
                             reset();
                             onHide();
-                        }} />
+                        }}
+                    />
                     <Button
                         label="Guardar"
                         severity="success"
-                        onClick={handleSubmit(onSubmit)} />
+                        onClick={handleSubmit(onSubmit)}
+                    />
                 </div>
-            </Sidebar></>
+            </Sidebar>
+        </>
     );
 };
 

@@ -66,6 +66,7 @@ export const DEPARTAMENTOS_UPDATE = `${EMPLEADOS_BASE}/UpdateDepartamento/{id}`
 //CRUD Animal
 export const ANIMALES_GET = `${ANIMALES_BASE}/${GET}`;
 export const ANIMALES_GETBYID = `${ANIMALES_BASE}/${GETBYID}`
+export const ANIMALES_BY_HABITATID = `${ANIMALES_BASE}/GetHabitatByAnimalId`
 export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
 export const ANIMLAES_UPDATE = `${ANIMALES_BASE}/${UPDATE}/{id}`
 export const ANIMALES_HABITATS_UPDATE = `${ANIMALES_BASE}/UpdateAnimalHabitat/{id}`
@@ -133,6 +134,7 @@ export const TRATAMIENTO_UPDATE = `${TRATAMIENTOS_BASE}/UpdateTratamiento`
 //CRUD TratamientoAplicado
 export const TRATAMIENTOSAPLICADOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientosAplicados`;
 export const TRATAMIENTOSAPLICADOS_CREATE = `${TRATAMIENTOS_BASE}/CreateTratamientoAplicado`;
+export const TRATAMIENTOSAPLICADOS_BY_ANIMALID = `${TRATAMIENTOS_BASE}/GetTratamientoByAnimalId`
 
 //Get Necropsias
 export const NECROPSIAS_GET = `${NECROPSIAS_BASE}/GetNecropsia`;
