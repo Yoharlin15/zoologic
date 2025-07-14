@@ -122,14 +122,6 @@ const TratamientoAplicadoTable = ({ dispatch }: ITratamientoAplicadoTableProps) 
         field: "NombreUsuario",
         style: { minWidth: "12rem" },
       },
-
-      {
-        filter: true,
-        sortable: true,
-        header: "Razon",
-        field: "Razon",
-        style: { minWidth: "12rem" },
-      },
     ],
     []
   );
