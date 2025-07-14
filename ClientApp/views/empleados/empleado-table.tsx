@@ -119,14 +119,6 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Nacionalidad",
-        field: "Nacionalidad",
-        style: { minWidth: "12rem" },
-      },
-
-      {
-        filter: true,
-        sortable: true,
         header: "Dirección",
         field: "Direccion",
         style: { minWidth: "12rem" },

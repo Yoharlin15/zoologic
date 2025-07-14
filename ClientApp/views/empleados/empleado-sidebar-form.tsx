@@ -27,6 +27,34 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
   const createEmpleado = useCreateEmpleado();
   const updateEmpleado = useUpdateEmpleado();
 
+  const countries = [
+    { name: "República Dominicana", code: "DO" },
+    { name: "Estados Unidos", code: "US" },
+    { name: "México", code: "MX" },
+    { name: "España", code: "ES" },
+    { name: "Francia", code: "FR" },
+    { name: "Alemania", code: "DE" },
+    { name: "India", code: "IN" },
+    { name: "Japón", code: "JP" },
+    { name: "Haití", code: "HT" },
+  ];
+
+  const countryOptionTemplate = (option: { name: string; code: string } | null | undefined) => {
+  if (!option) return <span className="text-500">Sin país</span>;
+
+  return (
+    <div className="flex align-items-center">
+      <img
+        alt={option.name}
+        src={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png`}
+        style={{ width: '20px', marginRight: '10px' }}
+      />
+      <span>{option.name}</span>
+    </div>
+  );
+};
+
+
   const { control, handleSubmit, reset } = useForm<IEmpleadoCreate, FieldValues>({
     mode: "onChange",
     defaultValues: {
@@ -45,7 +73,6 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
     },
   });
 
-  // Prellenar el formulario si es edición
   useEffect(() => {
     if (id && empleadoData) {
       reset({
@@ -63,7 +90,6 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
         EstadoId: empleadoData.EstadoId || undefined,
       });
     } else if (!id) {
-      // Si no hay id (crear nuevo), limpiar el formulario
       reset({
         Nombres: "",
         Apellidos: "",
@@ -81,7 +107,6 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
     }
   }, [id, empleadoData, reset]);
 
-
   const onSubmit = async (data: IEmpleadoCreate) => {
     const payload = {
       Nombres: data.Nombres,
@@ -90,7 +115,7 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
       FechaNacimiento: data.FechaNacimiento?.toISOString() || null,
       Sexo: data.Sexo,
       Telefono: data.Telefono,
-      Nacionalidad: data.Nacionalidad,
+      Nacionalidad: data.Nacionalidad, // Aquí guardamos el código del país (ej. "DO")
       Direccion: data.Direccion,
       FechaContratacion: data.FechaContratacion?.toISOString() || null,
       CargoId: Number(data.CargoId),
@@ -105,7 +130,6 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
       } else {
         res = await createEmpleado.mutateAsync(payload);
       }
-
 
       toast.current?.show({
         severity: "success",
@@ -140,30 +164,15 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
       >
         <Form>
           <FieldColumn label="Nombres" columns={{ sm: 6 }}>
-            <InputText
-              name="Nombres"
-              control={control}
-              placeholder="Nombres"
-              rules={{ required: "Campo obligatorio" }}
-            />
+            <InputText name="Nombres" control={control} placeholder="Nombres" rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
           <FieldColumn label="Apellidos" columns={{ sm: 6 }}>
-            <InputText
-              name="Apellidos"
-              control={control}
-              placeholder="Apellidos"
-              rules={{ required: "Campo obligatorio" }}
-            />
+            <InputText name="Apellidos" control={control} placeholder="Apellidos" rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
           <FieldColumn label="Cedula" columns={{ sm: 6 }}>
-            <InputText
-              name="Cedula"
-              control={control}
-              placeholder="Cedula"
-              rules={{ required: "Campo obligatorio" }}
-            />
+            <InputText name="Cedula" control={control} placeholder="Cédula" rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
           <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 6 }}>
@@ -179,7 +188,6 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
                   placeholder="Seleccione una fecha"
                   className="w-full"
                   showButtonBar
-                  required
                 />
               )}
             />
@@ -199,33 +207,29 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
           </FieldColumn>
 
           <FieldColumn label="Telefono" columns={{ sm: 6 }}>
-            <InputText
-              name="Telefono"
-              control={control}
-              placeholder="Telefono"
-              rules={{ required: "Campo obligatorio" }}
-            />
+            <InputText name="Telefono" control={control} placeholder="Teléfono" rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
           <FieldColumn label="Nacionalidad" columns={{ sm: 6 }}>
-            <InputText
+            <Dropdown
               name="Nacionalidad"
               control={control}
-              placeholder="Nacionalidad"
+              placeholder="Seleccione un país"
               rules={{ required: "Campo obligatorio" }}
+              options={countries}
+              optionLabel="name"
+              optionValue="code"
+              itemTemplate={countryOptionTemplate}
+              valueTemplate={countryOptionTemplate}
+              className="w-full"
             />
           </FieldColumn>
 
           <FieldColumn label="Direccion" columns={{ sm: 6 }}>
-            <InputText
-              name="Direccion"
-              control={control}
-              placeholder="Direccion"
-              rules={{ required: "Campo obligatorio" }}
-            />
+            <InputText name="Direccion" control={control} placeholder="Dirección" rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
-          <FieldColumn label="Fecha de contratacion" columns={{ sm: 6 }}>
+          <FieldColumn label="Fecha de contratación" columns={{ sm: 6 }}>
             <Controller
               name="FechaContratacion"
               control={control}
@@ -238,7 +242,6 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
                   placeholder="Seleccione una fecha"
                   className="w-full"
                   showButtonBar
-                  required
                 />
               )}
             />
@@ -272,30 +275,18 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
             <Dropdown
               name="EstadoId"
               control={control}
-              placeholder="Seleccione un cargo"
+              placeholder="Seleccione estado"
               rules={{ required: "Campo obligatorio" }}
               options={estados || []}
               optionLabel="NombreEstado"
               optionValue="EstadoId"
             />
           </FieldColumn>
-
         </Form>
 
         <div className="flex justify-content-end gap-2 mt-4">
-          <Button
-            label="Cancelar"
-            severity="secondary"
-            onClick={() => {
-              reset();
-              onHide();
-            }}
-          />
-          <Button
-            label="Guardar"
-            severity="success"
-            onClick={handleSubmit(onSubmit)}
-          />
+          <Button label="Cancelar" severity="secondary" onClick={() => { reset(); onHide(); }} />
+          <Button label="Guardar" severity="success" onClick={handleSubmit(onSubmit)} />
         </div>
       </Sidebar>
     </>
