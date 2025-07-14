@@ -1,11 +1,9 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import { Tags } from "../../core";
 import { EspecieApi } from "../../api";
 
 export const useCreateEspecie = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: EspecieApi.create,
     mutationKey: [Tags.ESPECIES, Tags.MUTATION_CREATE],

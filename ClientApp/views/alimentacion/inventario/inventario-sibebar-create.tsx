@@ -96,6 +96,14 @@ const InventarioSidebarCreate = ({ onHide, visible }: IInventarioSidebarProps) =
                             rules={{ required: "Campo obligatorio" }} />
                     </FieldColumn>
 
+                    <FieldColumn label="Unidad de medida" columns={{ sm: 6 }}>
+                        <InputNumber
+                            name="UnidadMedida"
+                            control={control}
+                            placeholder="Ej: Kg, Lb etc.."
+                            rules={{ required: "Campo obligatorio" }} />
+                    </FieldColumn>
+
                 </Form>
 
                 <div className="flex justify-content-end gap-2 mt-4">

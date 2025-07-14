@@ -7,7 +7,6 @@ import React, {
 import { debounce } from "radash";
 import { IEspecie } from "#interfaces";
 import { AppQueryHooks } from "#hooks";
-import { Button } from "primereact/button";
 import { Reducers } from "#core";
 import { ContextMenu } from "primereact/contextmenu";
 import { useNavigate } from "react-router-dom";
@@ -17,25 +16,22 @@ import {
 } from "primereact/datatable";
 
 import { CardTable, ICardTableProps } from "../../../components/card-table";
-import EspecieSidebarCreate from "./especie-sidebar-Create";
-import EspecieSidebarUpdate from "./especie-sidebar-Update";
-
 import { SplitButton } from 'primereact/splitbutton';
-        
-
+import EspecieSidebarForm from "./especie-sidebar-form";
 
 interface IEspecieTableProps {
   dispatch: React.Dispatch<any>;
 }
 
 const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
-  const navigate = useNavigate();
+  
   const especie = AppQueryHooks.useFetchEspecies();
   const [selectedEspecie, setSelectedEspecie] = useState<IEspecie>();
-  const cm = useRef<ContextMenu>(null);
 
-  const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
-  const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
+  const cm = useRef<ContextMenu>(null);
+  const navigate = useNavigate();
+  
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedEspecieId, setSelectedEspecieId] = useState<number | null>(null);
 
   const menuModel = [
@@ -46,7 +42,7 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
       command: () => {
         if (selectedEspecie) {
           setSelectedEspecieId(selectedEspecie.EspecieId);
-          setSidebarUpdateVisible(true);
+          setSidebarVisible(true);
         }
       },
     },
@@ -132,7 +128,7 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
             color="primary"
             onClick={() => {
               setSelectedEspecieId(null);
-              setSidebarCreateVisible(true);
+              setSidebarVisible(true);
             }}
             model={[
               {
@@ -159,16 +155,11 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
           ) => setSelectedEspecie(e.value),
         }}
       />
-      <EspecieSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedEspecieId ?? undefined}
-      />
-
-      <EspecieSidebarUpdate
-        visible={sidebarUpdateVisible}
-        onHide={() => setSidebarUpdateVisible(false)}
-        especieId={selectedEspecieId ?? undefined}
+      <EspecieSidebarForm
+        id={selectedEspecieId ?? undefined} // importante para edición
+        visible={sidebarVisible}
+        onHide={() => setSidebarVisible(false)}
+        especieId={undefined}
       />
     </div>
   );

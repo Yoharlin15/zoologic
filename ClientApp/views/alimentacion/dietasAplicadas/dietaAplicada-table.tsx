@@ -65,33 +65,34 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
             {
                 filter: true,
                 sortable: true,
-                header: "Animal (alias)",
-                field: "Alias",
+                header: "Animal (identificador)",
+                field: "IdentificadorUnico",
                 style: { minWidth: "12rem" },
             },
 
             {
                 filter: true,
                 sortable: true,
-                header: "Dieta",
+                header: "Alimento",
                 field: "Nombre",
                 style: { minWidth: "12rem" },
             },
-
-
             {
                 filter: true,
                 sortable: true,
-                header: "Alimentos",
-                field: "Alimentos", // campo base (puedes poner solo "Alimentos")
-                style: { minWidth: "12rem" },
-                body: (rowData: IDietaAplicada) => {
-                    if (!Array.isArray(rowData?.Alimentos) || rowData.Alimentos.length === 0)
-                        return "Sin alimentos";
-                    return rowData.Alimentos.map(alimento => alimento.Nombre).join(", ");
-                },
-
+                header: "Unidad de medida",
+                field: "UnidadMedida",
+                style: { minWidth: "12rem"}
             },
+
+             {
+                filter: true,
+                sortable: true,
+                header: "Cantidad",
+                field: "Cantidad",
+                style: { minWidth: "12rem"}
+            },
+
             {
                 filter: true,
                 sortable: true,
@@ -110,7 +111,7 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
     const filteredDietasAplicadas = useMemo(() => {
         if (!Array.isArray(DietaAplicada.data)) return [];
         return DietaAplicada.data.filter((t) =>
-            t.Alias?.toLowerCase().includes(searchText.toLowerCase())
+            t.IdentificadorUnico?.toLowerCase().includes(searchText.toLowerCase())
         );
     }, [DietaAplicada.data, searchText]);
 
@@ -132,7 +133,7 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
                 renderHeadActions={[
                     <SplitButton
                         key="btn_add_split"
-                        label="Nueva especie"
+                        label="Aplicar dieta"
                         severity="success"
                         className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
                         color="primary"

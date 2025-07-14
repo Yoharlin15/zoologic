@@ -9,7 +9,6 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
   update?: (data: Partial<IEmpleadoCurrent>) => Promise<IEmpleadoCurrent>;
-  
 }
 
 const EmpleadoApi: ApiCustom<IEmpleado> = {

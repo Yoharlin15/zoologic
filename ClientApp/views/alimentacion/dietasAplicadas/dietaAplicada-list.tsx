@@ -20,9 +20,11 @@ function DietasAplicadasList() {
   const [dietaAplicada, dispatch] = useReducer(DietasAplicadasReducer, initialDietaAplicada);
 
   return (
-    <>
-      <DietaAplicadaTable dispatch={dispatch} />
-    </>
+    <div className="p-3 max-w-6xl mx-auto">
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <DietaAplicadaTable dispatch={dispatch} />
+      </div>
+    </div>
   );
 }
 

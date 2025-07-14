@@ -10,17 +10,10 @@ export const useFetchEspecies = () => {
   });
 };
 
-export const useFetchEspeciesCreateGet = () => {
-  return useQuery({
-    queryFn: EspecieApi.createGet,
-    queryKey: [Tags.ESPECIES, Tags.CREATE_GET],
-  });
-};
-
-export const useFetchEspeciesUpdateGet = (id: number) => {
+export const useFetchOneEspecie = (id: number) => {
   return useQuery({
     enabled: !!id,
-    queryFn: () => EspecieApi.updateGet(id),
-    queryKey: [Tags.ESPECIES, Tags.UPDATE_GET],
+    queryKey: [Tags.ESPECIES, id],
+    queryFn: () => EspecieApi.getById?.(id),
   });
 };

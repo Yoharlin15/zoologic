@@ -52,8 +52,6 @@ export interface IEmpleadoCreate {
     EstadoId: number;
 }
 
-
-
 export interface IEmpleadoUpdate {
     EmpleadoId: number;
     Nombres: string;

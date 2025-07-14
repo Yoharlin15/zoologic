@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
 import AlimentosList from "./alimentos/alimento-list";
-import DietasList from "./dietas/dieta-list";
 import InventarioList from "./inventario/inventario-list";
 
 const Alimentacion = () => {
@@ -20,12 +19,6 @@ const Alimentacion = () => {
         panelContainerClassName="flex-grow-1 overflow-hidden"
         renderActiveOnly={false}
       >
-        <TabPanel header="Dietas" contentClassName="h-full overflow-hidden">
-          <div className="h-full overflow-hidden">
-            <DietasList />
-          </div>
-        </TabPanel>
-
         <TabPanel header="Alimentos" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
             <AlimentosList />

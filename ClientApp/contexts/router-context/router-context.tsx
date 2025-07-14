@@ -12,7 +12,6 @@ import {
   VerifyView,
   DashboardView,
   Ejemplares,
-  AnimalesList,
   DietasAplicadasList,
   AlimentacionList,
   Salud,
@@ -40,7 +39,6 @@ import Examenes from "ClientApp/views/salud/examenes/examen";
 import ComportamientoLayout from "ClientApp/views/comportamientos/comportamiento";
 import DetallesComportamientos from "ClientApp/views/comportamientos/detalleComportamiento/detalleComportamiento";
 import Departamentos from "ClientApp/views/settings/departamentos/departamentos";
-import TratamientoDetalle from "ClientApp/views/salud/tratamientosAplicados/tratamientoDetalle";
 import TratamientoDetalleWrapper from "ClientApp/views/salud/tratamientosAplicados/tratamiento-datails-view";
 
 interface IRouterContextProps {

@@ -109,6 +109,13 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
         field: "Cantidad",
         style: { minWidth: "12rem" },
       },
+      {
+        filter: true,
+        sortable: true,
+        header: "Unidad de Medida",
+        field: "UnidadMedida",
+        style: { minWidth: "12rem" },
+      }
     ],
     []
   );

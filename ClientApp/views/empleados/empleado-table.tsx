@@ -19,7 +19,6 @@ import {
 import { CardTable, ICardTableProps } from "../../components/card-table";
 import dayjs from "dayjs";
 import { Reducers } from "#core";
-import EmpleadoSidebarCreate from "./empleado-sidebar-form";
 import EmpleadoSidebarForm from "./empleado-sidebar-form";
 
 interface IEmpleadoTableProps {
@@ -30,10 +29,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
   const empleado = AppQueryHooks.useFetchEmpleados();
   const [selectedEmpleado, setSelectedEmpleado] = useState<IEmpleado>();
 
-  const navigate = useNavigate();
-
   const cm = useRef<ContextMenu>(null);
-  const menu = useRef<Menu>(null);
 
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedEmpleadoId, setSelectedEmpleadoId] = useState<number | null>(null);
@@ -228,7 +224,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
         id={selectedEmpleadoId ?? undefined} // importante para edición
         visible={sidebarVisible}
         onHide={() => setSidebarVisible(false)}
-        animalId={undefined}
+        empleadoId={undefined}
       />
     </div>
   );

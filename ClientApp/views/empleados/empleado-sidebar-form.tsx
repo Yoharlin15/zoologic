@@ -14,7 +14,7 @@ interface IEmpleadoSidebarProps {
   id?: number;
   visible: boolean;
   onHide: () => void;
-  animalId?: number;
+  empleadoId?: number;
 }
 
 const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {

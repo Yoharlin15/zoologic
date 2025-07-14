@@ -4,7 +4,6 @@ import { EmpleadoApi } from "../../api";
 
 export const useCreateEmpleado = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: EmpleadoApi.create,
     mutationKey: [Tags.EMPLEADOS, Tags.MUTATION_CREATE],
