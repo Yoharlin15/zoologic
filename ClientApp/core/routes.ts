@@ -1,4 +1,5 @@
 export const LANDING_ROUTE = "/";
+export const CATALOGO_ROUE = "catalogo-especies"
 export const login_ROUTE = "/login";
 export const DASHBOARD_ROUTE = "/dashboard";
 export const ANIMALES_ROUTE = "animales";

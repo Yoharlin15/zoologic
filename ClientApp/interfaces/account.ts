@@ -31,4 +31,5 @@ export interface IUsuario {
   Nombre: string;
   EmpleadoId: number;
   Nombres: string;
+  Verificado: number;
 }

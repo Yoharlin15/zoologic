@@ -40,6 +40,7 @@ import ComportamientoLayout from "ClientApp/views/comportamientos/comportamiento
 import DetallesComportamientos from "ClientApp/views/comportamientos/detalleComportamiento/detalleComportamiento";
 import Departamentos from "ClientApp/views/settings/departamentos/departamentos";
 import TratamientoDetalleWrapper from "ClientApp/views/salud/tratamientosAplicados/tratamiento-datails-view";
+import { CatalogoEspecies } from "ClientApp/views/landing/CatalogoEspecies";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -61,6 +62,11 @@ const Provider = () => {
       id: "landing-page",
       element: <ZoologicLandingPage />,
       path: Routes.LANDING_ROUTE,
+    },
+    {
+      id: "catalogo",
+      element: <CatalogoEspecies />,
+      path: Routes.CATALOGO_ROUE,
     },
     {
       id: "login-view",

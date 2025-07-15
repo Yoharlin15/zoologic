@@ -79,6 +79,13 @@ const LandingPage = () => {
                     {/* Logo a la izquierda */}
                     <div className="text-4xl font-bold text-white">zoologic</div>
 
+                    <Button
+                        label="Catálogo"
+                        icon="pi pi-book"
+                        className="p-button-rounded p-button-outlined ml-auto text-white border-white"
+                        onClick={() => navigate(Routes.CATALOGO_ROUE)}
+                    />
+
                     {/* Botón a la derecha */}
                     <Button
                         label="Iniciar Sesión"

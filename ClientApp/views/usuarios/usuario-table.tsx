@@ -77,7 +77,7 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Email",
+        header: "Correo electronico",
         field: "Email",
         style: { minWidth: "16rem" },
       },
@@ -91,9 +91,17 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Empleado",
+        header: "Empleado/a",
         field: "Nombres",
         style: { minWidth: "10rem" },
+      },
+      {
+        filter: true,
+        sortable: true,
+        header: "¿Cuenta verificada?",
+        field: "Verificado",
+        style: { minWidth: "10rem" },
+        body: (rowData: IUsuario) => (rowData.Verificado ? "Sí" : "No"),
       }
     ],
     []

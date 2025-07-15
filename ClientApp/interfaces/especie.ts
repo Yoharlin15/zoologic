@@ -8,8 +8,7 @@ export interface IEspecie {
     ProcedenciaNombre: string;
     ClaseId: number;
     ClaseNombre: string;
-    ZonaId: number;
-    ZonaNombre: string;
+    FotoUrl: string;
 }
 
 export interface IEspecieCreate {
@@ -19,19 +18,17 @@ export interface IEspecieCreate {
     FamiliaId: number;
     ClaseId: number;
     ProcedenciaId: number;
+    FotoUrl: string;
 }
 
 export interface IEspecieUpdate {
     EspecieId: number;
     NombreCientifico : string;
     NombreComun: string;
-    Familia: string;
-    Clase: string;
-    Sexo: string;
-    Peso: string;
-    FechaLlegada: Date | null;
-    Procedencia: string;
-    Observaciones: string;
+    FamiliaId: number;
+    ClaseId: number;
+    ProcedenciaId: number;
+    FotoUrl: string
 }
 
 export interface IEspecieCurrent {
@@ -44,8 +41,6 @@ export interface IEspecieCurrent {
     ProcedenciaNombre: string;
     ClaseId: number;
     ClaseNombre: string;
-    ZonaId: number;
-    ZonaNombre: string;
 }
 
 export interface IFamilia {

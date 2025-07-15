@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
@@ -8,6 +8,8 @@ import { IEspecieCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
 import { useFetchClases, useFetchFamilias, useFetchOneEspecie, useFetchProcedencias } from "ClientApp/hooks/useFetch";
 import { useCreateEspecie, useUpdateEspecie } from "ClientApp/hooks/useMutation";
+import { FileUpload } from "primereact/fileupload";
+
 
 interface IEmpleadoSidebarProps {
   id?: number;
@@ -18,6 +20,9 @@ interface IEmpleadoSidebarProps {
 
 const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
   const toast = useRef<Toast>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+
   const { data: familias } = useFetchFamilias();
   const { data: clases } = useFetchClases();
   const { data: procedencias } = useFetchProcedencias();
@@ -26,18 +31,18 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
   const createEspecie = useCreateEspecie();
   const updateEspecie = useUpdateEspecie();
 
-  const { control, handleSubmit, reset } = useForm<IEspecieCreate, FieldValues>({
+  const { control, handleSubmit, reset, setValue } = useForm<IEspecieCreate, FieldValues>({
     mode: "onChange",
     defaultValues: {
       NombreComun: "",
       NombreCientifico: "",
       FamiliaId: undefined,
       ClaseId: undefined,
-      ProcedenciaId: undefined
+      ProcedenciaId: undefined,
+      FotoUrl: ""
     },
   });
 
-  // Prellenar el formulario si es edición
   useEffect(() => {
     if (id && especieData) {
       reset({
@@ -46,30 +51,71 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
         FamiliaId: especieData.FamiliaId || undefined,
         ClaseId: especieData.ClaseId || undefined,
         ProcedenciaId: especieData.ProcedenciaId || undefined,
+        FotoUrl: especieData.FotoUrl || ""
       });
     } else if (!id) {
-      // Si no hay id (crear nuevo), limpiar el formulario
       reset({
         NombreCientifico: "",
         NombreComun: "",
         FamiliaId: undefined,
         ClaseId: undefined,
         ProcedenciaId: undefined,
+        FotoUrl: ""
       });
+      setSelectedImage(null);
     }
   }, [id, especieData, reset]);
 
+  const uploadToCloudinary = async (file: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "ml_default_unsigned");
+
+    const res = await fetch("https://api.cloudinary.com/v1_1/dlbb3qssp/image/upload", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+
+    if (!data.secure_url.includes("/upload/")) {
+      throw new Error("URL inesperada de Cloudinary");
+    }
+
+    if (!data.secure_url) throw new Error("Error al subir imagen a Cloudinary");
+
+    // Generamos una URL redimensionada: 258x177 con crop "fill"
+    const transformedUrl = data.secure_url.replace(
+      "/upload/",
+      "/upload/w_258,h_177,c_fill/"
+    );
+
+    return transformedUrl;
+  };
 
   const onSubmit = async (data: IEspecieCreate) => {
-    const payload = {
-      NombreCientifico: data.NombreCientifico,
-      NombreComun: data.NombreComun,
-      FamiliaId: Number(data.FamiliaId),
-      ClaseId: Number(data.ClaseId),
-      ProcedenciaId: Number(data.ProcedenciaId),
-    };
-
     try {
+
+      console.log("Datos antes del submit:", data);
+      console.log("Imagen seleccionada:", selectedImage);
+
+      let fotoUrl = data.FotoUrl;
+
+      if (selectedImage) {
+        fotoUrl = await uploadToCloudinary(selectedImage);
+      }
+
+      const payload = {
+        NombreCientifico: data.NombreCientifico,
+        NombreComun: data.NombreComun,
+        FamiliaId: Number(data.FamiliaId),
+        ClaseId: Number(data.ClaseId),
+        ProcedenciaId: Number(data.ProcedenciaId),
+        FotoUrl: fotoUrl || "",
+      };
+
+      console.log("Payload a enviar:", payload);
+
       let res;
       if (id) {
         res = await updateEspecie.mutateAsync({ EspecieId: id, ...payload });
@@ -77,14 +123,14 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
         res = await createEspecie.mutateAsync(payload);
       }
 
-
       toast.current?.show({
         severity: "success",
         summary: "Éxito",
-        detail: res?.mensaje || `Especie ${id ? "actualizado" : "creado"} correctamente.`,
+        detail: res?.mensaje || `Especie ${id ? "actualizada" : "creada"} correctamente.`,
       });
 
       reset();
+      setSelectedImage(null);
       onHide();
     } catch (error: any) {
       console.error("Error:", error.response?.data || error);
@@ -104,6 +150,7 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
         visible={visible}
         onHide={() => {
           reset();
+          setSelectedImage(null);
           onHide();
         }}
         className="w-full sm:w-8 md:w-6 lg:w-6 xl:w-4"
@@ -164,6 +211,30 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
             />
           </FieldColumn>
 
+          <FieldColumn label="Imagen de la especie" columns={{ sm: 6 }}>
+            <FileUpload
+              name="file"
+              mode="basic"
+              accept="image/*"
+              maxFileSize={1000000}
+              customUpload
+              chooseLabel="Seleccionar imagen"
+              onSelect={(e) => {
+                const file = e.files?.[0];
+                if (!file) return;
+
+                setSelectedImage(file);
+
+                toast.current?.show({
+                  severity: "info",
+                  summary: "Imagen seleccionada",
+                  detail: "La imagen se subirá al guardar.",
+                });
+
+                console.log("Imagen seleccionada:", file);
+              }}
+            />
+          </FieldColumn>
         </Form>
 
         <div className="flex justify-content-end gap-2 mt-4">
@@ -172,6 +243,7 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
             severity="secondary"
             onClick={() => {
               reset();
+              setSelectedImage(null);
               onHide();
             }}
           />
