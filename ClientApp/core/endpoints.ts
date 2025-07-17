@@ -48,8 +48,11 @@ export const ZONAS_UPDATE = `${ZONAS_BASE}/${UPDATE}`
 //Get Empleado
 export const EMPLEADOS_GET = `${EMPLEADOS_BASE}/${GET}`;
 export const EMPLEADOS_GETBYID = `${EMPLEADOS_BASE}/GetEmpleadoById`
+export const EMPLEADOS_BY_ESTADOID = `${EMPLEADOS_BASE}/GetEmpleadoByEstadoId`
 export const EMPLEADOS_CREATE = `${EMPLEADOS_BASE}/${CREATE}`;
 export const EMPLEADOS_UPDATE = `${EMPLEADOS_BASE}/UpdateEmpleado/{id}`
+export const EMPLEADOS_ACTIVATE = `${EMPLEADOS_BASE}/ActivarEmpleado/{id}`
+export const EMPLEADOS_DELETE = `${EMPLEADOS_BASE}/AnularEmpleado/{id}`
 
 //CRUD Cargo
 export const CARGOS_GET = `${EMPLEADOS_BASE}/GetCargos`;

@@ -17,3 +17,11 @@ export const useFetchOneEmpleado = (id: number) => {
     queryFn: () => EmpleadoApi.getById?.(id),
   });
 };
+
+export const useFetchEmpleadoByEstadoId = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.EMPLEADOS, id],
+    queryFn: () => EmpleadoApi.getEmpleadoByEstadoId?.(id),
+  });
+};

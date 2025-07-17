@@ -101,7 +101,7 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
         header: "¿Cuenta verificada?",
         field: "Verificado",
         style: { minWidth: "10rem" },
-        body: (rowData: IUsuario) => (rowData.Verificado ? "Sí" : "No"),
+        body: (rowData: IUsuario | null) => (rowData?.Verificado ? "Sí" : "No"),
       }
     ],
     []

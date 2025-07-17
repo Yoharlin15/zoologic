@@ -108,6 +108,34 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
   }, [id, empleadoData, reset]);
 
   const onSubmit = async (data: IEmpleadoCreate) => {
+    const hoy = new Date();
+
+    if (data.FechaNacimiento) {
+    const edadMinima = new Date(
+      hoy.getFullYear() - 18,
+      hoy.getMonth(),
+      hoy.getDate()
+    );
+
+  if (data.FechaNacimiento > edadMinima) {
+      toast.current?.show({
+        severity: "warn",
+        summary: "Edad mínima",
+        detail: "El empleado debe tener al menos 18 años",
+      });
+      return;
+    }
+  };
+
+  if (data.FechaContratacion && data.FechaContratacion > hoy) {
+    toast.current?.show({
+      severity: "warn",
+      summary: "Fecha inválida",
+      detail: "La fecha de contratación no puede ser mayor al día actual",
+    });
+    return;
+  }
+
     const payload = {
       Nombres: data.Nombres,
       Apellidos: data.Apellidos,
@@ -268,18 +296,6 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
               options={departamentos || []}
               optionLabel="Nombre"
               optionValue="DepartamentoId"
-            />
-          </FieldColumn>
-
-          <FieldColumn label="Estado" columns={{ sm: 6 }}>
-            <Dropdown
-              name="EstadoId"
-              control={control}
-              placeholder="Seleccione estado"
-              rules={{ required: "Campo obligatorio" }}
-              options={estados || []}
-              optionLabel="NombreEstado"
-              optionValue="EstadoId"
             />
           </FieldColumn>
         </Form>

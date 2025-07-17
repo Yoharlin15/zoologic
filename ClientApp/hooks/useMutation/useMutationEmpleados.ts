@@ -23,3 +23,26 @@ export const useUpdateEmpleado= () => {
     },
   });
 };
+
+export const useActivateEmpleado= () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: EmpleadoApi.activate,
+    mutationKey: [Tags.EMPLEADOS, Tags.MUTATION_UPDATE],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Tags.EMPLEADOS] });
+    },
+  });
+};
+
+export const useDeleteEmpleado= () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: EmpleadoApi.delete,
+    mutationKey: [Tags.EMPLEADOS, Tags.MUTATION_UPDATE],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Tags.EMPLEADOS] });
+    },
+  });
+};
+

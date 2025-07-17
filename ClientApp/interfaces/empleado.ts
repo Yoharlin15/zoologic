@@ -67,3 +67,7 @@ export interface IEmpleadoUpdate {
     DepartamentoId: number;
     EstadoId: number;
 }
+
+export interface IEmpleadoAnulate {
+    EmpleadoId: number;
+}
