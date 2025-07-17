@@ -3,7 +3,6 @@ import { Api, IAnimal, IAnimalCurrent } from "#interfaces";
 import API from "./api";
 import { WarnUtils } from "#utils";
 
-
 interface ApiCustom<T> extends Omit<Api<T>, "update"> {
   create?: (data: any) => Promise<any>;
   nullify?: (id: number) => Promise<number>;
@@ -61,8 +60,6 @@ const AnimalApi: ApiCustom<IAnimal> = {
 
     return response.data;
   },
-
-
 };
 
 export default AnimalApi;

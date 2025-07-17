@@ -61,6 +61,24 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
     }
   }, [animalData, reset]);
 
+  useEffect(() => {
+    if (!id && visible) {
+      reset({
+        IdentificadorUnico: "",
+        TipoIdentificador: "",
+        Alias: "",
+        EspecieId: undefined,
+        Sexo: "",
+        FechaNacimiento: null,
+        PadreId: undefined,
+        MadreId: undefined,
+        Color: "",
+        Observaciones: "",
+      });
+    }
+  }, [id, visible, reset]);
+
+
   const onSubmit = async (data: IAnimalCreate) => {
     const payload = {
       IdentificadorUnico: data.IdentificadorUnico,

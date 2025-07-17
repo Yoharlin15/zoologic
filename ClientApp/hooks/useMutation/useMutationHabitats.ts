@@ -12,3 +12,14 @@ export const useCreateHabitats = () => {
     },
   });
 };
+
+export const useUpdateHabitats= () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: HabitatApi.update,
+    mutationKey: [Tags.HABITATS, Tags.MUTATION_UPDATE],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Tags.HABITATS] });
+    },
+  });
+};

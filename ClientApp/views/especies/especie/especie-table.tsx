@@ -18,19 +18,20 @@ import {
 import { CardTable, ICardTableProps } from "../../../components/card-table";
 import { SplitButton } from 'primereact/splitbutton';
 import EspecieSidebarForm from "./especie-sidebar-form";
+import CardTableImage, { ICardTableImageProps } from "ClientApp/components/card-table/card-table-image";
 
 interface IEspecieTableProps {
   dispatch: React.Dispatch<any>;
 }
 
 const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
-  
+
   const especie = AppQueryHooks.useFetchEspecies();
   const [selectedEspecie, setSelectedEspecie] = useState<IEspecie>();
 
   const cm = useRef<ContextMenu>(null);
   const navigate = useNavigate();
-  
+
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedEspecieId, setSelectedEspecieId] = useState<number | null>(null);
 
@@ -56,43 +57,50 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
   const [searchText, setSearchText] = useState("");
   const [filters, setFilters] = useState<DataTableFilterMeta>();
 
-  const columns = useMemo<ICardTableProps<IEspecie>["columns"]>(
+  const columns = useMemo<ICardTableImageProps<IEspecie>["columns"]>(
     () => [
+      {
+        header: "Imagen",
+        field: "FotoUrl", // este campo debe existir en los datos de especie
+        isImage: true,
+        style: { minWidth: "5rem" },
+      },
+
       {
         filter: true,
         sortable: true,
         header: "Nombre Cientifico",
         field: "NombreCientifico",
-        style: { minWidth: "15rem" },
+        style: { minWidth: "12rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Nombre Comun",
         field: "NombreComun",
-        style: { minWidth: "15rem" },
+        style: { minWidth: "12rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Familia",
         field: "FamiliaNombre",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "6rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Clase",
         field: "ClaseNombre",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "6rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Procedencia",
         field: "ProcedenciaNombre",
-        style: { minWidth: "15rem" },
-      },
+        style: { minWidth: "6rem" },
+      }
     ],
     []
   );
@@ -111,7 +119,7 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
         model={menuModel}
         onHide={() => setSelectedEspecie(undefined)}
       />
-      <CardTable<IEspecie>
+      <CardTableImage<IEspecie>
         title="Lista de Especies"
         columns={columns}
         value={filteredEspecies}

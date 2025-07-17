@@ -20,7 +20,8 @@ import { CardTable, ICardTableProps } from "../../components/card-table";
 
 // import HabitatSidebarCreate from "./Habitat-sidebar-create";
 import { Reducers } from "#core";
-import HabitatSidebarCreate from "./habitat-sidebar-create";
+import HabitatSidebarCreate from "./habitat-sidebar-form";
+import HabitatSidebarForm from "./habitat-sidebar-form";
 
 interface IHabitatTableProps {
   dispatch: React.Dispatch<any>;
@@ -35,8 +36,7 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
   const cm = useRef<ContextMenu>(null);
   const menu = useRef<Menu>(null);
 
-  const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
-  const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedHabitatId, setSelectedHabitatId] = useState<number | null>(null);
 
   const menuModel = [
@@ -46,7 +46,7 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
       command: () => {
         if (selectedHabitat) {
           setSelectedHabitatId(selectedHabitat.HabitatId);
-          setSidebarUpdateVisible(true); // Abre el sidebar
+          setSidebarVisible(true); // Abre el sidebar
         }
       },
     },
@@ -123,7 +123,7 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
             key="btn_add"
             onClick={() => {
               setSelectedHabitatId(null);
-              setSidebarCreateVisible(true);
+              setSidebarVisible(true);
             }}
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             label="Nuevo habitat"
@@ -143,10 +143,11 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
           ) => setSelectedHabitat(e.value),
         }}
       />
-      <HabitatSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedHabitatId ?? undefined}
+      <HabitatSidebarForm
+        id={selectedHabitatId ?? undefined} // importante para edición
+        visible={sidebarVisible}
+        onHide={() => setSidebarVisible(false)}
+        especieId={undefined}
       />
     </div>
   );

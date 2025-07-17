@@ -32,6 +32,8 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
 
   const [habitatModalVisible, setHabitatModalVisible] = useState(false);
   const [animalIdToAssignHabitat, setAnimalIdToAssignHabitat] = useState<number | undefined>(undefined);
+  const [especieIdToAssignHabitat, setEspecieIdToAssignHabitat] = useState<number | undefined>(undefined);
+
 
   const animal = AppQueryHooks.useFetchAnimales();
   const [selectedAnimal, setSelectedAnimal] = useState<IAnimal>();
@@ -71,6 +73,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
       command: () => {
         if (selectedAnimal) {
           setAnimalIdToAssignHabitat(selectedAnimal.AnimalId);
+          setEspecieIdToAssignHabitat(selectedAnimal.EspecieId);
           setHabitatModalVisible(true);
         }
       },
@@ -216,6 +219,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
       <HabitatModalUpdate
         visible={habitatModalVisible}
         idAnimal={animalIdToAssignHabitat}
+        especieId={especieIdToAssignHabitat}
         onHide={() => setHabitatModalVisible(false)}
       />
 

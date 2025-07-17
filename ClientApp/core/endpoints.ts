@@ -117,7 +117,10 @@ export const DIETA_APLICADA_CREATE = `${DIETA_APLICADA_BASE}/CreateDietasAplicad
 
 //CRUD Habitats
 export const HABITATS_GET = `${HABITATS_BASE}/${GET}`;
-export const HABITATS_CREATE = `${ZONAS_BASE}/${CREATE}`;
+export const HABITATS_GETBYID = `${HABITATS_BASE}/GetHabitatById`
+export const HABITATS_BY_ESPECIEID = `${HABITATS_BASE}/GetHabitatByEspecieId`
+export const HABITATS_CREATE = `${HABITATS_BASE}/CreateHabitat`;
+export const HABITATS_UPDATE = `${HABITATS_BASE}/Update/{id}`
 
 //CRUD Comportamiento
 export const COMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/${GET}`;

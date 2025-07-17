@@ -10,18 +10,19 @@ import {
 } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { IAnimalHabitatUpdate } from "#interfaces";
-import { useFetchHabitats } from "ClientApp/hooks/useFetch";
+import { useFetchHabitatByEspecieId, useFetchHabitats } from "ClientApp/hooks/useFetch";
 import { useUpdateAnimalHabitat } from "ClientApp/hooks/useMutation/useMutationAnimales";
 
 interface IHabitatModalUpdateProps {
   idAnimal: number | undefined; // ID del animal a actualizar
+  especieId: number | undefined;
   visible: boolean;
   onHide: () => void;
 }
 
-const HabitatModalUpdate = ({ visible, onHide, idAnimal }: IHabitatModalUpdateProps) => {
+const HabitatModalUpdate = ({ visible, onHide, idAnimal, especieId }: IHabitatModalUpdateProps) => {
   const toast = useRef<Toast>(null);
-  const { data: habitats } = useFetchHabitats();
+  const { data: habitatsByEspecie } = useFetchHabitatByEspecieId(especieId ?? 0);
   const updateHabitat = useUpdateAnimalHabitat(); // mutation para actualizar
 
   const { control, handleSubmit, reset } = useForm<IAnimalHabitatUpdate, FieldValues>({
@@ -48,7 +49,7 @@ const HabitatModalUpdate = ({ visible, onHide, idAnimal }: IHabitatModalUpdatePr
       toast.current?.show({
         severity: "success",
         summary: "Éxito",
-        detail: res?.mensaje || "Hábitat asignado correctamente.",
+        detail: "Hábitat asignado correctamente.",
       });
       reset();
       onHide();
@@ -85,7 +86,7 @@ const HabitatModalUpdate = ({ visible, onHide, idAnimal }: IHabitatModalUpdatePr
               control={control}
               placeholder="Seleccione el hábitat"
               rules={{ required: "Campo obligatorio" }}
-              options={habitats || []}
+              options={habitatsByEspecie || []}
               optionLabel="Nombre"
               optionValue="HabitatId"
             />

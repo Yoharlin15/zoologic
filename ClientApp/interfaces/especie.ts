@@ -28,7 +28,7 @@ export interface IEspecieUpdate {
     FamiliaId: number;
     ClaseId: number;
     ProcedenciaId: number;
-    FotoUrl: string
+    FotoUrl: string;
 }
 
 export interface IEspecieCurrent {

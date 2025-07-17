@@ -6,7 +6,7 @@ import { Dropdown, InputText } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { IEspecieCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
-import { useFetchClases, useFetchFamilias, useFetchOneEspecie, useFetchProcedencias } from "ClientApp/hooks/useFetch";
+import { useFetchClases, useFetchFamilias, useFetchHabitats, useFetchOneEspecie, useFetchProcedencias } from "ClientApp/hooks/useFetch";
 import { useCreateEspecie, useUpdateEspecie } from "ClientApp/hooks/useMutation";
 import { FileUpload } from "primereact/fileupload";
 
@@ -26,6 +26,7 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
   const { data: familias } = useFetchFamilias();
   const { data: clases } = useFetchClases();
   const { data: procedencias } = useFetchProcedencias();
+  const { data: habitats } = useFetchHabitats();
   const { data: especieData } = useFetchOneEspecie(id!);
 
   const createEspecie = useCreateEspecie();
@@ -39,7 +40,7 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
       FamiliaId: undefined,
       ClaseId: undefined,
       ProcedenciaId: undefined,
-      FotoUrl: ""
+      FotoUrl: "",
     },
   });
 
@@ -51,7 +52,7 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
         FamiliaId: especieData.FamiliaId || undefined,
         ClaseId: especieData.ClaseId || undefined,
         ProcedenciaId: especieData.ProcedenciaId || undefined,
-        FotoUrl: especieData.FotoUrl || ""
+        FotoUrl: especieData.FotoUrl || "",
       });
     } else if (!id) {
       reset({
@@ -60,7 +61,7 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
         FamiliaId: undefined,
         ClaseId: undefined,
         ProcedenciaId: undefined,
-        FotoUrl: ""
+        FotoUrl: "",
       });
       setSelectedImage(null);
     }
@@ -208,6 +209,18 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
               options={procedencias || []}
               optionLabel="ProcedenciaNombre"
               optionValue="ProcedenciaId"
+            />
+          </FieldColumn>
+
+          <FieldColumn label="Habitat" columns={{ sm: 6 }}>
+            <Dropdown
+              name="HabitatId"
+              control={control}
+              placeholder="Seleccione un habitat"
+              rules={{ required: "Campo obligatorio" }}
+              options={habitats || []}
+              optionLabel="Nombre"
+              optionValue="HabitatId"
             />
           </FieldColumn>
 
