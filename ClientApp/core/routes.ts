@@ -11,6 +11,7 @@ export const CLASES_ROUTE = "clases";
 export const PROCEDENCIAS_ROUTE = "procedencias";
 export const EMPLEADOS_ROUTE = "/empleados";
 export const TRATAMIENTOS_ROUTE = "tratamientos";
+export const TRATAMIENTOS_ESPECIES_ROUTE = "tratamientosEspecies"
 export const TRATAMIENTOS_DETALLES_ROUTE = "tratamientos/:animalId";
 export const EXAMENES_ROUTE = "examenes";
 export const NECROPSIAS_ROUTE = "necropsias";

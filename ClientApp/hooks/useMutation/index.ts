@@ -10,6 +10,7 @@ export * from "./useMutationDietas";
 export * from "./useMutationDietaAplicada";
 export * from "./useMutationZonas";
 export * from "./useMutationTratamientos";
+export * from "./useMutationTratamientoEspecie";
 export * from "./useMutationExamenes";
 export * from "./useMutationDetalleComportamiento";
 export * from "./useMutationDepartamentos";

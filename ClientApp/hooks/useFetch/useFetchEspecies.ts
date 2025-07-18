@@ -10,6 +10,13 @@ export const useFetchEspecies = () => {
   });
 };
 
+export const useFetchCategorias = () => {
+  return useQuery({
+    queryKey: [Tags.ESPECIES],
+    queryFn: EspecieApi.getCategorias,
+  });
+};
+
 export const useFetchOneEspecie = (id: number) => {
   return useQuery({
     enabled: !!id,

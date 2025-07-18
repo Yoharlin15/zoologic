@@ -3,6 +3,7 @@ export * from "./useFetchEspecies";
 export * from "./useFetchAnimales";
 export * from "./useFetchEmpleados";
 export * from "./useFetchTratamientos";
+export * from "./useFetchTratamientoEspecie";
 export * from "./useFetchNecropsias"
 export * from "./useFetchZonas";
 export * from "./useFetchUsuarios";

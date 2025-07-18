@@ -101,7 +101,13 @@ export const DIETASAPLICADAS = "DietasAplicadas";
 export const TRATAMIENTOS = "Tratamientos";
 
 //--------------------------------------------------------------------------------------//
-//                                       TratamientosAplicados                                   //
+//                                       TratamientosEspecies                           //
+//--------------------------------------------------------------------------------------//
+
+export const TRATAMIENTOSESPECIES = "TratamientosEspecies";
+
+//--------------------------------------------------------------------------------------//
+//                                       TratamientosAplicados                          //
 //--------------------------------------------------------------------------------------//
 
 export const TRATAMIENTOSAPLICADOS = "TratamientosAplicados";

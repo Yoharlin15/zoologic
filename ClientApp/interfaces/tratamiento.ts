@@ -42,3 +42,30 @@ export interface ITratamientoAplicadoCreate {
     Razon: string;
 }
 
+export interface ITratamientoEspecie {
+    TratamientoEspecieId: number;
+    TratamientoId: number;
+    NombreTratamiento: string;
+    EspecieId: number;
+    NombreComun: string;
+}
+
+export interface ITratamientoEspecieCurrent {
+    TratamientoEspecieId: number;
+    TratamientoId: number;
+    NombreTratamiento: string;
+    EspecieId: number;
+    NombreComun: string;
+}
+
+export interface ITratamientoEspecieCreate {
+    TratamientoId: number;
+    EspecieId: number;
+}
+
+export interface ITratamientoEspecieUpdate {
+    TratamientoEspecieId: number;
+    TratamientoId: number;
+    EspecieId: number;
+}
+

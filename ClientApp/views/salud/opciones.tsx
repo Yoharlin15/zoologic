@@ -18,7 +18,8 @@ const SaludLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
 
   const items: MenuItem[] = [
     createMenuItem("tratamientos", "Tratamientos", "heart"),
-    createMenuItem("examenes", "Examenes", "bookmark")
+    createMenuItem("examenes", "Examenes", "bookmark"),
+    createMenuItem("tratamientosEspecies", "Aplicados", "sparkles")
 
     // Puedes agregar más items aquí
   ];

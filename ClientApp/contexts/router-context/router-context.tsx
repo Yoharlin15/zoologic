@@ -41,6 +41,7 @@ import DetallesComportamientos from "ClientApp/views/comportamientos/detalleComp
 import Departamentos from "ClientApp/views/settings/departamentos/departamentos";
 import TratamientoDetalleWrapper from "ClientApp/views/salud/tratamientosAplicados/tratamiento-datails-view";
 import { CatalogoEspecies } from "ClientApp/views/landing/CatalogoEspecies";
+import TratamientosEspecies from "ClientApp/views/salud/tratamientoEspecie/tratamientoEspecie";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -136,6 +137,10 @@ const Provider = () => {
                 {
                   path: Routes.EXAMENES_ROUTE,
                   element: <Examenes />
+                },
+                {
+                  path: Routes.TRATAMIENTOS_ESPECIES_ROUTE,
+                  element: <TratamientosEspecies />
                 }
               ]
             },

@@ -76,6 +76,7 @@ export const ANIMALES_HABITATS_UPDATE = `${ANIMALES_BASE}/UpdateAnimalHabitat/{i
 
 //CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;
+export const ESPECIES_GET_CATEGORIAS = `${ESPECIES_BASE}/GetByCategorias`
 export const ESPECIES_GETBYID = `${ESPECIES_BASE}/GetById`
 export const ESPECIES_CREATE = `${ESPECIES_BASE}/CreateEspecie`;
 export const ESPECIES_CREATE_GET = `${ESPECIES_BASE}/${CREATE}`;
@@ -137,6 +138,12 @@ export const TRATAMIENTOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientos`;
 export const TRATAMIENTO_GETBYID = `${TRATAMIENTOS_BASE}/GetTratamientoById`
 export const TRATAMIENTO_CREATE = `${TRATAMIENTOS_BASE}/CreateTratamiento`
 export const TRATAMIENTO_UPDATE = `${TRATAMIENTOS_BASE}/UpdateTratamiento`
+
+//Get Tratamiento
+export const TRATAMIENTOESPECIES_GET = `${TRATAMIENTOS_BASE}/GetTratamientoEspecie`;
+export const TRATAMIENTOESPECIES_GETBYID = `${TRATAMIENTOS_BASE}/GetTratamientoEspecieById`
+export const TRATAMIENTOESPECIES_CREATE = `${TRATAMIENTOS_BASE}/CreateTratamientoEspecie`
+export const TRATAMIENTOESPECIES_UPDATE = `${TRATAMIENTOS_BASE}/UpdateTratamientoEspecie`
 
 //CRUD TratamientoAplicado
 export const TRATAMIENTOSAPLICADOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientosAplicados`;

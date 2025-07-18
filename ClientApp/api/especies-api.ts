@@ -9,12 +9,18 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
   update?: (data: Partial<IEspecieCurrent>) => Promise<IEspecieCurrent>;
+  getCategorias?: () => Promise<T[]>;
 }
 
 const EspecieApi: ApiCustom<IEspecie> = {
 
   getAll: async () => {
     const result = await API().get(Endpoints.ESPECIES_GET);
+    return result.data;
+  },
+
+  getCategorias: async () => {
+    const result = await API().get(Endpoints.ESPECIES_GET_CATEGORIAS);
     return result.data;
   },
 
