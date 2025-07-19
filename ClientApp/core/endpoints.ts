@@ -1,5 +1,3 @@
-import { ANIMALES } from "./tags";
-
 const GET = "Get";
 const GETBYID = "GetById";
 const CREATE = "Create";
@@ -152,16 +150,15 @@ export const TRATAMIENTOSAPLICADOS_BY_ANIMALID = `${TRATAMIENTOS_BASE}/GetTratam
 
 //Get Necropsias
 export const NECROPSIAS_GET = `${NECROPSIAS_BASE}/GetNecropsia`;
-export const NECROPCIAS_CREATE = `${NECROPSIAS_BASE}/CreateNecropsia`;
+export const NECROPSIAS_CREATE = `${NECROPSIAS_BASE}/CreateNecropsia`;
+export const NECROPSIAS_GETBYID = `${NECROPSIAS_BASE}/GetById`
+export const NECROPSIAS_UPDATE = `${NECROPSIAS_BASE}/Update/{id}`;
 
-//CRUD Examenes
-export const EXAMENES_GET = `${NECROPSIAS_BASE}/GetExamen`
-export const EXAMENES_GETBYID = `${NECROPSIAS_BASE}/GetExamenById`
-export const EXAMENES_CREATE = `${NECROPSIAS_BASE}/CreateExamen`
-export const EXAMENES_UPDATE = `${NECROPSIAS_BASE}/UpdateExamen`
-
-//Get Usuarios 
+//CRUD Usuarios
 export const USUARIOS_GET = `${USUARIOS_BASE}/${GET}`;
+export const USUARIOS_GETBYID = `${USUARIOS_BASE}/GetById`
+export const USUARIOS_UPDATE = `${USUARIOS_BASE}/UpdateUsuario/{id}
+`
 
 //Account Endpoints
 export const USUARIOS_SIGNUP = `${USUARIOS_BASE}/${REGISTER}/signup`;

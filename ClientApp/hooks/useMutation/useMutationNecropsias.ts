@@ -12,3 +12,14 @@ export const useCreateNecropsias = () => {
     },
   });
 };
+
+export const useUpdateNecropsias = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: NecropsiaApi.update,
+    mutationKey: [Tags.NECROPSIAS, Tags.MUTATION_UPDATE],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Tags.NECROPSIAS] });
+    },
+  });
+};

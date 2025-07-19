@@ -18,6 +18,8 @@ import { CardTable, ICardTableProps } from "../../../components/card-table";
 import dayjs from "dayjs";
 import { Reducers } from "#core";
 import { SplitButton } from "primereact/splitbutton";
+import { set } from "react-hook-form";
+import NecropsiaSidebarForm from "./necropsias-sidebar-form";
 
 interface INecropsiaTableProps {
   dispatch: React.Dispatch<any>;
@@ -29,8 +31,7 @@ const NecropsiaTable = ({ dispatch }: INecropsiaTableProps) => {
   const [selectedNecropsia, setSelectedNecropsia] = useState<INecropsia>();
   const cm = useRef<ContextMenu>(null);
 
-  const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
-  const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedNecropsiaId, setSelectedNecropsiaId] = useState<number | null>(null);
 
   const menuModel = [
@@ -40,7 +41,7 @@ const NecropsiaTable = ({ dispatch }: INecropsiaTableProps) => {
       command: () => {
         if (selectedNecropsia) {
           setSelectedNecropsiaId(selectedNecropsia.NecropsiaId);
-          setSidebarUpdateVisible(true); // Abre el sidebar
+          setSidebarVisible(true); // Abre el sidebar
         }
       },
     },
@@ -58,8 +59,8 @@ const NecropsiaTable = ({ dispatch }: INecropsiaTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Animal(alias)",
-        field: "Alias",
+        header: "Animal(codigo)",
+        field: "IdentificadorUnico",
         style: { minWidth: "12rem" },
       },
 
@@ -98,14 +99,6 @@ const NecropsiaTable = ({ dispatch }: INecropsiaTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Examen realizado",
-        field: "Examen",
-        style: { minWidth: "12rem" },
-      },
-
-      {
-        filter: true,
-        sortable: true,
         header: "Realizada por",
         field: "NombreUsuario",
         style: { minWidth: "12rem" },
@@ -117,7 +110,7 @@ const NecropsiaTable = ({ dispatch }: INecropsiaTableProps) => {
   const filteredNecropsias = useMemo(() => {
     if (!Array.isArray(necropsia.data)) return [];
     return necropsia.data.filter((t) =>
-      t.Alias?.toLowerCase().includes(searchText.toLowerCase())
+      t.IdentificadorUnico?.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [necropsia.data, searchText]);
 
@@ -145,7 +138,7 @@ const NecropsiaTable = ({ dispatch }: INecropsiaTableProps) => {
             color="primary"
             onClick={() => {
               setSelectedNecropsiaId(null);
-              setSidebarCreateVisible(true);
+              setSidebarVisible(true);
             }}
             model={[
               {
@@ -171,11 +164,12 @@ const NecropsiaTable = ({ dispatch }: INecropsiaTableProps) => {
           ) => setSelectedNecropsia(e.value),
         }}
       />
-      {/* <TratamientoAplicadoSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        especieId={selectedTratamientoAplicadoId ?? undefined}
-      /> */}
+      <NecropsiaSidebarForm
+        id={selectedNecropsiaId ?? undefined} // importante para edición
+        visible={sidebarVisible}
+        onHide={() => setSidebarVisible(false)}
+        especieId={undefined}
+      />
     </div>
   );
 };

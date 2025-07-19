@@ -24,6 +24,7 @@ import { constants } from "buffer";
 import { CardTable, ICardTableProps } from "../../components/card-table";
 import { fileURLToPath } from "url";
 import UsuarioSidebarCreate from "./usuario-sidebar-create";
+import UsuarioSidebarUpdate from "./usuario-grid-update";
 
 interface IUsuarioTableProps {
   dispatch: React.Dispatch<any>;
@@ -42,9 +43,6 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
   const [selectedUsuarioId, setSelectedUsuarioId] = useState<number | null>(null);
 
   const menuModel = [
-    {
-
-    },
     {
       label: "Editar",
       icon: "pi pi-pencil",
@@ -160,6 +158,17 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
         usuarioId={selectedUsuarioId ?? undefined}
         onCreateSuccess={() => usuario.refetch()}
       />
+
+      <UsuarioSidebarUpdate
+        visible={sidebarUpdateVisible}
+        onHide={() => setSidebarUpdateVisible(false)}
+        usuarioId={selectedUsuarioId ?? 0}
+        onUpdateSuccess={() => {
+          usuario.refetch();
+          setSidebarUpdateVisible(false);
+        }}
+      />
+
     </div>
   );
 };

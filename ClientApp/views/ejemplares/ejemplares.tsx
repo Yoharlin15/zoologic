@@ -19,13 +19,13 @@ const Ejemplares = () => {
         panelContainerClassName="flex-grow-1 overflow-hidden"
         renderActiveOnly={false}
       >
-        <TabPanel header="Animales" contentClassName="h-full overflow-hidden">
+        <TabPanel header="🐾Animales" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
             <AnimalesList />
           </div>
         </TabPanel>
 
-        <TabPanel header="Especies" contentClassName="h-full overflow-hidden">
+        <TabPanel header="🧬Especies" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
             <EspeciesList />
           </div>

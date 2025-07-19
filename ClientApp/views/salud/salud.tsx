@@ -19,11 +19,11 @@ const SaludMenu = () => {
         panelContainerClassName="flex-grow-1 overflow-hidden"
         renderActiveOnly={false}
       >
-        <TabPanel contentClassName="overflow-auto h-full" header="🧪Tratamientos">
+        <TabPanel contentClassName="overflow-auto h-full" header="🧪 Tratamientos">
           <TratamientosAplicadosList />
         </TabPanel>
 
-        <TabPanel contentClassName="overflow-auto h-full" header="Necropsias">
+        <TabPanel contentClassName="overflow-auto h-full" header="🩻Necropsias">
           <NecropsiasList />
         </TabPanel>
 

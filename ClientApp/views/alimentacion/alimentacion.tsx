@@ -19,13 +19,13 @@ const Alimentacion = () => {
         panelContainerClassName="flex-grow-1 overflow-hidden"
         renderActiveOnly={false}
       >
-        <TabPanel header="Alimentos" contentClassName="h-full overflow-hidden">
+        <TabPanel header="🥩Alimentos" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
             <AlimentosList />
           </div>
         </TabPanel>
         
-        <TabPanel header="Inventario" contentClassName="h-full overflow-hidden">
+        <TabPanel header="📋Inventario" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
             <InventarioList />
           </div>

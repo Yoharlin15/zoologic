@@ -9,18 +9,13 @@ import { IHabitat } from "#interfaces";
 import { AppQueryHooks } from "#hooks";
 import { Button } from "primereact/button";
 import { ContextMenu } from "primereact/contextmenu";
-import { Menu } from "primereact/menu";
-import { useNavigate } from "react-router-dom";
 import {
   DataTableFilterMeta,
   DataTableSelectionSingleChangeEvent,
 } from "primereact/datatable";
 
 import { CardTable, ICardTableProps } from "../../components/card-table";
-
-// import HabitatSidebarCreate from "./Habitat-sidebar-create";
 import { Reducers } from "#core";
-import HabitatSidebarCreate from "./habitat-sidebar-form";
 import HabitatSidebarForm from "./habitat-sidebar-form";
 
 interface IHabitatTableProps {
@@ -30,11 +25,7 @@ interface IHabitatTableProps {
 const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
   const Habitat = AppQueryHooks.useFetchHabitats();
   const [selectedHabitat, setSelectedHabitat] = useState<IHabitat>();
-
-  const navigate = useNavigate();
-
   const cm = useRef<ContextMenu>(null);
-  const menu = useRef<Menu>(null);
 
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedHabitatId, setSelectedHabitatId] = useState<number | null>(null);

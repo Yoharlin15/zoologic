@@ -13,6 +13,7 @@ export interface IAnimal {
     Madre: string;
     Color: string;
     Observaciones: string;
+    EstadoId: number;
 }
 
 export interface IAnimalCurrent {

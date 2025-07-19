@@ -28,7 +28,7 @@ export const TratamientoEspecieFormDialog: React.FC<TratamientoEspecieFormDialog
   const { data: tratamientoEspecieData } = AppQueryHooks.useFetchOneTratamientoEspecie(id);
   const { data: especies = [] } = AppQueryHooks.useFetchEspecies();
   const { data: tratamientos = [] } = AppQueryHooks.useFetchTratamientos();
-  
+
   const createMutation = AppMutationHooks.useCreateTratamientoEspecie(); // <- cambia este hook si lo necesitas
   const updateMutation = AppMutationHooks.useUpdateTratamientoEspecie(); // puedes eliminar esto si no se editarán múltiples
 
@@ -55,13 +55,20 @@ export const TratamientoEspecieFormDialog: React.FC<TratamientoEspecieFormDialog
 
   const onSubmit = async (data: ITratamientoEspecieForm) => {
     try {
-      await createMutation.mutateAsync(data); // debe recibir { EspecieId, TratamientoIdList }
+      for (const tratamientoId of data.TratamientoIdList) {
+        await createMutation.mutateAsync({
+          EspecieId: data.EspecieId,
+          TratamientoId: tratamientoId,
+        });
+      }
+
       toast.success("Tratamientos asignados correctamente");
       onHide();
     } catch (error) {
       toast.error("Error al asignar tratamientos");
     }
   };
+
 
   return (
     <Dialog

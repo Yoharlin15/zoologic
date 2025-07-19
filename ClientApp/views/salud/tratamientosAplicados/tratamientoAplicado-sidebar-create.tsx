@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Calendar } from "primereact/calendar";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
@@ -10,13 +10,13 @@ import {
     InputTextArea,
 } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
-import { IHabitaByAnimal, ITratamientoAplicadoCreate } from "#interfaces";
+import { IHabitaByAnimal, ITratamientoAplicadoCreate, IUsuario } from "#interfaces";
 
 import {
     useFetchAnimales,
-    useFetchTratamientos,
     useFetchUsuarios,
     useFetchHabitatByAnimalId,
+    useFetchTratamientoEspecie,
 } from "ClientApp/hooks/useFetch";
 import { useCreateTratamientosAplicados } from "ClientApp/hooks/useMutation/useMutationTratamientosAplicados";
 
@@ -29,15 +29,20 @@ interface ITratamientoAplicadoSidebarProps {
 
 const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplicadoSidebarProps) => {
     const toast = useRef<Toast>(null);
-    const { data: tratamientos } = useFetchTratamientos();
+
     const { data: animales } = useFetchAnimales();
     const { data: usuarios } = useFetchUsuarios();
+    const { data: tratamientosEspecie } = useFetchTratamientoEspecie();
+
+    const usuariosFiltrados = (usuarios ?? []).filter((u: IUsuario) => u.RolId === 3);
 
     const {
         control,
         handleSubmit,
         reset,
         watch,
+        getValues,
+        setValue,
     } = useForm<ITratamientoAplicadoCreate, FieldValues>({
         mode: "onChange",
         defaultValues: {
@@ -52,19 +57,29 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
     });
 
     const selectedAnimalId = watch("AnimalId");
+    const fechaEntrada = watch("FechaEntrada");
+
+    const selectedAnimal = useMemo(() => {
+        return animales?.find((a) => a.AnimalId === selectedAnimalId);
+    }, [animales, selectedAnimalId]);
+
+    const especieId = selectedAnimal?.EspecieId;
+
     const { data: habitatByAnimal } = useFetchHabitatByAnimalId(selectedAnimalId);
     const [filteredHabitats, setFilteredHabitats] = useState<IHabitaByAnimal[]>([]);
 
+    const tratamientosFiltrados = useMemo(() => {
+        if (!especieId || !tratamientosEspecie) return [];
+        return tratamientosEspecie.filter((t) => t.EspecieId === especieId);
+    }, [tratamientosEspecie, especieId]);
+
     useEffect(() => {
         if (habitatByAnimal) {
-            // If habitatByAnimal is already an array, use it directly; otherwise, wrap it in an array
             setFilteredHabitats(Array.isArray(habitatByAnimal) ? habitatByAnimal : [habitatByAnimal]);
         } else {
             setFilteredHabitats([]);
         }
     }, [habitatByAnimal]);
-
-
 
     const createTratamientoAplicado = useCreateTratamientosAplicados();
 
@@ -112,30 +127,6 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                 header={<h1 className="font-semibold text-2xl text-900">Nuevo tratamiento</h1>}
             >
                 <Form>
-                    <FieldColumn label="Tratamiento" columns={{ sm: 6 }}>
-                        <Dropdown
-                            name="TratamientoId"
-                            control={control}
-                            placeholder="Seleccione el tratamiento"
-                            rules={{ required: "Campo obligatorio" }}
-                            options={tratamientos || []}
-                            optionLabel="NombreTratamiento"
-                            optionValue="TratamientoId"
-                        />
-                    </FieldColumn>
-
-                    <FieldColumn label="Atendido por" columns={{ sm: 6 }}>
-                        <Dropdown
-                            name="UsuarioId"
-                            control={control}
-                            placeholder="Seleccione el usuario"
-                            rules={{ required: "Campo obligatorio" }}
-                            options={usuarios || []}
-                            optionLabel="NombreUsuario"
-                            optionValue="UsuarioId"
-                        />
-                    </FieldColumn>
-
                     <FieldColumn label="Animal (código)" columns={{ sm: 6 }}>
                         <Dropdown
                             name="AnimalId"
@@ -145,6 +136,31 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                             options={animales || []}
                             optionLabel="IdentificadorUnico"
                             optionValue="AnimalId"
+                        />
+                    </FieldColumn>
+
+                    <FieldColumn label="Atendido por" columns={{ sm: 6 }}>
+                        <Dropdown
+                            name="UsuarioId"
+                            control={control}
+                            placeholder="Seleccione el usuario"
+                            rules={{ required: "Campo obligatorio" }}
+                            options={usuariosFiltrados}
+                            optionLabel="NombreUsuario"
+                            optionValue="UsuarioId"
+                        />
+                    </FieldColumn>
+
+                    <FieldColumn label="Tratamiento" columns={{ sm: 6 }}>
+                        <Dropdown
+                            name="TratamientoId"
+                            control={control}
+                            placeholder="Seleccione el tratamiento"
+                            rules={{ required: "Campo obligatorio" }}
+                            options={tratamientosFiltrados}
+                            optionLabel="NombreTratamiento"
+                            optionValue="TratamientoId"
+                            disabled={!especieId}
                         />
                     </FieldColumn>
 
@@ -165,17 +181,22 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                         <Controller
                             name="FechaEntrada"
                             control={control}
-                            render={({ field }) => (
-                                <Calendar
-                                    value={field.value}
-                                    onChange={(e) => field.onChange(e.value)}
-                                    showIcon
-                                    dateFormat="dd/mm/yy"
-                                    placeholder="Seleccione una fecha"
-                                    className="w-full"
-                                    showButtonBar
-                                    required
-                                />
+                            rules={{ required: "Campo obligatorio" }}
+                            render={({ field, fieldState }) => (
+                                <>
+                                    <Calendar
+                                        value={field.value}
+                                        onChange={(e) => field.onChange(e.value)}
+                                        showIcon
+                                        dateFormat="dd/mm/yy"
+                                        placeholder="Seleccione una fecha"
+                                        className="w-full"
+                                        showButtonBar
+                                    />
+                                    {fieldState.error && (
+                                        <small className="p-error">{fieldState.error.message}</small>
+                                    )}
+                                </>
                             )}
                         />
                     </FieldColumn>
@@ -184,17 +205,32 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                         <Controller
                             name="FechaSalida"
                             control={control}
-                            render={({ field }) => (
-                                <Calendar
-                                    value={field.value}
-                                    onChange={(e) => field.onChange(e.value)}
-                                    showIcon
-                                    dateFormat="dd/mm/yy"
-                                    placeholder="Seleccione una fecha"
-                                    className="w-full"
-                                    showButtonBar
-                                    required
-                                />
+                            rules={{
+                                required: "Campo obligatorio",
+                                validate: (fechaSalida) => {
+                                    const entrada = getValues("FechaEntrada");
+                                    if (entrada && fechaSalida && fechaSalida < entrada) {
+                                        return "La fecha de salida no puede ser menor a la de entrada";
+                                    }
+                                    return true;
+                                },
+                            }}
+                            render={({ field, fieldState }) => (
+                                <>
+                                    <Calendar
+                                        value={field.value}
+                                        onChange={(e) => field.onChange(e.value)}
+                                        showIcon
+                                        dateFormat="dd/mm/yy"
+                                        placeholder="Seleccione una fecha"
+                                        className="w-full"
+                                        showButtonBar
+                                        minDate={fechaEntrada || undefined}
+                                    />
+                                    {fieldState.error && (
+                                        <small className="p-error">{fieldState.error.message}</small>
+                                    )}
+                                </>
                             )}
                         />
                     </FieldColumn>

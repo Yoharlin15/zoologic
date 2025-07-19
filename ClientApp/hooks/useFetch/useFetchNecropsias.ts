@@ -8,3 +8,11 @@ export const useFetchNecropsias = () => {
     queryFn: NecropsiaApi.getAll,
   });
 };
+
+export const useFetchOneNecropsia = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.NECROPSIAS, id],
+    queryFn: () => NecropsiaApi.getById?.(id),
+  });
+};

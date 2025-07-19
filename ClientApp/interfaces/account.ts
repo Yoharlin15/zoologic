@@ -33,3 +33,18 @@ export interface IUsuario {
   Nombres: string;
   Verificado: number;
 }
+
+export interface IUsuarioCurrent {
+  mensaje: string;
+  UsuarioId: number;
+  NombreUsuario: string;
+  RolId: number;
+  EmpleadoId: number;
+}
+
+export interface IUsuarioUpdate {
+  UsuarioId: number;
+  NombreUsuario: string;
+  RolId: number;
+  EmpleadoId: number;
+}
