@@ -157,7 +157,7 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
         sortable: true,
         header: "Fecha de nacimiento",
         field: "FechaNacimiento",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "14rem" },
         body: (rowData: IEmpleado | null) => {
           if (!rowData?.FechaNacimiento) return "";
           return dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY");
@@ -175,6 +175,13 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
         sortable: true,
         header: "Telefono",
         field: "Telefono",
+        style: { minWidth: "12em" },
+      },
+      {
+        filter: true,
+        sortable: true,
+        header: "Correo personal",
+        field: "Email",
         style: { minWidth: "12em" },
       },
       {

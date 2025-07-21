@@ -15,6 +15,7 @@ export interface IEmpleado {
     NombreDepartamento: string;
     EstadoId: number;
     NombreEstado: string;
+    Email: string;
 }
 
 export interface IEmpleadoCurrent {
@@ -35,6 +36,7 @@ export interface IEmpleadoCurrent {
     NombreDepartamento: string;
     EstadoId: number;
     NombreEstado: string;
+    Email: string;
 }
 
 export interface IEmpleadoCreate {
@@ -50,6 +52,7 @@ export interface IEmpleadoCreate {
     FechaContratacion: Date | null;
     DepartamentoId: number;
     EstadoId: number;
+    Email: string;
 }
 
 export interface IEmpleadoUpdate {
@@ -66,6 +69,7 @@ export interface IEmpleadoUpdate {
     FechaContratacion: Date | null;
     DepartamentoId: number;
     EstadoId: number;
+    Email: string;
 }
 
 export interface IEmpleadoAnulate {

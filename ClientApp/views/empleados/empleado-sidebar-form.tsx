@@ -9,6 +9,7 @@ import { IEmpleadoCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
 import { useFetchCargos, useFetchDepartamentos, useFetchEstados, useFetchOneEmpleado } from "ClientApp/hooks/useFetch";
 import { useCreateEmpleado, useUpdateEmpleado } from "ClientApp/hooks/useMutation/useMutationEmpleados";
+import { InputMask } from "primereact/inputmask";
 
 interface IEmpleadoSidebarProps {
   id?: number;
@@ -40,19 +41,19 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
   ];
 
   const countryOptionTemplate = (option: { name: string; code: string } | null | undefined) => {
-  if (!option) return <span className="text-500">Sin país</span>;
+    if (!option) return <span className="text-500">Sin país</span>;
 
-  return (
-    <div className="flex align-items-center">
-      <img
-        alt={option.name}
-        src={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png`}
-        style={{ width: '20px', marginRight: '10px' }}
-      />
-      <span>{option.name}</span>
-    </div>
-  );
-};
+    return (
+      <div className="flex align-items-center">
+        <img
+          alt={option.name}
+          src={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png`}
+          style={{ width: '20px', marginRight: '10px' }}
+        />
+        <span>{option.name}</span>
+      </div>
+    );
+  };
 
 
   const { control, handleSubmit, reset } = useForm<IEmpleadoCreate, FieldValues>({
@@ -69,7 +70,8 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
       FechaContratacion: null,
       CargoId: undefined,
       DepartamentoId: undefined,
-      EstadoId: undefined
+      EstadoId: undefined,
+      Email: "",
     },
   });
 
@@ -88,6 +90,7 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
         CargoId: empleadoData.CargoId || undefined,
         DepartamentoId: empleadoData.DepartamentoId || undefined,
         EstadoId: empleadoData.EstadoId || undefined,
+        Email: empleadoData.Email || "",
       });
     } else if (!id) {
       reset({
@@ -103,6 +106,7 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
         CargoId: undefined,
         DepartamentoId: undefined,
         EstadoId: undefined,
+        Email: "",
       });
     }
   }, [id, empleadoData, reset]);
@@ -111,30 +115,30 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
     const hoy = new Date();
 
     if (data.FechaNacimiento) {
-    const edadMinima = new Date(
-      hoy.getFullYear() - 18,
-      hoy.getMonth(),
-      hoy.getDate()
-    );
+      const edadMinima = new Date(
+        hoy.getFullYear() - 18,
+        hoy.getMonth(),
+        hoy.getDate()
+      );
 
-  if (data.FechaNacimiento > edadMinima) {
+      if (data.FechaNacimiento > edadMinima) {
+        toast.current?.show({
+          severity: "warn",
+          summary: "Edad mínima",
+          detail: "El empleado debe tener al menos 18 años",
+        });
+        return;
+      }
+    };
+
+    if (data.FechaContratacion && data.FechaContratacion > hoy) {
       toast.current?.show({
         severity: "warn",
-        summary: "Edad mínima",
-        detail: "El empleado debe tener al menos 18 años",
+        summary: "Fecha inválida",
+        detail: "La fecha de contratación no puede ser mayor al día actual",
       });
       return;
     }
-  };
-
-  if (data.FechaContratacion && data.FechaContratacion > hoy) {
-    toast.current?.show({
-      severity: "warn",
-      summary: "Fecha inválida",
-      detail: "La fecha de contratación no puede ser mayor al día actual",
-    });
-    return;
-  }
 
     const payload = {
       Nombres: data.Nombres,
@@ -149,6 +153,7 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
       CargoId: Number(data.CargoId),
       DepartamentoId: Number(data.DepartamentoId),
       EstadoId: Number(data.EstadoId),
+      Email: data.Email || "",
     };
 
     try {
@@ -192,16 +197,43 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
       >
         <Form>
           <FieldColumn label="Nombres" columns={{ sm: 6 }}>
-            <InputText name="Nombres" control={control} placeholder="Nombres" rules={{ required: "Campo obligatorio" }} />
+            <InputText
+              name="Nombres"
+              control={control}
+              placeholder="Ej: Ana Maria"
+              rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
           <FieldColumn label="Apellidos" columns={{ sm: 6 }}>
-            <InputText name="Apellidos" control={control} placeholder="Apellidos" rules={{ required: "Campo obligatorio" }} />
+            <InputText
+              name="Apellidos"
+              control={control}
+              placeholder="Ej: Pérez Rodríguez"
+              rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
-          <FieldColumn label="Cedula" columns={{ sm: 6 }}>
-            <InputText name="Cedula" control={control} placeholder="Cédula" rules={{ required: "Campo obligatorio" }} />
+          <FieldColumn label="Cédula" columns={{ sm: 6 }}>
+            <Controller
+              name="Cedula"
+              control={control}
+              rules={{ required: "Campo obligatorio" }}
+              render={({ field, fieldState }) => (
+                <div>
+                  <InputMask
+                    id={field.name}
+                    {...field}
+                    mask="999-9999999-9"
+                    placeholder="001-1234567-8"
+                    className={`p-inputtext ${fieldState.invalid ? 'p-invalid' : ''}`}
+                  />
+                  {fieldState.error && (
+                    <small className="p-error">{fieldState.error.message}</small>
+                  )}
+                </div>
+              )}
+            />
           </FieldColumn>
+
 
           <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 6 }}>
             <Controller
@@ -235,7 +267,32 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
           </FieldColumn>
 
           <FieldColumn label="Telefono" columns={{ sm: 6 }}>
-            <InputText name="Telefono" control={control} placeholder="Teléfono" rules={{ required: "Campo obligatorio" }} />
+            <Controller
+              name="Telefono"
+              control={control}
+              rules={{ required: "Campo obligatorio" }}
+              render={({ field, fieldState }) => (
+                <div>
+                  <InputMask
+                    id={field.name}
+                    {...field}
+                    mask="(999) 999-9999"
+                    placeholder="(809) 555-1234"
+                    className={`p-inputtext ${fieldState.invalid ? 'p-invalid' : ''}`}
+                  />
+                  {fieldState.error && (
+                    <small className="p-error">{fieldState.error.message}</small>
+                  )}
+                </div>
+              )}
+            />
+          </FieldColumn>
+          <FieldColumn label="Correo personal" columns={{ sm: 6 }}>
+            <InputText
+              name="Email"
+              control={control}
+              placeholder="ana@example.com"
+              rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
           <FieldColumn label="Nacionalidad" columns={{ sm: 6 }}>
@@ -254,7 +311,11 @@ const EmpleadoSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => 
           </FieldColumn>
 
           <FieldColumn label="Direccion" columns={{ sm: 6 }}>
-            <InputText name="Direccion" control={control} placeholder="Dirección" rules={{ required: "Campo obligatorio" }} />
+            <InputText
+              name="Direccion"
+              control={control}
+              placeholder="Calle 123, Ciudad"
+              rules={{ required: "Campo obligatorio" }} />
           </FieldColumn>
 
           <FieldColumn label="Fecha de contratación" columns={{ sm: 6 }}>

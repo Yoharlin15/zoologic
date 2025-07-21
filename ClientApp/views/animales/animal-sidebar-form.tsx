@@ -191,22 +191,23 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
             />
           </FieldColumn>
 
-          <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 6 }}>
-            <Controller
-              name="FechaNacimiento"
+          <FieldColumn label="Color" columns={{ sm: 6 }}>
+            <Dropdown
+              name="Color"
               control={control}
-              render={({ field }) => (
-                <Calendar
-                  value={field.value}
-                  onChange={(e) => field.onChange(e.value)}
-                  showIcon
-                  dateFormat="dd/mm/yy"
-                  placeholder="Seleccione una fecha"
-                  className="w-full"
-                  showButtonBar
-                  required
-                />
-              )}
+              placeholder="Color"
+              rules={{ required: "Campo obligatorio" }}
+              options={[
+                { label: "Negro", value: "Negro" },
+                { label: "Blanco", value: "Blanco" },
+                { label: "Marrón", value: "Marrón" },
+                { label: "Gris", value: "Gris" },
+                { label: "Amarillo", value: "Amarillo" },
+                { label: "Naranja", value: "Naranja" },
+                { label: "Rojo", value: "Rojo" },
+                { label: "Verde", value: "Verde" },
+                { label: "Azul", value: "Azul" },
+              ]}
             />
           </FieldColumn>
 
@@ -232,12 +233,24 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
             />
           </FieldColumn>
 
-          <FieldColumn label="Color" columns={{ sm: 6 }}>
-            <InputText
-              name="Color"
+          
+
+          <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 12 }}>
+            <Controller
+              name="FechaNacimiento"
               control={control}
-              placeholder="Color"
-              rules={{ required: "Campo obligatorio" }}
+              render={({ field }) => (
+                <Calendar
+                  value={field.value}
+                  onChange={(e) => field.onChange(e.value)}
+                  showIcon
+                  dateFormat="dd/mm/yy"
+                  placeholder="Seleccione una fecha"
+                  className="w-full"
+                  showButtonBar
+                  required
+                />
+              )}
             />
           </FieldColumn>
 
@@ -250,6 +263,8 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
               rules={{ required: "Campo obligatorio" }}
             />
           </FieldColumn>
+
+          
         </Form>
 
         <div className="flex justify-content-end gap-2 mt-4">

@@ -130,9 +130,10 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
     () => [
       {
         header: "Imagen",
+        headerStyle: { width: "4rem", textAlign: "center" },
         field: "FotoUrl",
         isImage: true,
-        style: { minWidth: "5rem" },
+        style: { minWidth: "4rem", textAlign: "center" },
       },
       {
         filter: true,

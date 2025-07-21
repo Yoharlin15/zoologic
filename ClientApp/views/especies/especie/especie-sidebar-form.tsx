@@ -158,7 +158,7 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
         header={<h1 className="font-semibold text-2xl text-900">{id ? "Editar especie" : "Nueva especie"}</h1>}
       >
         <Form>
-          <FieldColumn label="Nombre cientifico" columns={{ sm: 6 }}>
+          <FieldColumn label="Nombre cientifico" columns={{ sm: 12 }}>
             <InputText
               name="NombreCientifico"
               control={control}
@@ -212,7 +212,7 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
             />
           </FieldColumn>
 
-          <FieldColumn label="Imagen de la especie" columns={{ sm: 6 }}>
+          <FieldColumn label="Imagen de la especie" columns={{ sm: 12 }}>
             <FileUpload
               name="file"
               mode="basic"
