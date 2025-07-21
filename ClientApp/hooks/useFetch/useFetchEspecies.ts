@@ -2,6 +2,7 @@ import { Tags } from "#core";
 import { useQuery } from "@tanstack/react-query";
 
 import { EspecieApi } from "../../api";
+import { ICategoriasData } from "#interfaces";
 
 export const useFetchEspecies = () => {
   return useQuery({
@@ -11,8 +12,8 @@ export const useFetchEspecies = () => {
 };
 
 export const useFetchCategorias = () => {
-  return useQuery({
-    queryKey: [Tags.ESPECIES],
+  return useQuery<ICategoriasData>({
+    queryKey: [Tags.CATEGORIAS],
     queryFn: EspecieApi.getCategorias,
   });
 };

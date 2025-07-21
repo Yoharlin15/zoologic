@@ -84,3 +84,9 @@ export interface IProcedenciaCurrent {
 export interface IProcedenciaCreate {
     ProcedenciaNombre: string;
 }
+
+export interface ICategoriasData {
+  Familias: IFamilia[];
+  Clases: IClase[];
+  Procedencias: IProcedencia[];
+}

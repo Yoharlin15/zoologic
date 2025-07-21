@@ -212,18 +212,6 @@ const EspecieSidebarForm = ({ id, onHide, visible }: IEmpleadoSidebarProps) => {
             />
           </FieldColumn>
 
-          <FieldColumn label="Habitat" columns={{ sm: 6 }}>
-            <Dropdown
-              name="HabitatId"
-              control={control}
-              placeholder="Seleccione un habitat"
-              rules={{ required: "Campo obligatorio" }}
-              options={habitats || []}
-              optionLabel="Nombre"
-              optionValue="HabitatId"
-            />
-          </FieldColumn>
-
           <FieldColumn label="Imagen de la especie" columns={{ sm: 6 }}>
             <FileUpload
               name="file"

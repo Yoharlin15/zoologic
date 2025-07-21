@@ -1,5 +1,5 @@
 import { Endpoints } from "../core";
-import { Api, IEspecie, IEspecieCurrent } from "../interfaces";
+import { Api, ICategoriasData, IEspecie, IEspecieCurrent } from "../interfaces";
 import { WarnUtils } from "#utils";
 import API from "./api";
 
@@ -9,7 +9,7 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
   update?: (data: Partial<IEspecieCurrent>) => Promise<IEspecieCurrent>;
-  getCategorias?: () => Promise<T[]>;
+  getCategorias?: () => Promise<ICategoriasData>;
 }
 
 const EspecieApi: ApiCustom<IEspecie> = {

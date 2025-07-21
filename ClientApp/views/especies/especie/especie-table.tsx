@@ -26,12 +26,6 @@ interface IEspecieTableProps {
   dispatch: React.Dispatch<any>;
 }
 
-interface ICategoriasData {
-  Familias: IFamilia[];
-  Clases: IClase[];
-  Procedencias: IProcedencia[];
-}
-
 interface ICategoriaOption {
   name: string;
   code: string;
@@ -117,17 +111,17 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
       {
         name: "Familias",
         code: "Familia",
-        items: processCategory<IFamilia>(categoriasData, 'FamiliaId', 'FamiliaNombre')
+        items: processCategory<IFamilia>(categoriasData.Familias, 'FamiliaId', 'FamiliaNombre')
       },
       {
         name: "Clases",
         code: "Clase",
-        items: processCategory<IClase>(categoriasData, 'ClaseId', 'ClaseNombre')
+        items: processCategory<IClase>(categoriasData.Clases, 'ClaseId', 'ClaseNombre')
       },
       {
         name: "Procedencias",
         code: "Procedencia",
-        items: processCategory<IProcedencia>(categoriasData, 'ProcedenciaId', 'ProcedenciaNombre')
+        items: processCategory<IProcedencia>(categoriasData.Procedencias, 'ProcedenciaId', 'ProcedenciaNombre')
       }
     ];
   }, [categoriasData]);
