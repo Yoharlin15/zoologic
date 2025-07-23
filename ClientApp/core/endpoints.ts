@@ -32,10 +32,22 @@ export const ESTADO_CREATE = `${ESTADO_BASE}/${CREATE}`;
 export const ESTADO_UPDATE = `${ESTADO_BASE}/${UPDATE}/{id}`;
 
 //Get Roles
-export const ROLES_GET = `${USUARIOS_BASE}/get-roles`
+export const ROLES_GET = `${USUARIOS_BASE}/GetRoles`
 export const ROLES_GETBYID = `${USUARIOS_BASE}/GetRolById`
-export const ROLES_CREATE = `${USUARIOS_BASE}/create-rol`
+export const ROLES_CREATE = `${USUARIOS_BASE}/CreateRol`
 export const ROLES_UPDATE = `${USUARIOS_BASE}/UpdateRol/{id}`
+
+//CRUD Permisos
+export const PERMISOS_GET = `${USUARIOS_BASE}/GetPermisos`
+export const PERMISOS_GETBYID = `${USUARIOS_BASE}/GetPermisoById`
+export const PERMISOS_CREATE = `${USUARIOS_BASE}/CreatePermiso`
+export const PERMISOS_UPDATE = `${USUARIOS_BASE}/UpdatePermiso/{id}`
+
+//CRUD RolesPermisos
+export const ROLES_PERMISOS_GET = `${USUARIOS_BASE}/GetRolesPermisos`
+export const ROLES_PERMISOS_GETBYID = `${USUARIOS_BASE}/GetRolesPermisosById`
+export const ROLES_PERMISOS_CREATE = `${USUARIOS_BASE}/CreateRolesPermisos`
+export const ROLES_PERMISOS_UPDATE = `${USUARIOS_BASE}/UpdateRolesPermisos/{id}`
 
 //Get Zonas 
 export const ZONAS_GET = `${ZONAS_BASE}/${GET}`;

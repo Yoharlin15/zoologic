@@ -24,10 +24,10 @@ api.interceptors.request.use(
 
 
 export const registrarUsuario = (datos: RegistroDatos) =>
-  api.post<RespuestaServidor>('/api/Usuario/signup', datos);
+  api.post<RespuestaServidor>('/api/Usuario/Register', datos);
 
 export const loginUsuario = async (credenciales: LoginDatos): Promise<RespuestaServidor> => {
-  const response = await api.post<RespuestaServidor>('/api/Usuario/login', credenciales);
+  const response = await api.post<RespuestaServidor>('/api/Usuario/Login', credenciales);
 
   const { TokenJwt, NombreUsuario, RolId } = response.data;
 
@@ -51,7 +51,7 @@ export const loginUsuario = async (credenciales: LoginDatos): Promise<RespuestaS
 export const confirmarCorreo = async (token: string) => {
   try {
     const tokenCodificado = encodeURIComponent(token);
-    const response = await api.get(`/api/Usuario/confirmar-correo?token=${tokenCodificado}`);
+    const response = await api.get(`/api/Usuario/ConfirmarCorreo?token=${tokenCodificado}`);
 
     console.log("✅ Respuesta exitosa del servidor:", response.data);
     return {
@@ -84,7 +84,7 @@ export const confirmarCorreo = async (token: string) => {
 
 export const GetAllUsuarios = async () => {
   try {
-    const response = await api.get('/api/Usuario');
+    const response = await api.get('/api/Usuario/Get');
 
     console.log("✅ Usuarios obtenidos exitosamente:", response.data);
     return response.data; // ✅ Devolver directamente los datos

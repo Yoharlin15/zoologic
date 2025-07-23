@@ -1,5 +1,4 @@
 import React from "react";
-import { IRolesPermisos } from "ClientApp/interfaces/permisos";
 import { IRoles } from "#interfaces";
 import toast from "react-hot-toast";
 import { matchesSearchText } from "#utils";
@@ -11,7 +10,6 @@ import { Card } from "primereact/card";
 import { Toolbar } from "primereact/toolbar";
 import { Skeleton } from "primereact/skeleton";
 import { confirmDialog } from "primereact/confirmdialog";
-import { Dialog } from "primereact/dialog";
 
 import {
   DataTableSelectionSingleChangeEvent,
@@ -20,18 +18,18 @@ import {
   CardTable,
   ICardTableProps,
 } from "#components";
-import { RolesFormDialog } from "./rolesFormDialog";
+import { IPermiso } from "ClientApp/interfaces/permisos";
+import { PermisosFormDialog } from "./permisosFormDialog";
 
-const Roles = () => {
-  const roles = AppQueryHooks.useFetchRolesPermisos();
+const Permisos = () => {
+  const permisos = AppQueryHooks.useFetchPermisos();
 
   const [state, dispatch] = React.useReducer(Reducers.DialogsReducer, {
     id: 0,
     visible: false,
   });
 
-  const [selectedRol, setSelectedRol] = React.useState<IRolesPermisos>();
-  const [rolDetalle, setRolDetalle] = React.useState<IRolesPermisos | null>(null); // Para el Dialog de permisos
+  const [selectedPermiso, setSelectedPermiso] = React.useState<IPermiso>();
   const cm = React.useRef<ContextMenu>(null);
   const [searchText, setSearchText] = React.useState("");
 
@@ -42,29 +40,33 @@ const Roles = () => {
       command: () =>
         dispatch({
           type: "OPEN_DIALOG",
-          payload: selectedRol?.RolId ?? 0,
+          payload: selectedPermiso?.PermisoId ?? 0,
         }),
     },
     {
       label: "Eliminar",
       icon: "pi pi-trash",
-      command: () => handleDeleteRol(),
+      command: () => handleDeletePermiso(),
     },
   ];
 
-  const handleDeleteRol = () => {
+  const handleDeletePermiso = () => {
     confirmDialog({
-      message: `¿Estás seguro de que deseas eliminar el rol "${selectedRol?.Nombre}"?`,
+      message: `¿Estás seguro de que deseas eliminar el permiso "${selectedPermiso?.Modulo}"?`,
       header: "Confirmar Eliminación",
       icon: "pi pi-exclamation-triangle",
       acceptClassName: "p-button-danger",
       acceptLabel: "Sí, eliminar",
       rejectLabel: "Cancelar",
       accept: () => {
-        toast.success(`Rol "${selectedRol?.Nombre}" eliminado correctamente`);
-        // Aquí iría la lógica para eliminar
+        // Aquí iría la lógica para eliminar el permiso
+        toast.success(`Permiso "${selectedPermiso?.Modulo}" eliminado correctamente`);
       },
     });
+  };
+
+  const onSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
   };
 
   const handleOpenDialog = (id: number = 0) => {
@@ -75,48 +77,53 @@ const Roles = () => {
     dispatch({ type: "CLOSE_DIALOG" });
   };
 
-  const columns = React.useMemo<ICardTableProps<IRolesPermisos>["columns"]>(
+  const columns = React.useMemo<ICardTableProps<IPermiso>["columns"]>(
     () => [
       {
         filter: true,
         sortable: true,
-        header: "Roles",
-        field: "Nombre",
-        body: (rowData: IRolesPermisos) => (
+        header: "Modulos",
+        field: "Modulo",
+        body: (rowData: IPermiso) => (
           <div className="flex align-items-center gap-2">
             <i className="pi pi-user text-green-500"></i>
-            <span className="font-medium">{rowData.Nombre}</span>
+             <span className="font-medium">
+            {Array.isArray(rowData.Modulo) ? rowData.Modulo.join(", ") : rowData.Modulo}
+          </span>
           </div>
         ),
       },
       {
-        header: "Permisos",
-        field: "Permisos",
-        body: (rowData: IRolesPermisos) => (
-          <div className="flex align-items-center gap-2">
-            <span>{rowData.Permisos?.length ?? 0} permiso(s)</span>
-            {rowData.Permisos?.length > 0 && (
-              <Button
-                icon="pi pi-eye"
-                className="p-button-text p-button-sm"
-                tooltip="Ver detalles"
-                onClick={() => setRolDetalle(rowData)}
-              />
-            )}
-          </div>
+        filter: true,
+        sortable: true,
+        header: "Acciones",
+        field: "Accion",
+        body: (rowData: IPermiso) => (
+           <span className="font-medium">
+            {Array.isArray(rowData.Accion) ? rowData.Accion.join(", ") : rowData.Accion}
+          </span>
+        ),
+      },
+      {
+        filter: true,
+        sortable: true,
+        header: "Descripción",
+        field: "Descripcion",
+        body: (rowData: IPermiso) => (
+          <span className="text-600">{rowData.Descripcion}</span>
         ),
       },
     ],
     [],
   );
 
-  const filteredRoles = React.useMemo(() => {
-    if (!roles.data?.length) return [];
+  const filteredPermisos = React.useMemo(() => {
+    if (!permisos.data?.length) return [];
 
-    return roles.data.filter((item) =>
-      matchesSearchText(searchText, item.Nombre),
+    return permisos.data.filter((item) =>
+      matchesSearchText(searchText, item.Descripcion),
     );
-  }, [searchText, roles.data]);
+  }, [searchText, permisos.data]);
 
   const renderEmptyMessage = React.useCallback(() => {
     return (
@@ -125,7 +132,7 @@ const Roles = () => {
         <div className="text-900 font-bold text-xl mb-2">No hay roles registrados</div>
         <div className="text-600 mb-4">Comienza creando tu primer rol</div>
         <Button
-          label="Crear Nuevo rol"
+          label="Crear Nuevo permiso"
           icon="pi pi-plus"
           onClick={() => handleOpenDialog(0)}
         />
@@ -136,8 +143,8 @@ const Roles = () => {
   const startContent = (
     <div className="flex align-items-center gap-3">
       <div>
-        <h1 className="text-2xl font-bold text-900 m-0">Gestión de Roles</h1>
-        <p className="text-600 m-0 mt-1">Administra los roles disponibles</p>
+        <h1 className="text-2xl font-bold text-900 m-0">Gestión de Permisos</h1>
+        <p className="text-600 m-0 mt-1">Administra los permisos disponibles</p>
       </div>
     </div>
   );
@@ -145,15 +152,14 @@ const Roles = () => {
   const endContent = (
     <div className="flex gap-2">
       <Button
-        label="Nuevo rol"
+        label="Nuevo permiso"
         icon="pi pi-plus"
         onClick={() => handleOpenDialog(0)}
-        className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
-      />
+        className="bg-green-400 hover:bg-green-600 border-0 shadow-none" />
     </div>
   );
 
-  if (roles.isPending) {
+  if (permisos.isPending) {
     return (
       <div className="w-full">
         <Card className="mb-2 bg-blue-50">
@@ -180,7 +186,7 @@ const Roles = () => {
       <ContextMenu
         ref={cm}
         model={menuModel}
-        onHide={() => setSelectedRol(undefined)}
+        onHide={() => setSelectedPermiso(undefined)}
       />
 
       <Card className="mb-2 bg-blue-50">
@@ -188,57 +194,35 @@ const Roles = () => {
       </Card>
 
       <Card className="bg-blue-50">
-        <CardTable<IRolesPermisos>
+        <CardTable<IPermiso>
           title=""
           columns={columns}
-          value={filteredRoles}
-          skeletonLoading={roles.isPending}
+          value={filteredPermisos}
+          skeletonLoading={permisos.isPending}
           tableProps={{
             rows: 10,
             size: "small",
             scrollable: true,
-            dataKey: "RolId",
+            dataKey: "PermisoId",
             removableSort: true,
             paginatorLeft: true,
             scrollHeight: "500px",
-            loading: roles.isFetching,
+            loading: permisos.isFetching,
             emptyMessage: renderEmptyMessage(),
-            contextMenuSelection: selectedRol,
+            contextMenuSelection: selectedPermiso,
             rowsPerPageOptions: [10, 25, 50],
-            paginator: filteredRoles.length > 10,
+            paginator: filteredPermisos.length > 10,
             className: "p-datatable-striped",
             onContextMenu: (e) => cm.current?.show(e.originalEvent),
             onContextMenuSelectionChange: (
-              e: DataTableSelectionSingleChangeEvent<IRolesPermisos[]>,
-            ) => setSelectedRol(e.value),
+              e: DataTableSelectionSingleChangeEvent<IPermiso[]>,
+            ) => setSelectedPermiso(e.value),
             onRowDoubleClick: (e) => handleOpenDialog(e.data.EstadoId),
           }}
         />
       </Card>
 
-      {/* Dialog para ver permisos detallados */}
-      <Dialog
-        header={`Permisos del rol: ${rolDetalle?.Nombre ?? ""}`}
-        visible={!!rolDetalle}
-        style={{ width: "40vw" }}
-        modal
-        onHide={() => setRolDetalle(null)}
-      >
-        {rolDetalle?.Permisos?.map((permiso, idx) => (
-          <div key={idx} className="mb-3 border-bottom-1 pb-2">
-            <h4 className="m-0 mb-2">{permiso.Descripcion}</h4>
-            <p className="m-0 text-sm text-600">
-              <b>Módulos:</b> {permiso.Modulo?.join(", ")}
-            </p>
-            <p className="m-0 text-sm text-600">
-              <b>Acciones:</b> {permiso.Accion?.join(", ")}
-            </p>
-          </div>
-        ))}
-        {rolDetalle?.Permisos?.length === 0 && <p>No hay permisos asignados.</p>}
-      </Dialog>
-
-      <RolesFormDialog
+      <PermisosFormDialog
         id={state.id}
         visible={state.visible ?? false}
         onHide={handleCloseDialog}
@@ -247,4 +231,4 @@ const Roles = () => {
   );
 };
 
-export default Roles;
+export default Permisos;

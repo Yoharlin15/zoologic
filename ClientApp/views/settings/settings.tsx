@@ -20,6 +20,7 @@ const SettingsLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
   );
 
   const items: MenuItem[] = [
+    createMenuItem("permisos", "Permisos", "shield"),
     createMenuItem("roles", "Roles", "users"),
     createMenuItem("estados", "Estados", "flag"),
     createMenuItem("cargos", "Cargos", "briefcase"),
