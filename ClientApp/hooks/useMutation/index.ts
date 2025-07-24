@@ -14,4 +14,4 @@ export * from "./useMutationTratamientoEspecie";
 export * from "./useMutationExamenes";
 export * from "./useMutationDetalleComportamiento";
 export * from "./useMutationDepartamentos";
-export * from "./useMutationPermisos"
+export * from "./useMutationRolesPermisos";

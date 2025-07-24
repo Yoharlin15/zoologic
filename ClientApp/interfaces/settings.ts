@@ -9,6 +9,26 @@ export interface IRolCurrent {
   Nombre: string;
 }
 
+//RolesPermisos
+export interface IRolesPermisos {
+  RolId: number;
+  ModuloId: number;
+  ModuloNombre: string;
+  Acciones: {
+    Ver?: boolean;
+    Crear?: boolean;
+    Editar?: boolean;
+    Eliminar?: boolean;
+    [key: string]: boolean | undefined; // permite claves adicionales si hiciera falta
+  };
+}
+
+export interface IUpdateRolesPermisos {
+  RolId: number;
+  ModuloId: number;
+  AccionId: number;
+}
+
 //Estados
 export interface IEstados {
     EstadoId: number;

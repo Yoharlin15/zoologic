@@ -1,15 +1,14 @@
 import { Endpoints } from "../core";
-import { Api } from "#interfaces";
+import { Api, IRolesPermisos } from "#interfaces";
 import API from "./api";
 import { WarnUtils } from "#utils";
-import { IPermiso, IRolesPermisos, IRolesPermisosCurrent } from "ClientApp/interfaces/permisos";
 
 interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   create?: (data: any) => Promise<any>;
   nullify?: (id: number) => Promise<number>;
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
-  update?: (data: Partial<IRolesPermisosCurrent>) => Promise<IRolesPermisosCurrent>;
+  update: (data: IRolesPermisos[]) => Promise<any>
 }
 
 const RolesPermisosApi: ApiCustom<IRolesPermisos> = {
@@ -24,10 +23,25 @@ const RolesPermisosApi: ApiCustom<IRolesPermisos> = {
     return result.data;
   },
 
-  create: async (data) => {
-    const result = await API().post(Endpoints.ROLES_PERMISOS_CREATE, data);
-    return result.data;
-  },
+  update: async (updatedPermisos) => {
+  if (!updatedPermisos || updatedPermisos.length === 0) {
+    WarnUtils.missing(Endpoints.ROLES_PERMISOS_UPDATE, "Missing update data");
+    return Promise.reject(new Error("Missing update data"));
+  }
+
+  const rolId = updatedPermisos[0].RolId;
+  if (!rolId) {
+    WarnUtils.missing(Endpoints.ROLES_PERMISOS_UPDATE, "Missing RolId");
+    return Promise.reject(new Error("Missing RolId"));
+  }
+
+  const url = Endpoints.ROLES_PERMISOS_UPDATE.replace("{id}", rolId.toString());
+
+  const response = await API().put(url, updatedPermisos);
+
+  return response.data;
+},
+
 }
 
 export default RolesPermisosApi;

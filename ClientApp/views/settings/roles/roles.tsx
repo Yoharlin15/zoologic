@@ -1,5 +1,4 @@
 import React from "react";
-import { IRolesPermisos } from "ClientApp/interfaces/permisos";
 import { IRoles } from "#interfaces";
 import toast from "react-hot-toast";
 import { matchesSearchText } from "#utils";
@@ -10,28 +9,30 @@ import { AppQueryHooks } from "#hooks";
 import { Card } from "primereact/card";
 import { Toolbar } from "primereact/toolbar";
 import { Skeleton } from "primereact/skeleton";
-import { confirmDialog } from "primereact/confirmdialog";
-import { Dialog } from "primereact/dialog";
+import { confirmDialog } from "primereact/confirmdialog"; // Asegúrate de que la ruta sea correcta
 
 import {
   DataTableSelectionSingleChangeEvent,
 } from "primereact/datatable";
+
 import {
   CardTable,
   ICardTableProps,
 } from "#components";
 import { RolesFormDialog } from "./rolesFormDialog";
+import { PermisosDialog } from "./PermisosDialog.tsx";
 
 const Roles = () => {
-  const roles = AppQueryHooks.useFetchRolesPermisos();
+  const roles = AppQueryHooks.useFetchRoles();
 
   const [state, dispatch] = React.useReducer(Reducers.DialogsReducer, {
     id: 0,
     visible: false,
   });
 
-  const [selectedRol, setSelectedRol] = React.useState<IRolesPermisos>();
-  const [rolDetalle, setRolDetalle] = React.useState<IRolesPermisos | null>(null); // Para el Dialog de permisos
+  const [selectedRol, setSelectedRol] = React.useState<IRoles>();
+  const [rolDetalle, setRolDetalle] = React.useState<IRoles | null>(null); // Para el Dialog de permisos
+  const [showPermisosDialog, setShowPermisosDialog] = React.useState(false);
   const cm = React.useRef<ContextMenu>(null);
   const [searchText, setSearchText] = React.useState("");
 
@@ -46,9 +47,14 @@ const Roles = () => {
         }),
     },
     {
-      label: "Eliminar",
-      icon: "pi pi-trash",
-      command: () => handleDeleteRol(),
+      label: "Asignar Permisos",
+      icon: "pi pi-shield",
+      command: () => {
+        if (selectedRol) {
+          setRolDetalle(selectedRol);
+          setShowPermisosDialog(true);
+        }
+      },
     },
   ];
 
@@ -75,36 +81,44 @@ const Roles = () => {
     dispatch({ type: "CLOSE_DIALOG" });
   };
 
-  const columns = React.useMemo<ICardTableProps<IRolesPermisos>["columns"]>(
+  const columns = React.useMemo<ICardTableProps<IRoles>["columns"]>(
     () => [
       {
         filter: true,
         sortable: true,
         header: "Roles",
         field: "Nombre",
-        body: (rowData: IRolesPermisos) => (
-          <div className="flex align-items-center gap-2">
+        body: (rowData: IRoles) => (
+          <div className="flex items-center gap-2">
             <i className="pi pi-user text-green-500"></i>
             <span className="font-medium">{rowData.Nombre}</span>
           </div>
         ),
       },
       {
-        header: "Permisos",
-        field: "Permisos",
-        body: (rowData: IRolesPermisos) => (
-          <div className="flex align-items-center gap-2">
-            <span>{rowData.Permisos?.length ?? 0} permiso(s)</span>
-            {rowData.Permisos?.length > 0 && (
-              <Button
-                icon="pi pi-eye"
-                className="p-button-text p-button-sm"
-                tooltip="Ver detalles"
-                onClick={() => setRolDetalle(rowData)}
-              />
-            )}
+        header: "Acciones",
+        body: (rowData: IRoles) => (
+          <div className="flex gap-2">
+            <Button
+              icon="pi pi-pencil"
+              className="p-button-rounded p-button-text text-blue-500"
+              onClick={() => handleOpenDialog(rowData.RolId)}
+              tooltip="Editar rol"
+              tooltipOptions={{ position: "top" }}
+            />
+            <Button
+              icon="pi pi-shield"
+              className="p-button-rounded p-button-text text-green-500"
+              onClick={() => {
+                setRolDetalle(rowData);
+                setShowPermisosDialog(true);
+              }}
+              tooltip="Asignar permisos"
+              tooltipOptions={{ position: "top" }}
+            />
           </div>
         ),
+        style: { width: "150px" },
       },
     ],
     [],
@@ -112,7 +126,6 @@ const Roles = () => {
 
   const filteredRoles = React.useMemo(() => {
     if (!roles.data?.length) return [];
-
     return roles.data.filter((item) =>
       matchesSearchText(searchText, item.Nombre),
     );
@@ -134,7 +147,7 @@ const Roles = () => {
   }, []);
 
   const startContent = (
-    <div className="flex align-items-center gap-3">
+    <div className="flex items-center gap-3">
       <div>
         <h1 className="text-2xl font-bold text-900 m-0">Gestión de Roles</h1>
         <p className="text-600 m-0 mt-1">Administra los roles disponibles</p>
@@ -188,7 +201,7 @@ const Roles = () => {
       </Card>
 
       <Card className="bg-blue-50">
-        <CardTable<IRolesPermisos>
+        <CardTable<IRoles>
           title=""
           columns={columns}
           value={filteredRoles}
@@ -209,40 +222,29 @@ const Roles = () => {
             className: "p-datatable-striped",
             onContextMenu: (e) => cm.current?.show(e.originalEvent),
             onContextMenuSelectionChange: (
-              e: DataTableSelectionSingleChangeEvent<IRolesPermisos[]>,
+              e: DataTableSelectionSingleChangeEvent<IRoles[]>,
             ) => setSelectedRol(e.value),
-            onRowDoubleClick: (e) => handleOpenDialog(e.data.EstadoId),
+            onRowDoubleClick: (e) => handleOpenDialog(e.data.RolId),
           }}
         />
       </Card>
-
-      {/* Dialog para ver permisos detallados */}
-      <Dialog
-        header={`Permisos del rol: ${rolDetalle?.Nombre ?? ""}`}
-        visible={!!rolDetalle}
-        style={{ width: "40vw" }}
-        modal
-        onHide={() => setRolDetalle(null)}
-      >
-        {rolDetalle?.Permisos?.map((permiso, idx) => (
-          <div key={idx} className="mb-3 border-bottom-1 pb-2">
-            <h4 className="m-0 mb-2">{permiso.Descripcion}</h4>
-            <p className="m-0 text-sm text-600">
-              <b>Módulos:</b> {permiso.Modulo?.join(", ")}
-            </p>
-            <p className="m-0 text-sm text-600">
-              <b>Acciones:</b> {permiso.Accion?.join(", ")}
-            </p>
-          </div>
-        ))}
-        {rolDetalle?.Permisos?.length === 0 && <p>No hay permisos asignados.</p>}
-      </Dialog>
 
       <RolesFormDialog
         id={state.id}
         visible={state.visible ?? false}
         onHide={handleCloseDialog}
       />
+
+      {rolDetalle && (
+        <PermisosDialog
+          visible={showPermisosDialog}
+          rolId={rolDetalle.RolId}
+          onHide={() => {
+            setShowPermisosDialog(false);
+            setRolDetalle(null);
+          }}
+        />
+      )}
     </div>
   );
 };

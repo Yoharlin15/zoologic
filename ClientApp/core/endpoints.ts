@@ -45,9 +45,8 @@ export const PERMISOS_UPDATE = `${USUARIOS_BASE}/UpdatePermiso/{id}`
 
 //CRUD RolesPermisos
 export const ROLES_PERMISOS_GET = `${USUARIOS_BASE}/GetRolesPermisos`
-export const ROLES_PERMISOS_GETBYID = `${USUARIOS_BASE}/GetRolesPermisosById`
-export const ROLES_PERMISOS_CREATE = `${USUARIOS_BASE}/CreateRolesPermisos`
-export const ROLES_PERMISOS_UPDATE = `${USUARIOS_BASE}/UpdateRolesPermisos/{id}`
+export const ROLES_PERMISOS_GETBYID = `${USUARIOS_BASE}/GetPermisoByRolId`
+export const ROLES_PERMISOS_UPDATE = `${USUARIOS_BASE}/UpdateRolesPermisos/{id}/permisos`
 
 //Get Zonas 
 export const ZONAS_GET = `${ZONAS_BASE}/${GET}`;
