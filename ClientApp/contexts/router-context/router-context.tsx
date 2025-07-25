@@ -86,7 +86,6 @@ const Provider = () => {
     },
     {
       path: "/",
-      element: <PrivateRoute />, // Aquí se valida si está autenticado
       children: [
         {
           path: "/",
@@ -94,7 +93,11 @@ const Provider = () => {
           children: [
             {
               path: Routes.DASHBOARD_ROUTE,
-              element: <DashboardView />,
+              element: (
+                <PrivateRoute requiredPermission="Ver" requiredModule="Home">
+                  <DashboardView />
+                </PrivateRoute>
+              ),
             },
             {
               path: Routes.EMPLEADOS_ROUTE,
@@ -215,7 +218,7 @@ const Provider = () => {
                   id: "cargos",
                   path: Routes.CARGOS_ROUTE,
                   element: <Cargos />,
-                },  
+                },
                 {
                   id: "departamentos",
                   path: Routes.DEPARTAMENTOS_ROUTE,

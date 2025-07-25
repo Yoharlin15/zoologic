@@ -29,7 +29,7 @@ export const registrarUsuario = (datos: RegistroDatos) =>
 export const loginUsuario = async (credenciales: LoginDatos): Promise<RespuestaServidor> => {
   const response = await api.post<RespuestaServidor>('/api/Usuario/Login', credenciales);
 
-  const { TokenJwt, NombreUsuario, RolId } = response.data;
+  const { TokenJwt, NombreUsuario, RolId, Permisos } = response.data;
 
   if (TokenJwt) {
     localStorage.setItem('token', TokenJwt);
@@ -38,6 +38,9 @@ export const loginUsuario = async (credenciales: LoginDatos): Promise<RespuestaS
     }
     if (RolId !== undefined) {
       localStorage.setItem('rolId', RolId.toString());
+    }
+    if (Permisos) {
+         localStorage.setItem('permisos', JSON.stringify(Permisos));
     }
   } else {
     console.warn("⚠️ No se recibió un token del backend:", response.data);

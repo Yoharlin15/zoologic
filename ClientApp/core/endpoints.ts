@@ -167,7 +167,7 @@ export const NECROPSIAS_UPDATE = `${NECROPSIAS_BASE}/Update/{id}`;
 
 //CRUD Usuarios
 export const USUARIOS_GET = `${USUARIOS_BASE}/${GET}`;
-export const USUARIOS_GETBYID = `${USUARIOS_BASE}/GetById`
+export const USUARIOS_GETBYID = `${USUARIOS_BASE}/GetUsuarioById`
 export const USUARIOS_UPDATE = `${USUARIOS_BASE}/UpdateUsuario/{id}
 `
 

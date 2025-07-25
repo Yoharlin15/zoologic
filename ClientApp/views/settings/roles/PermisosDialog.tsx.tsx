@@ -1,8 +1,8 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useRef } from "react";
 import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { IRolesPermisos, IUpdateRolesPermisos } from "#interfaces";
-import toast from "react-hot-toast";
+import { Toast } from 'primereact/toast';
 import { useFetchPermisosByRolId } from "ClientApp/hooks/useFetch";
 import { useUpdateRolesPermisos } from "ClientApp/hooks/useMutation";
 import { ProgressSpinner } from "primereact/progressspinner";
@@ -16,10 +16,10 @@ interface Props {
 const acciones = ["Ver", "Crear", "Editar", "Eliminar"];
 
 export const PermisosDialog = ({ visible, onHide, rolId }: Props) => {
+  const toastRef = useRef<Toast>(null);  // Usamos la referencia aquí
   const { data, isLoading } = useFetchPermisosByRolId(rolId);
   const { mutate: updatePermisos } = useUpdateRolesPermisos();
-  const saving = false;
-
+  const [saving, setSaving] = useState(false);
   const [selected, setSelected] = useState<IUpdateRolesPermisos[]>([]);
 
   const permisosPorModulo = useMemo(() => {
@@ -58,6 +58,7 @@ export const PermisosDialog = ({ visible, onHide, rolId }: Props) => {
     const inChanges = selected.find(p => p.ModuloId === moduloId && p.AccionId === acciones.indexOf(accion) + 1);
     return inChanges ? !inOriginal : inOriginal;
   };
+
   type AccionNombre = "Ver" | "Crear" | "Editar" | "Eliminar";
 
   const mapToApiFormat = (): IRolesPermisos[] => {
@@ -92,22 +93,65 @@ export const PermisosDialog = ({ visible, onHide, rolId }: Props) => {
     return result;
   };
 
-
   const handleSave = () => {
     const payload = mapToApiFormat();
 
     if (payload.length === 0) {
-      toast.error("No hay cambios para guardar");
+      toastRef.current?.show({
+        severity: "warn",
+        summary: "Sin cambios",
+        detail: "No hay modificaciones para guardar",
+        life: 3000
+      });
       return;
     }
 
+    setSaving(true);
+
     updatePermisos(payload, {
       onSuccess: () => {
-        toast.success("Permisos actualizados correctamente");
-        onHide();
+        toastRef.current?.show({
+          severity: "success",
+          summary: "Guardado",
+          detail: "Permisos actualizados correctamente",
+          life: 3000
+        });
+        // Retrasa el cierre para permitir ver el toast
+        setTimeout(() => {
+          setSaving(false);
+          onHide();
+        }, 1000);
       },
-      onError: () => toast.error("Error al actualizar permisos"),
+      onError: () => {
+        toastRef.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Error al guardar permisos",
+          life: 3000
+        });
+        setSaving(false);
+      }
     });
+  };
+
+  const handleActivateAll = () => {
+    const all: IUpdateRolesPermisos[] = [];
+
+    Object.keys(permisosPorModulo).forEach(moduloIdStr => {
+      const moduloId = Number(moduloIdStr);
+      acciones.forEach((accion, index) => {
+        const isAlreadyOn = permisosPorModulo[moduloId]?.acciones[accion];
+        if (!isAlreadyOn) {
+          all.push({ RolId: rolId, ModuloId: moduloId, AccionId: index + 1 });
+        }
+      });
+    });
+
+    setSelected(all);
+  };
+
+  const handleDeactivateAll = () => {
+    setSelected([]); // Desactiva todos los permisos
   };
 
   return (
@@ -121,6 +165,8 @@ export const PermisosDialog = ({ visible, onHide, rolId }: Props) => {
       dismissableMask
       draggable={false}
     >
+      <Toast ref={toastRef} />  {/* Agregar el Toast aquí */}
+
       {isLoading ? (
         <div className="flex justify-center items-center h-40">
           <ProgressSpinner />
@@ -165,18 +211,28 @@ export const PermisosDialog = ({ visible, onHide, rolId }: Props) => {
 
           <div className="flex justify-end gap-3 mt-6">
             <Button
-              label="Guardar"
-              icon="pi pi-check"
-              onClick={handleSave}
-              disabled={saving || selected.length === 0}
-              className="bg-green-600 hover:bg-green-700 text-white border-none px-5 py-2 rounded-md shadow-sm"
+              label="Activar Todos"
+              icon="pi pi-check-square"
+              onClick={handleActivateAll}
+              className="bg-blue-500 hover:bg-blue-600 text-white border-none px-4 py-2 rounded-md shadow-sm"
+              disabled={saving}
             />
             <Button
-              label="Salir"
-              icon="pi pi-times"
-              onClick={onHide}
-              className="bg-red-500 hover:bg-red-600 text-white border-none px-5 py-2 rounded-md shadow-sm"
+              label="Desactivar Todos"
+              icon="pi pi-times-circle"
+              onClick={handleDeactivateAll}
+              className="bg-red-500 hover:bg-red-600 text-white border-none px-4 py-2 rounded-md shadow-sm"
+              disabled={saving}
             />
+            <Button
+              label={saving ? "Guardando..." : "Guardar"}
+              icon={saving ? undefined : "pi pi-check"}
+              onClick={handleSave}
+              disabled={saving || selected.length === 0}
+              className="bg-green-600 hover:bg-green-700 text-white border-none px-5 py-2 rounded-md shadow-sm flex items-center gap-2"
+            >
+              {saving && <ProgressSpinner style={{ width: '20px', height: '20px' }} strokeWidth="4" />}
+            </Button>
           </div>
         </div>
       )}

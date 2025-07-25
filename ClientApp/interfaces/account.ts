@@ -18,6 +18,16 @@ export interface RespuestaServidor {
   TokenJwt?: string; 
   NombreUsuario?: string;
   RolId: number;
+  Permisos?: { // Estructura más detallada de los permisos
+    ModuloId: number;
+    ModuloNombre: string;
+    Acciones: {
+      Crear: boolean;
+      Editar: boolean;
+      Eliminar: boolean;
+      Ver: boolean;
+    };
+  }[]; // Array de permisos
 }
 
 // Confirmación de correo con token en URL

@@ -3,7 +3,6 @@ import { renderTooltip } from "#utils";
 import { Ripple } from "primereact/ripple";
 import { useMediaQuery } from "usehooks-ts";
 import { classNames } from "primereact/utils";
-import { StyleClass } from "primereact/styleclass";
 import { useNavigate } from 'react-router-dom';
 import { Routes } from "#core";
 
@@ -232,7 +231,7 @@ const LayoutContent = ({
       {/* HEADER */}
       <div
         style={{ height: "60px" }}
-        className="flex justify-content-between align-items-center px-5 surface-0 border-bottom-1 surface-border absolute top-0 w-full z-5"
+        className="flex justify-content-between align-items-center px-5 surface-0 border-bottom-1 surface-border absolute top-0 w-full z-5 bg-gray-100 shadow-3"
       >
         <span className="font-semibold text-lg text-700 flex">{title}</span>
 
