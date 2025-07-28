@@ -43,6 +43,11 @@ export interface IEspecieCurrent {
     ClaseNombre: string;
 }
 
+export interface IEspecieFoto {
+    EspecieId: number;
+    FotoUrl: string;
+}
+
 export interface IFamilia {
     FamiliaId: number;
     FamiliaNombre: string;

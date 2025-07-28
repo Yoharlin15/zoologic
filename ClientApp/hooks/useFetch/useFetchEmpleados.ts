@@ -25,3 +25,11 @@ export const useFetchEmpleadoByEstadoId = (id: number) => {
     queryFn: () => EmpleadoApi.getEmpleadoByEstadoId?.(id),
   });
 };
+
+export const useFetchEmpleadoReportes = (filtros: any) => {
+  return useQuery({
+    enabled: false, // No se ejecuta al montar
+    queryKey: [Tags.EMPLEADOS, filtros],
+    queryFn: () => EmpleadoApi.getEmpleadoReportes?.(filtros),
+  });
+};

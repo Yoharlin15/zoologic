@@ -19,6 +19,14 @@ export const useFetchOneAnimal = (id: number) => {
   });
 };
 
+export const useFetchAnimalByEspecieId = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.ANIMALES, id],
+    queryFn: () => AnimalApi.getAnimalByEspecieId?.(id),
+  });
+};
+
 export const useFetchHabitatByAnimalId = (id: number) => {
   return useQuery<IHabitaByAnimal[]>({
     enabled: !!id,

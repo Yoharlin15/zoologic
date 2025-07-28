@@ -1,15 +1,16 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Calendar } from "primereact/calendar";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
-import { Dropdown, InputNumber, InputText, InputTextArea } from "ClientApp/components/inputs";
+import { Dropdown, InputText, InputTextArea } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { IAnimalCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
 import { useCreateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales";
-import { useFetchAnimales, useFetchEspecies, useFetchOneAnimal } from "ClientApp/hooks/useFetch";
-import { useUpdateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales";
+import { useFetchAnimalByEspecieId, useFetchEspecies, useFetchOneAnimal } from "ClientApp/hooks/useFetch";
+import { useUpdateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales"; // Importar el hook de los animales filtrados por especie
+
 
 interface IAnimalSidebarProps {
   id?: number;
@@ -20,14 +21,14 @@ interface IAnimalSidebarProps {
 
 const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
   const toast = useRef<Toast>(null);
-  const { data: padres } = useFetchAnimales();
   const { data: especies } = useFetchEspecies();
   const { data: animalData } = useFetchOneAnimal(id!);
 
   const createAnimal = useCreateAnimal();
   const updateAnimal = useUpdateAnimal();
 
-  const { control, handleSubmit, reset } = useForm<IAnimalCreate, FieldValues>({
+  const [padres, setPadres] = useState([]);
+  const { control, handleSubmit, reset, setValue, watch } = useForm<IAnimalCreate, FieldValues>({
     mode: "onChange",
     defaultValues: {
       IdentificadorUnico: "",
@@ -78,6 +79,17 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
     }
   }, [id, visible, reset]);
 
+  const selectedEspecieId = watch("EspecieId");
+
+  // Hook para obtener los animales filtrados por especie
+  const { data: filteredPadres } = useFetchAnimalByEspecieId(selectedEspecieId);
+
+  useEffect(() => {
+    // Cuando se seleccione una especie, actualizamos los padres
+    if (filteredPadres) {
+      setPadres(filteredPadres);
+    }
+  }, [filteredPadres]);
 
   const onSubmit = async (data: IAnimalCreate) => {
     const payload = {
@@ -100,7 +112,6 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
       } else {
         res = await createAnimal.mutateAsync(payload);
       }
-
 
       toast.current?.show({
         severity: "success",
@@ -175,6 +186,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
               options={especies || []}
               optionLabel="NombreComun"
               optionValue="EspecieId"
+              onChange={(e) => setValue("EspecieId", e.value)} // Cambiar valor de especie
             />
           </FieldColumn>
 
@@ -182,11 +194,11 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
             <Dropdown
               name="Sexo"
               control={control}
-              placeholder="Seleccione sexo"
+              placeholder="Seleccione un Sexo"
               rules={{ required: "Campo obligatorio" }}
               options={[
-                { label: "Hembra", value: "Hembra" },
                 { label: "Macho", value: "Macho" },
+                { label: "Hembra", value: "Hembra" },
               ]}
             />
           </FieldColumn>
@@ -201,12 +213,6 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
                 { label: "Negro", value: "Negro" },
                 { label: "Blanco", value: "Blanco" },
                 { label: "Marrón", value: "Marrón" },
-                { label: "Gris", value: "Gris" },
-                { label: "Amarillo", value: "Amarillo" },
-                { label: "Naranja", value: "Naranja" },
-                { label: "Rojo", value: "Rojo" },
-                { label: "Verde", value: "Verde" },
-                { label: "Azul", value: "Azul" },
               ]}
             />
           </FieldColumn>
@@ -216,7 +222,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
               name="PadreId"
               control={control}
               placeholder="Seleccione un padre"
-              options={padres || []}
+              options={padres.filter((animal: any) => animal.Sexo === "Macho") || []}
               optionLabel="IdentificadorUnico"
               optionValue="AnimalId"
             />
@@ -227,13 +233,11 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
               name="MadreId"
               control={control}
               placeholder="Seleccione una madre"
-              options={padres || []}
+              options={padres.filter((animal: any) => animal.Sexo === "Hembra")  || []}
               optionLabel="IdentificadorUnico"
               optionValue="AnimalId"
             />
           </FieldColumn>
-
-          
 
           <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 12 }}>
             <Controller
@@ -263,8 +267,6 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
               rules={{ required: "Campo obligatorio" }}
             />
           </FieldColumn>
-
-          
         </Form>
 
         <div className="flex justify-content-end gap-2 mt-4">

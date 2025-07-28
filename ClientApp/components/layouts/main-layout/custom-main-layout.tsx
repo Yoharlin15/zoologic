@@ -21,7 +21,9 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
       [Routes.ALIMENTACION_ROUTE]: 4,
       [Routes.HABITAT_ROUTE]: 5,
       [Routes.COMPORTAMIENTO_ROUTE]: 6,
+      [Routes.VENTA_BOLETOS_ROUTE]: 7,
       [Routes.USUARIOS_ROUTE]: 8,
+      [Routes.REPORTES_ROUTE]: 9,
     }),
     []
   );
@@ -81,7 +83,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
       {
         icon: <FontAwesomeIcon icon="chart-column" />,
         label: "Reportes",
-        path: "/admin/",
+        path: Routes.REPORTES_ROUTE,
       },
     ];
 

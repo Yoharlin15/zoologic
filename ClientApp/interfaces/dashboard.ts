@@ -4,8 +4,12 @@ export interface IDashboard {
 
 
 export interface ITotals {
-  Especies: number;
   Empleados: number;
-  Visitantes: number;
+  Animales: number;
+  Especies: number;
   Zonas: number;
+  Habitats: number;
+  Visitantes: number;
+  Ventas: number;
+  Usuarios: number;
 }

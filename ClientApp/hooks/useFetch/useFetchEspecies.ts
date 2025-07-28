@@ -25,3 +25,11 @@ export const useFetchOneEspecie = (id: number) => {
     queryFn: () => EspecieApi.getById?.(id),
   });
 };
+
+export const useFetchOneFoto = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.ESPECIES, id],
+    queryFn: () => EspecieApi.getFotoByEspecieId?.(id),
+  });
+};

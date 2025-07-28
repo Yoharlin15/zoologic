@@ -9,6 +9,7 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
   getEmpleadoByEstadoId?: (id: number) => Promise<any>;
+  getEmpleadoReportes?: (id: number) => Promise<any>;
   update?: (data: Partial<IEmpleadoCurrent>) => Promise<IEmpleadoCurrent>;
 }
 
@@ -28,6 +29,14 @@ const EmpleadoApi: ApiCustom<IEmpleado> = {
     const result = await API().get(`${Endpoints.EMPLEADOS_BY_ESTADOID}/${id}`);
     return result.data;
   },
+
+  getEmpleadoReportes: async (params) => {
+  console.log("🟢 Llamando a la API con filtros:", params);
+  const result = await API().get(Endpoints.EMPLEADOS_REPORTES, { params });
+  console.log("🟢 Datos recibidos del backend:", result.data);
+  return result.data;
+},
+
 
   create: async (data) => {
     const result = await API().post(Endpoints.EMPLEADOS_CREATE, data);

@@ -3,7 +3,7 @@ import { Calendar } from "primereact/calendar";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
-import { Dropdown, InputNumber, InputText, InputTextArea } from "ClientApp/components/inputs";
+import { Dropdown, InputNumber, InputText, InputTextArea, MultiSelect } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { IAnimalCreate, IHabitatCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
@@ -131,7 +131,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
           </FieldColumn>
 
           <FieldColumn label="Especie">
-            <Dropdown
+            <MultiSelect
               name="EspecieId"
               control={control}
               placeholder="Seleccione una Especie"

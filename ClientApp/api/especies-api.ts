@@ -8,6 +8,7 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   nullify?: (id: number) => Promise<number>;
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
+  getFotoByEspecieId?: (id: number) => Promise<string>;
   update?: (data: Partial<IEspecieCurrent>) => Promise<IEspecieCurrent>;
   getCategorias?: () => Promise<ICategoriasData>;
 }
@@ -26,6 +27,11 @@ const EspecieApi: ApiCustom<IEspecie> = {
 
   getById: async (id: number) => {
     const result = await API().get(`${Endpoints.ESPECIES_GETBYID}/${id}`);
+    return result.data;
+  },
+
+  getFotoByEspecieId: async (id: number) => {
+    const result = await API().get(`${Endpoints.ESPECIES_GET_FOTO}/${id}`);
     return result.data;
   },
 

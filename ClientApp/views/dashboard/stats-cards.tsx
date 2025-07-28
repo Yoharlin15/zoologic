@@ -22,10 +22,14 @@ interface IStatsCardsProps {
 }
 
 const defaultTotals: ITotals = {
-  Especies: 0,
   Empleados: 0,
-  Visitantes: 0,
+  Animales: 0,
+  Especies: 0,
   Zonas: 0,
+  Habitats: 0,
+  Visitantes: 0,
+  Ventas: 0,
+  Usuarios: 0,
 };
 
 const StatsCards = ({
@@ -34,16 +38,34 @@ const StatsCards = ({
 }: IStatsCardsProps) => {
   const items: CardItem[] = [
     {
+      label: "Empleados",
+      value: millify(totales.Empleados),
+      icon: <FontAwesomeIcon icon={faUserTie} />,
+      color: "bg-green-100 text-green-600",
+    },
+    {
+      label: "Animales",
+      value: millify(totales.Animales),
+      icon: <FontAwesomeIcon icon={faPaw} />,
+      color: "bg-yellow-100 text-yellow-600",
+    },
+    {
       label: "Especies",
       value: millify(totales.Especies),
       icon: <FontAwesomeIcon icon={faPaw} />,
       color: "bg-blue-100 text-blue-600",
     },
     {
-      label: "Empleados",
-      value: millify(totales.Empleados),
-      icon: <FontAwesomeIcon icon={faUserTie} />,
-      color: "bg-green-100 text-green-600",
+      label: "Habitats",
+      value: millify(totales.Habitats),
+      icon: <FontAwesomeIcon icon="tree" />,
+      color: "bg-cyan-100 text-cyan-600",
+    },
+    {
+      label: "Zonas",
+      value: millify(totales.Zonas),
+      icon: <FontAwesomeIcon icon={faMapMarkedAlt} />,
+      color: "bg-orange-100 text-orange-600",
     },
     {
       label: "Visitantes",
@@ -52,11 +74,17 @@ const StatsCards = ({
       color: "bg-purple-100 text-purple-600",
     },
     {
-      label: "Zonas",
-      value: millify(totales.Zonas),
-      icon: <FontAwesomeIcon icon={faMapMarkedAlt} />,
-      color: "bg-orange-100 text-orange-600",
+      label: "Ventas",
+      value: millify(totales.Ventas),
+      icon: <FontAwesomeIcon icon="ticket" />,
+      color: "bg-red-100 text-red-600",
     },
+    {
+      label: "Usuarios",
+      value: millify(totales.Usuarios),
+      icon: <FontAwesomeIcon icon="user-gear" />,
+      color: "bg-indigo-100 text-indigo-600",
+    }
   ];
 
   if (isPending) return <StatsCardsSkeleton />;
