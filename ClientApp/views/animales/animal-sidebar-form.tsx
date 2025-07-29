@@ -161,7 +161,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
               placeholder="Seleccione"
               rules={{ required: "Campo obligatorio" }}
               options={[
-                { label: "Microship", value: "Microship" },
+                { label: "Microchip", value: "Microchip" },
                 { label: "Arete-plastico", value: "Arete-plastico" },
                 { label: "Arete-metal", value: "Arete-metal" },
               ]}
