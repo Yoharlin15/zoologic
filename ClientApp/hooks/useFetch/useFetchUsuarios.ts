@@ -16,3 +16,11 @@ export const useFetchOneUsuario = (id: number) => {
     queryFn: () => RolApi.getUsuarioById?.(id),
   });
 };
+
+export const useCheckEmailExistence = (email: string) => {
+  return useQuery({
+    queryKey: ["checkEmailExistence", email], // La clave única para esta query es el email
+    queryFn: () => RolApi.checkEmailExistence?.(email),
+    enabled: !!email, // Solo se ejecuta si el email no está vacío
+  });
+};

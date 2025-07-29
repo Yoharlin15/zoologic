@@ -81,6 +81,7 @@ export const ANIMALES_GET = `${ANIMALES_BASE}/${GET}`;
 export const ANIMALES_GETBYID = `${ANIMALES_BASE}/${GETBYID}`
 export const ANIMALES_BY_ESPECIEID = `${ANIMALES_BASE}/GetAnimalByEspecieId`
 export const ANIMALES_BY_HABITATID = `${ANIMALES_BASE}/GetHabitatByAnimalId`
+export const ANIMALES_REPORTES = `${ANIMALES_BASE}/GetReporteAnimales`
 export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
 export const ANIMLAES_UPDATE = `${ANIMALES_BASE}/${UPDATE}/{id}`
 export const ANIMALES_HABITATS_UPDATE = `${ANIMALES_BASE}/UpdateAnimalHabitat/{id}`
@@ -132,6 +133,7 @@ export const DIETA_APLICADA_CREATE = `${DIETA_APLICADA_BASE}/CreateDietasAplicad
 export const HABITATS_GET = `${HABITATS_BASE}/${GET}`;
 export const HABITATS_GETBYID = `${HABITATS_BASE}/GetHabitatById`
 export const HABITATS_BY_ESPECIEID = `${HABITATS_BASE}/GetHabitatByEspecieId`
+export const HABITATS_REPORTES = `${HABITATS_BASE}/GetReporteHabitats`;
 export const HABITATS_CREATE = `${HABITATS_BASE}/CreateHabitat`;
 export const HABITATS_UPDATE = `${HABITATS_BASE}/Update/{id}`
 
@@ -170,6 +172,7 @@ export const NECROPSIAS_UPDATE = `${NECROPSIAS_BASE}/Update/{id}`;
 
 //CRUD Usuarios
 export const USUARIOS_GET = `${USUARIOS_BASE}/${GET}`;
+export const USUARIOS_CHECKEMAIL = `${USUARIOS_BASE}/CheckEmailExistence`;
 export const USUARIOS_GETBYID = `${USUARIOS_BASE}/GetUsuarioById`
 export const USUARIOS_UPDATE = `${USUARIOS_BASE}/UpdateUsuario/{id}
 `

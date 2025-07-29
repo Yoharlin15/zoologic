@@ -5,3 +5,7 @@ export const missing = (title: string, message: string) => {
 export const warn = (title: string, message: string) => {
   console.warn(`[${title}]: ${message}`);
 };
+
+export function handleError(error: unknown) {
+  throw new Error("Function not implemented.");
+}

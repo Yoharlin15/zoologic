@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Controller, FieldValues, useForm, useWatch } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
@@ -14,9 +14,11 @@ import { RegistroDatos } from "#interfaces";
 
 import { useRegistrarUsuario } from "ClientApp/hooks/useMutation/useMutationSignup";
 import {
+  useCheckEmailExistence,
   useFetchEmpleados,
   useFetchRoles,
 } from "ClientApp/hooks/useFetch";
+import { watch } from "fs/promises";
 
 interface IUsuarioSidebarProps {
   id?: number;
@@ -37,6 +39,8 @@ const UsuarioSidebarCreate = ({ onHide, visible, onCreateSuccess }: IUsuarioSide
     control,
     handleSubmit,
     reset,
+    setValue,
+    watch,
   } = useForm<RegistroDatos & { ConfirmPassword: string }, FieldValues>({
     mode: "onChange",
     defaultValues: {
@@ -49,6 +53,16 @@ const UsuarioSidebarCreate = ({ onHide, visible, onCreateSuccess }: IUsuarioSide
   });
 
   const passwordValue = useWatch({ control, name: "Password" });
+
+  const { data: emailExistente, isLoading, isError } = useCheckEmailExistence(
+    watch("Email")  // Verificamos el email cada vez que cambie
+  );
+
+  useEffect(() => {
+    if (emailExistente) {
+      setValue("Email", "");  // Limpiar email si ya existe
+    }
+  }, [emailExistente, setValue]);
 
   const onSubmit = async (data: RegistroDatos & { ConfirmPassword: string }) => {
     const payload = {
@@ -107,8 +121,19 @@ const UsuarioSidebarCreate = ({ onHide, visible, onCreateSuccess }: IUsuarioSide
               name="Email"
               control={control}
               placeholder="Email"
-              rules={{ required: "Campo obligatorio" }}
+              rules={{
+                required: "Campo obligatorio",
+                validate: (value) => {
+                  if (emailExistente) {
+                    return "Este email ya está registrado";
+                  }
+                  return true;
+                },
+              }}
             />
+            {isLoading && <small>Verificando email...</small>}
+            {isError && <small>Hubo un error al verificar el email.</small>}
+            {emailExistente && <small style={{ color: "red" }}>Este email ya está registrado.</small>}
           </FieldColumn>
 
           <FieldColumn label="Rol" columns={{ sm: 6 }}>

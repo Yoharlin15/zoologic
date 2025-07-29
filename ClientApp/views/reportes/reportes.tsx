@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import ReporteEmpleados from "./ReporteEmpleados";
+import ReporteAnimales from "./ReporteAnimales";
+import ReporteHabitats from "./ReporteHabitats";
 
 
 const VistaReportes = () => {
@@ -8,15 +10,18 @@ const VistaReportes = () => {
 
   const modulos = [
     { label: "Empleados", value: "empleados" },
-    // { label: "Animales", value: "animales" }, (puedes agregar más)
+    { label: "Animales", value: "animales" },
+    { label: "habitats", value: "habitats" },
   ];
 
   const renderReporte = () => {
     switch (modulo) {
       case "empleados":
         return <ReporteEmpleados />;
-      // case "animales":
-      //   return <ReporteAnimales />;
+       case "animales":
+         return <ReporteAnimales />;
+       case "habitats":
+         return <ReporteHabitats />;
       default:
         return <p className="text-gray-500">Seleccione un módulo</p>;
     }

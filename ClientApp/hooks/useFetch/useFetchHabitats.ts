@@ -24,3 +24,11 @@ export const useFetchHabitatByEspecieId = (id: number) => {
     queryFn: () => HabitatApi.getHabitatByEspecieId?.(id),
   });
 };
+
+export const useFetchHabitatReportes = (filtros: any) => {
+  return useQuery({
+    enabled: false, // No se ejecuta al montar
+    queryKey: [Tags.HABITATS, filtros],
+    queryFn: () => HabitatApi.getHabitatReportes?.(filtros),
+  });
+};

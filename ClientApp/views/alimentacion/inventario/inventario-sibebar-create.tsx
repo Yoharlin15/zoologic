@@ -97,11 +97,17 @@ const InventarioSidebarCreate = ({ onHide, visible }: IInventarioSidebarProps) =
                     </FieldColumn>
 
                     <FieldColumn label="Unidad de medida" columns={{ sm: 6 }}>
-                        <InputNumber
+                        <Dropdown
                             name="UnidadMedida"
                             control={control}
                             placeholder="Ej: Kg, Lb etc.."
-                            rules={{ required: "Campo obligatorio" }} />
+                            rules={{ required: "Campo obligatorio" }}
+                            options={[
+                                { label: "Kg", value: "Kg" },
+                                { label: "Lb", value: "Lb" },
+                                { label: "Oz", value: "Oz" },
+                            ]}
+                        />
                     </FieldColumn>
 
                 </Form>

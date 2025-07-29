@@ -1,6 +1,5 @@
 import { Tags } from "#core";
 import { useQuery } from "@tanstack/react-query";
-
 import { AnimalApi } from "../../api";
 import { IHabitaByAnimal } from "#interfaces";
 
@@ -32,6 +31,14 @@ export const useFetchHabitatByAnimalId = (id: number) => {
     enabled: !!id,
     queryKey: [Tags.ANIMALES, id],
     queryFn: () => AnimalApi.getHabitatByAnimalId(id),
+  });
+};
+
+export const useFetchAnimalReportes = (filtros: any) => {
+  return useQuery({
+    enabled: false, // No se ejecuta al montar
+    queryKey: [Tags.ANIMALES, filtros],
+    queryFn: () => AnimalApi.getAnimalReportes?.(filtros),
   });
 };
 

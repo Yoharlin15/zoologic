@@ -3,11 +3,11 @@
 import React, { useState, useEffect } from "react"
 import { TabView, TabPanel, type TabViewTabChangeEvent } from "primereact/tabview"
 import { Card } from "primereact/card"
-import { Tag } from "primereact/tag"
 import dayjs from "dayjs"
 import { useFetchOneAnimal } from "ClientApp/hooks/useFetch/useFetchAnimales"
 import { useFetchOneFoto } from "ClientApp/hooks/useFetch/useFetchEspecies"
 import { IAnimal, IEspecieFoto } from "#interfaces"
+import AnimalTratamientos from "./animal-tratamientos"
 
 // Mock hook for demonstration
 const useFetchOneDieta = (animalId: number) => ({
@@ -64,64 +64,64 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
   return (
     <div className="flex flex-col h-full bg-gray-100 p-4 gap-4 max-w-screen-xl mx-auto">
       {/* Animal Info Card */}
-      <Card className="shadow-sm w-full max-w-md mx-auto">  
-          <div>
-            <img
-              src={imageUrl}
-              alt={animal.Alias}
-              className="h-20 w-20 object-cover rounded-full"
-            />
+      <Card className="shadow-sm w-full max-w-md mx-auto">
+        <div>
+          <img
+            src={imageUrl}
+            alt={animal.Alias}
+            className="h-20 w-20 object-cover rounded-full"
+          />
+        </div>
+
+        {/* Animal Details */}
+        <div className="space-y-2 text-sm md:text-sm">
+          <div className="pt-2">
+            <span className="font-bold">Codigo: </span>
+            <span>{animal.Codigo || "N/A"}</span>
           </div>
 
-          {/* Animal Details */}
-          <div className="space-y-2 text-sm md:text-sm">
-            <div className="pt-2">
-              <span className="font-bold">Codigo: </span>
-              <span>{animal.Codigo || "N/A"}</span>
-            </div>
-
-            <div className="pt-2">
-              <span className="font-bold">Alias: </span>
-              <span>{animal.Alias}</span>
-            </div>
-
-            <div className="pt-2">
-              <span className="font-bold">Especie: </span>
-              <span>{animal.NombreCientifico || "N/A"}</span>
-            </div>
-
-            <div className="pt-2">
-              <span className="font-bold">Color: </span>
-              <span>{animal.Color || "N/A"}</span>
-            </div>
-
-            <div className="pt-2">
-              <span className="font-bold">Sexo: </span>
-              <span>{animal.Sexo}</span>
-            </div>
-
-            <div className="pt-2">
-              <span className="font-bold">Fecha de nacimiento: </span>
-              <span>{formatDate(animal.FechaNacimiento)}</span>
-            </div>
-
-            <div className="pt-2">
-              <span className="font-bold">Padre: </span>
-              <span>{animal.Padre || "N/A"}</span>
-            </div>
-
-            <div className="pt-2">
-              <span className="font-bold">Madre: </span>
-              <span>{animal.Madre || "N/A"}</span>
-            </div>
-
-            {animal.Observaciones && (
-              <div className="pt-2">
-                <span className="font-bold">Observaciones: </span>
-                <div className="mt-1">{animal.Observaciones}</div>
-              </div>
-            )}
+          <div className="pt-2">
+            <span className="font-bold">Alias: </span>
+            <span>{animal.Alias}</span>
           </div>
+
+          <div className="pt-2">
+            <span className="font-bold">Especie: </span>
+            <span>{animal.NombreCientifico || "N/A"}</span>
+          </div>
+
+          <div className="pt-2">
+            <span className="font-bold">Color: </span>
+            <span>{animal.Color || "N/A"}</span>
+          </div>
+
+          <div className="pt-2">
+            <span className="font-bold">Sexo: </span>
+            <span>{animal.Sexo}</span>
+          </div>
+
+          <div className="pt-2">
+            <span className="font-bold">Fecha de nacimiento: </span>
+            <span>{formatDate(animal.FechaNacimiento)}</span>
+          </div>
+
+          <div className="pt-2">
+            <span className="font-bold">Padre: </span>
+            <span>{animal.Padre || "N/A"}</span>
+          </div>
+
+          <div className="pt-2">
+            <span className="font-bold">Madre: </span>
+            <span>{animal.Madre || "N/A"}</span>
+          </div>
+
+          {animal.Observaciones && (
+            <div className="pt-2">
+              <span className="font-bold">Observaciones: </span>
+              <div className="mt-1">{animal.Observaciones}</div>
+            </div>
+          )}
+        </div>
       </Card>
 
       {/* Tabs Section */}
@@ -142,11 +142,8 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
           </TabPanel>
 
           <TabPanel header="Tratamientos aplicados">
-            <div className="h-full p-4">
-              <h2 className="text-xl font-bold mb-4">Tratamientos aplicados</h2>
-              <div className="space-y-4">
-                <p>Contenido de tratamientos aplicados...</p>
-              </div>
+            <div className="h-full overflow-hidden">
+              <AnimalTratamientos animalId={animalId} />
             </div>
           </TabPanel>
 
