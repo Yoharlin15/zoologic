@@ -8,7 +8,6 @@ import { debounce } from "radash";
 import { AppQueryHooks } from "#hooks";
 import { Button } from "primereact/button";
 import { ContextMenu } from "primereact/contextmenu";
-import { Menu } from "primereact/menu";
 import { useNavigate } from "react-router-dom";
 import {
     DataTableFilterMeta,
@@ -18,7 +17,8 @@ import {
 import { CardTable, ICardTableProps } from "../../../components/card-table";
 import { Reducers } from "#core";
 import { IAlimento } from "#interfaces";
-import AlimentoSidebarCreate from "./alimento-sidebar-create";
+import AlimentoSidebarForm from "./alimento-sidebar-form";
+import dayjs from "dayjs";
 
 interface IAlimentoTableProps {
     dispatch: React.Dispatch<any>;
@@ -27,13 +27,9 @@ interface IAlimentoTableProps {
 const AlimentoTable = ({ dispatch }: IAlimentoTableProps) => {
     const Alimento = AppQueryHooks.useFetchAlimentos();
     const [selectedAlimento, setSelectedDietaAplicada] = useState<IAlimento>();
-
-    const navigate = useNavigate();
-
     const cm = useRef<ContextMenu>(null);
 
-    const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
-    const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
+    const [sidebarVisible, setSidebarVisible] = useState(false);
     const [selectedAlimentoId, setSelectedAlimentoId] = useState<number | null>(null);
 
     const menuModel = [
@@ -43,7 +39,7 @@ const AlimentoTable = ({ dispatch }: IAlimentoTableProps) => {
             command: () => {
                 if (selectedAlimento) {
                     setSelectedAlimentoId(selectedAlimento.AlimentoId);
-                    setSidebarUpdateVisible(true); // Abre el sidebar
+                    setSidebarVisible(true); // Abre el sidebar
                 }
             }
         },
@@ -63,15 +59,39 @@ const AlimentoTable = ({ dispatch }: IAlimentoTableProps) => {
                 sortable: true,
                 header: "Alimento",
                 field: "Nombre",
-                style: { minWidth: "12rem" },
+                style: { minWidth: "10rem" },
             },
-
+            {
+                filter: true,
+                sortable: true,
+                header: "Unidad de medida",
+                field: "UnidadMedida",
+                style: { minWidth: "10rem" },
+            },
             {
                 filter: true,
                 sortable: true,
                 header: "Descripcion",
                 field: "Descripcion",
+                style: { minWidth: "20rem" },
+            },
+            {
+                filter: true,
+                sortable: true,
+                header: "Creado Por",
+                field: "NombreUsuario",
+                style: { minWidth: "10rem" },
+            },
+            {
+                filter: true,
+                sortable: true,
+                header: "Fecha de creacion",
+                field: "FechaCreacion",
                 style: { minWidth: "12rem" },
+                body: (rowData: IAlimento | null) => {
+                    if (!rowData?.FechaCreacion) return "";
+                    return dayjs(rowData.FechaCreacion).format("DD/MM/YYYY");
+                },
             },
         ],
         []
@@ -104,7 +124,7 @@ const AlimentoTable = ({ dispatch }: IAlimentoTableProps) => {
                         key="btn_add"
                         onClick={() => {
                             setSelectedAlimentoId(null);
-                            setSidebarCreateVisible(true);
+                            setSidebarVisible(true);
                         }}
                         className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
                         label="Nuevo alimento"
@@ -124,9 +144,10 @@ const AlimentoTable = ({ dispatch }: IAlimentoTableProps) => {
                     ) => setSelectedDietaAplicada(e.value),
                 }}
             />
-            <AlimentoSidebarCreate
-                visible={sidebarCreateVisible}
-                onHide={() => setSidebarCreateVisible(false)}
+            <AlimentoSidebarForm
+                id={selectedAlimentoId ?? undefined}
+                visible={sidebarVisible}
+                onHide={() => setSidebarVisible(false)}
                 alimentoId={selectedAlimentoId ?? undefined}
             />
         </div>

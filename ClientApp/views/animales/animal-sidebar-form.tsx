@@ -7,10 +7,10 @@ import { Dropdown, InputText, InputTextArea } from "ClientApp/components/inputs"
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { IAnimalCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
-import { useCreateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales";
+import { useCreateAnimal, useUpdateAnimalEstado } from "ClientApp/hooks/useMutation/useMutationAnimales";
 import { useFetchAnimalByEspecieId, useFetchEspecies, useFetchOneAnimal } from "ClientApp/hooks/useFetch";
 import { useUpdateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales"; // Importar el hook de los animales filtrados por especie
-
+import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
 
 interface IAnimalSidebarProps {
   id?: number;
@@ -27,6 +27,8 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
   const createAnimal = useCreateAnimal();
   const updateAnimal = useUpdateAnimal();
 
+  const { usuarioId } = useAuth();
+
   const [padres, setPadres] = useState([]);
   const { control, handleSubmit, reset, setValue, watch } = useForm<IAnimalCreate, FieldValues>({
     mode: "onChange",
@@ -37,10 +39,9 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
       EspecieId: undefined,
       Sexo: "",
       FechaNacimiento: null,
-      PadreId: undefined,
-      MadreId: undefined,
       Color: "",
       Observaciones: "",
+      CreadoPor: usuarioId
     },
   });
 
@@ -54,10 +55,9 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
         EspecieId: animalData.EspecieId,
         Sexo: animalData.Sexo || "",
         FechaNacimiento: animalData.FechaNacimiento ? new Date(animalData.FechaNacimiento) : null,
-        PadreId: animalData.PadreId || undefined,
-        MadreId: animalData.MadreId || undefined,
         Color: animalData.Color || "",
         Observaciones: animalData.Observaciones || "",
+        CreadoPor: animalData.CreadoPor || usuarioId
       });
     }
   }, [animalData, reset]);
@@ -71,10 +71,9 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
         EspecieId: undefined,
         Sexo: "",
         FechaNacimiento: null,
-        PadreId: undefined,
-        MadreId: undefined,
         Color: "",
         Observaciones: "",
+        CreadoPor: usuarioId
       });
     }
   }, [id, visible, reset]);
@@ -99,10 +98,9 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
       EspecieId: Number(data.EspecieId),
       Sexo: data.Sexo,
       FechaNacimiento: data.FechaNacimiento?.toISOString() || null,
-      PadreId: Number(data.PadreId),
-      MadreId: Number(data.MadreId),
       Color: data.Color,
       Observaciones: data.Observaciones,
+      CreadoPor: data.CreadoPor || usuarioId
     };
 
     try {
@@ -217,28 +215,6 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
             />
           </FieldColumn>
 
-          <FieldColumn label="Padre" columns={{ sm: 6 }}>
-            <Dropdown
-              name="PadreId"
-              control={control}
-              placeholder="Seleccione un padre"
-              options={padres.filter((animal: any) => animal.Sexo === "Macho") || []}
-              optionLabel="IdentificadorUnico"
-              optionValue="AnimalId"
-            />
-          </FieldColumn>
-
-          <FieldColumn label="Madre" columns={{ sm: 6 }}>
-            <Dropdown
-              name="MadreId"
-              control={control}
-              placeholder="Seleccione una madre"
-              options={padres.filter((animal: any) => animal.Sexo === "Hembra")  || []}
-              optionLabel="IdentificadorUnico"
-              optionValue="AnimalId"
-            />
-          </FieldColumn>
-
           <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 12 }}>
             <Controller
               name="FechaNacimiento"
@@ -267,6 +243,8 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
               rules={{ required: "Campo obligatorio" }}
             />
           </FieldColumn>
+              
+          <input type="hidden" name="CreadoPor" value={usuarioId!} />
         </Form>
 
         <div className="flex justify-content-end gap-2 mt-4">

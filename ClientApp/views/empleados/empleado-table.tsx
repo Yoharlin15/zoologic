@@ -135,6 +135,14 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
       },
       { filter: true, sortable: true, header: "Departamento", field: "NombreDepartamento", style: { minWidth: "12em" } },
       { filter: true, sortable: true, header: "Estado", field: "NombreEstado", style: { minWidth: "10em" } },
+      {
+        filter: true,
+        sortable: true,
+        header: "Fecha de creacion",
+        field: "FechaCreacion",
+        style: { minWidth: "12rem" },
+        body: (rowData) => rowData?.FechaCreacion ? dayjs(rowData.FechaCreacion).format("DD/MM/YYYY") : "",
+      },
     ],
     []
   );

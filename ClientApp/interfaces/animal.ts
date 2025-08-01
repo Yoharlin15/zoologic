@@ -7,13 +7,13 @@ export interface IAnimal {
     NombreComun: string;
     Sexo: string;
     FechaNacimiento: Date | string | null;
-    PadreId: number;
-    Padre: string;
-    MadreId: number;
-    Madre: string;
     Color: string;
     Observaciones: string;
     EstadoId: number;
+    NombreEstado: string;
+    CreadoPor : number;
+    NombreUsuario: string;
+    FechaCreacion: Date | string | null;
 }
 
 export interface IAnimalCurrent {
@@ -25,10 +25,6 @@ export interface IAnimalCurrent {
     NombreComun: string;
     Sexo: string;
     FechaNacimiento: Date | string | null;
-    PadreId: number;
-    Padre: string;
-    MadreId: number;
-    Madre: string;
     Color: string;
     Observaciones: string;
 }
@@ -40,10 +36,9 @@ export interface IAnimalCreate {
     EspecieId: number;
     Sexo: string;
     FechaNacimiento: Date | null;
-    PadreId: number;
-    MadreId: number;
     Color: string
     Observaciones: string;
+    CreadoPor: number | null;
 }
 
 export interface IAnimalUpdate {
@@ -54,8 +49,6 @@ export interface IAnimalUpdate {
     EspecieId: number;
     Sexo: string;
     FechaNacimiento: Date | null;
-    PadreId: number;
-    MadreId: number;
     Color: string
     Observaciones: string;
 }
@@ -69,4 +62,13 @@ export interface IHabitaByAnimal {
     AnimalId: number;
     HabitatId: number;
     Nombre: string;
+}
+
+export interface IAnimalEstado {
+    AnimalId: number;
+    EstadoId: number;
+}
+
+export interface IAnimalAnulate {
+    AnimalId: number;
 }

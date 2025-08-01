@@ -4,6 +4,7 @@ import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
 import { Toast } from "primereact/toast";
+import { Checkbox } from "primereact/checkbox";  // Importar Checkbox
 
 import {
     Dropdown,
@@ -34,7 +35,7 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
     const { data: usuarios } = useFetchUsuarios();
     const { data: tratamientosEspecie } = useFetchTratamientoEspecie();
 
-    const usuariosFiltrados = (usuarios ?? []).filter((u: IUsuario) => u.RolId === 3);
+    const usuariosFiltrados = (usuarios ?? []).filter((u: IUsuario) => u.RolId === 2);
 
     const {
         control,
@@ -53,11 +54,14 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
             FechaSalida: null,
             UsuarioId: undefined,
             Razon: "",
+            ActivarFechas: false,  // Añadir campo para activar/desactivar fechas
         },
     });
 
     const selectedAnimalId = watch("AnimalId");
     const fechaEntrada = watch("FechaEntrada");
+    const fechaSalida = watch("FechaSalida");
+    const activarFechas = watch("ActivarFechas");  // Obtenemos el estado del checkbox
 
     const selectedAnimal = useMemo(() => {
         return animales?.find((a) => a.AnimalId === selectedAnimalId);
@@ -177,63 +181,85 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                         />
                     </FieldColumn>
 
-                    <FieldColumn label="Fecha de entrada" columns={{ sm: 6 }}>
+                    {/* Checkbox para activar/desactivar fechas */}
+                    <FieldColumn label="¿Estuvo en clinica?" columns={{ sm: 12 }}>
                         <Controller
-                            name="FechaEntrada"
+                            name="ActivarFechas"
                             control={control}
-                            rules={{ required: "Campo obligatorio" }}
-                            render={({ field, fieldState }) => (
-                                <>
-                                    <Calendar
-                                        value={field.value}
-                                        onChange={(e) => field.onChange(e.value)}
-                                        showIcon
-                                        dateFormat="dd/mm/yy"
-                                        placeholder="Seleccione una fecha"
-                                        className="w-full"
-                                        showButtonBar
-                                    />
-                                    {fieldState.error && (
-                                        <small className="p-error">{fieldState.error.message}</small>
-                                    )}
-                                </>
+                            render={({ field }) => (
+                                <Checkbox
+                                    {...field}  // Spread the `field` props here
+                                    checked={field.value ?? true}  // Control the checked state
+                                    onChange={(e) => field.onChange(e.checked)} // Handle change manually
+                                />
                             )}
                         />
                     </FieldColumn>
 
-                    <FieldColumn label="Fecha de salida" columns={{ sm: 6 }}>
-                        <Controller
-                            name="FechaSalida"
-                            control={control}
-                            rules={{
-                                required: "Campo obligatorio",
-                                validate: (fechaSalida) => {
-                                    const entrada = getValues("FechaEntrada");
-                                    if (entrada && fechaSalida && fechaSalida < entrada) {
-                                        return "La fecha de salida no puede ser menor a la de entrada";
-                                    }
-                                    return true;
-                                },
-                            }}
-                            render={({ field, fieldState }) => (
-                                <>
-                                    <Calendar
-                                        value={field.value}
-                                        onChange={(e) => field.onChange(e.value)}
-                                        showIcon
-                                        dateFormat="dd/mm/yy"
-                                        placeholder="Seleccione una fecha"
-                                        className="w-full"
-                                        showButtonBar
-                                        minDate={fechaEntrada || undefined}
-                                    />
-                                    {fieldState.error && (
-                                        <small className="p-error">{fieldState.error.message}</small>
-                                    )}
-                                </>
-                            )}
-                        />
-                    </FieldColumn>
+
+                    {/* Fecha de entrada - Condicional */}
+                    {activarFechas && (
+                        <FieldColumn label="Fecha de entrada" columns={{ sm: 6 }}>
+                            <Controller
+                                name="FechaEntrada"
+                                control={control}
+                                rules={{ required: "Campo obligatorio" }}
+                                render={({ field, fieldState }) => (
+                                    <>
+                                        <Calendar
+                                            value={field.value}
+                                            onChange={(e) => field.onChange(e.value)}
+                                            showIcon
+                                            dateFormat="dd/mm/yy"
+                                            placeholder="Seleccione una fecha"
+                                            className="w-full"
+                                            showButtonBar
+                                        />
+                                        {fieldState.error && (
+                                            <small className="p-error">{fieldState.error.message}</small>
+                                        )}
+                                    </>
+                                )}
+                            />
+                        </FieldColumn>
+                    )}
+
+                    {/* Fecha de salida - Condicional */}
+                    {activarFechas && (
+                        <FieldColumn label="Fecha de salida" columns={{ sm: 6 }}>
+                            <Controller
+                                name="FechaSalida"
+                                control={control}
+                                rules={{
+                                    required: "Campo obligatorio",
+                                    validate: (fechaSalida) => {
+                                        const entrada = getValues("FechaEntrada");
+                                        if (entrada && fechaSalida && fechaSalida < entrada) {
+                                            return "La fecha de salida no puede ser menor a la de entrada";
+                                        }
+                                        return true;
+                                    },
+                                }}
+                                render={({ field, fieldState }) => (
+                                    <>
+                                        <Calendar
+                                            value={field.value}
+                                            onChange={(e) => field.onChange(e.value)}
+                                            showIcon
+                                            dateFormat="dd/mm/yy"
+                                            placeholder="Seleccione una fecha"
+                                            className="w-full"
+                                            showButtonBar
+                                            minDate={fechaEntrada || undefined}
+                                        />
+                                        {fieldState.error && (
+                                            <small className="p-error">{fieldState.error.message}</small>
+                                        )}
+                                    </>
+                                )}
+                            />
+                        </FieldColumn>
+                    )}
 
                     <FieldColumn label="Razón" columns={{ sm: 12 }}>
                         <InputTextArea

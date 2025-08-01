@@ -9,3 +9,11 @@ export const useFetchAlimentos = () => {
     queryFn: AlimentoApi.getAll,
   });
 };
+
+export const useFetchOneAlimento = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.ALIMENTOS, id],
+    queryFn: () => AlimentoApi.getById?.(id),
+  });
+};

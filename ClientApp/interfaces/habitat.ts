@@ -8,6 +8,7 @@ export interface IHabitat
     Descripcion: string;
     EspecieId: number;
     NombreComun: string;
+    Tamaño: string;
 }
 
 export interface IHabitatCurrent {
@@ -19,6 +20,7 @@ export interface IHabitatCurrent {
     Descripcion: string;
     EspecieId: number;
     NombreComun: string;
+    Tamaño: number;
 }
 
 export interface IHabitatCreate {
@@ -27,6 +29,7 @@ export interface IHabitatCreate {
     EstadoId: number;
     Descripcion: string;
     EspecieId: number;
+    Tamaño: number;
 }
 
 export interface IHabitatUpdate {
@@ -36,4 +39,5 @@ export interface IHabitatUpdate {
     EstadoId: number;
     Descripcion: string;
     EspecieId: number
+    Tamaño: number;
 }

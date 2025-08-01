@@ -4,10 +4,20 @@ import { InventarioApi } from "../../api";
 
 export const useCreateInventario = () => {
   const queryClient = useQueryClient();
-
   return useMutation({
     mutationFn: InventarioApi.create,
     mutationKey: [Tags.INVENTARIOS, Tags.MUTATION_CREATE],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [Tags.INVENTARIOS] });
+    },
+  });
+};
+
+export const useUpdateInventario= () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: InventarioApi.update,
+    mutationKey: [Tags.INVENTARIOS, Tags.MUTATION_UPDATE],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [Tags.INVENTARIOS] });
     },

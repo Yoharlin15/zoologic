@@ -2,6 +2,7 @@
 export interface IRoles {
   RolId: number;
   Nombre: string;
+  FechaCreacion: string;
 }
 
 export interface IRolCurrent {
@@ -31,8 +32,9 @@ export interface IUpdateRolesPermisos {
 
 //Estados
 export interface IEstados {
-    EstadoId: number;
-    NombreEstado: string; 
+  EstadoId: number;
+  NombreEstado: string; 
+  FechaCreacion: string;
 }
 
 export interface ICreateEstados {

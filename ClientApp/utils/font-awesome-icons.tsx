@@ -11,7 +11,11 @@ import {
   faTicket,
   faUserGear,
   faChartColumn,
-  faUserTie
+  faUserTie,
+  faFlag,
+  faBriefcase,
+  faBuilding,
+  faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
 
 export const setupFontAwesomeIcons = () => {
@@ -27,6 +31,10 @@ export const setupFontAwesomeIcons = () => {
     faTicket,
     faUserGear,
     faChartColumn,
-    faUserTie
+    faUserTie,
+    faFlag,
+    faBriefcase,
+    faBuilding,
+    faLocationDot
   );
 };

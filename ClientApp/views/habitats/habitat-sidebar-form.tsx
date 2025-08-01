@@ -1,13 +1,12 @@
 import React, { useEffect, useRef } from "react";
-import { Calendar } from "primereact/calendar";
-import { Controller, FieldValues, useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
-import { Dropdown, InputNumber, InputText, InputTextArea, MultiSelect } from "ClientApp/components/inputs";
+import { Dropdown, InputNumber, InputText, InputTextArea } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
-import { IAnimalCreate, IHabitatCreate } from "#interfaces";
+import { IHabitatCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
-import { useFetchAnimales, useFetchEspecies, useFetchEstados, useFetchOneHabitat } from "ClientApp/hooks/useFetch";
+import { useFetchEspecies, useFetchEstados, useFetchOneHabitat } from "ClientApp/hooks/useFetch";
 import { useCreateHabitats, useUpdateHabitats } from "ClientApp/hooks/useMutation/useMutationHabitats";
 
 interface IHabitatSidebarProps {
@@ -17,7 +16,7 @@ interface IHabitatSidebarProps {
   especieId?: number;
 }
 
-const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
+const HabitatSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
   const toast = useRef<Toast>(null);
   const { data: estados } = useFetchEstados();
   const { data: especies } = useFetchEspecies();
@@ -34,6 +33,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
       EstadoId: undefined,
       Descripcion: undefined,
       EspecieId: undefined,
+      Tamaño: undefined,
     },
   });
 
@@ -46,22 +46,23 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
         EstadoId: habitatData.EstadoId || undefined,
         Descripcion: habitatData.Descripcion || "",
         EspecieId: habitatData.EspecieId || undefined,
+        Tamaño: habitatData.Tamaño || undefined,
       });
     }
   }, [habitatData, reset]);
 
   useEffect(() => {
-  if (!id && visible) {
-    reset({
-      Nombre: "",
-      CantidadAnimales: undefined,
-      EstadoId: undefined,
-      EspecieId: undefined,
-      Descripcion: "",
-    });
-  }
-}, [id, visible, reset]);
-
+    if (!id && visible) {
+      reset({
+        Nombre: "",
+        CantidadAnimales: undefined,
+        EstadoId: undefined,
+        EspecieId: undefined,
+        Descripcion: "",
+        Tamaño: undefined,
+      });
+    }
+  }, [id, visible, reset]);
 
   const onSubmit = async (data: IHabitatCreate) => {
     const payload = {
@@ -69,7 +70,8 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
       CantidadAnimales: data.CantidadAnimales,
       EstadoId: Number(data.EstadoId),
       Descripcion: data.Descripcion,
-      EspecieId: Number(data.EspecieId)
+      EspecieId: Number(data.EspecieId),
+      Tamaño: data.Tamaño
     };
 
     try {
@@ -108,7 +110,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
           reset();
           onHide();
         }}
-        className="w-full sm:w-8 md:w-6 lg:w-4 xl:w-3"
+        className="w-full sm:w-8 md:w-6 lg:w-3 xl:w-3"
         header={<h1 className="font-semibold text-2xl text-900">{id ? "Editar habitat" : "Nuevo habitat"}</h1>}
       >
         <Form>
@@ -131,7 +133,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
           </FieldColumn>
 
           <FieldColumn label="Especie">
-            <MultiSelect
+            <Dropdown
               name="EspecieId"
               control={control}
               placeholder="Seleccione una Especie"
@@ -141,6 +143,30 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
               optionValue="EspecieId"
             />
           </FieldColumn>
+
+          <FieldColumn label="Tamaño (MT2)">
+            <InputNumber
+              name="Tamaño"
+              control={control}
+              placeholder="Tamaño"
+              rules={{ required: "Campo obligatorio" }}
+            />
+          </FieldColumn>
+
+          {id && (
+            <FieldColumn label="Estado">
+              <Dropdown
+                name="EstadoId"
+                control={control}
+                placeholder="Seleccione un Estado"
+                rules={{ required: "Campo obligatorio" }}
+                options={estados || []}
+                optionLabel="NombreEstado"
+                optionValue="EstadoId" 
+              />
+            </FieldColumn>
+          )}
+
 
           <FieldColumn label="Descripcion">
             <InputTextArea
@@ -172,4 +198,4 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IHabitatSidebarProps) => {
   );
 };
 
-export default AnimalSidebarForm;
+export default HabitatSidebarForm;

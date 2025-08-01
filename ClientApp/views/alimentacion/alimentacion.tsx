@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
 import AlimentosList from "./alimentos/alimento-list";
 import InventarioList from "./inventario/inventario-list";
+import AlimentosEspeciesList from "./alimentosEspecies/alimentoEspecie-list";
 
 const Alimentacion = () => {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -28,6 +29,12 @@ const Alimentacion = () => {
         <TabPanel header="📋Inventario" contentClassName="h-full overflow-hidden">
           <div className="h-full overflow-hidden">
             <InventarioList />
+          </div>
+        </TabPanel>
+
+        <TabPanel header="Alimentos&Especies" contentClassName="h-full overflow-hidden">
+          <div className="h-full overflow-hidden">
+            <AlimentosEspeciesList />
           </div>
         </TabPanel>
 

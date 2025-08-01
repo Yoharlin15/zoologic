@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useCallback } from "react";
-import { Outlet, RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Navigate, Outlet, RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Routes } from "#core";
 import { isAuthenticated } from "#utils";
 import { CustomMainLayout } from "#components";
@@ -20,13 +20,12 @@ import {
   InventarioList,
   EmpleadosList,
   HabitatList,
-  Settings,
   Roles,
-  SettingsLayout,
   Estados,
   ComportamientosList,
   Cargos,
 } from "#views";
+
 import EspecieLayout from "ClientApp/views/especies/especie";
 import Familias from "ClientApp/views/especies/familia/familia";
 import Clases from "ClientApp/views/especies/clase/clase";
@@ -43,6 +42,8 @@ import TratamientoDetalleWrapper from "ClientApp/views/salud/tratamientosAplicad
 import { CatalogoEspecies } from "ClientApp/views/landing/CatalogoEspecies";
 import TratamientosEspecies from "ClientApp/views/salud/tratamientoEspecie/tratamientoEspecie";
 import VistaReportes from "ClientApp/views/reportes/reportes";
+import { CustomSettingsLayout, SettingsLayout } from "ClientApp/components/layouts/settings";
+import AlimentosEspeciesList from "ClientApp/views/alimentacion/alimentosEspecies/alimentoEspecie-list";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -57,6 +58,10 @@ export const useRouterContext = () => useContext(RouterContext);
 const Provider = () => {
   const renderMainLayout = useCallback((children: React.ReactNode) => {
     return <CustomMainLayout>{children}</CustomMainLayout>;
+  }, []);
+
+  const renderSettingsLayout = useCallback((children: React.ReactNode) => {
+    return <CustomSettingsLayout>{children}</CustomSettingsLayout>;
   }, []);
 
   const routes: RouteObject[] = [
@@ -102,7 +107,8 @@ const Provider = () => {
             },
             {
               path: Routes.EMPLEADOS_ROUTE,
-              element: <EmpleadosList />,
+              
+              element: <EmpleadosList/>,
             },
             {
               path: Routes.EJEMPLARES_ROUTE,
@@ -118,13 +124,13 @@ const Provider = () => {
                 },
                 {
                   path: Routes.CLASES_ROUTE,
-                  element: <Clases />
+                  element: <Clases />,
                 },
                 {
                   path: Routes.PROCEDENCIAS_ROUTE,
-                  element: <Procedencias />
-                }
-              ]
+                  element: <Procedencias />,
+                },
+              ],
             },
             {
               path: Routes.SALUD_ROUTE,
@@ -136,21 +142,21 @@ const Provider = () => {
               children: [
                 {
                   path: Routes.TRATAMIENTOS_ROUTE,
-                  element: <Tratamientos />
+                  element: <Tratamientos />,
                 },
                 {
                   path: Routes.EXAMENES_ROUTE,
-                  element: <Examenes />
+                  element: <Examenes />,
                 },
                 {
                   path: Routes.TRATAMIENTOS_ESPECIES_ROUTE,
-                  element: <TratamientosEspecies />
-                }
-              ]
+                  element: <TratamientosEspecies />,
+                },
+              ],
             },
             {
               path: Routes.NECROPSIAS_ROUTE,
-              element: <NecropsiasList />
+              element: <NecropsiasList />,
             },
             {
               path: Routes.INVENTARIO_ROUTE,
@@ -166,77 +172,68 @@ const Provider = () => {
             },
             {
               path: Routes.TRATAMIENTOS_DETALLES_ROUTE,
-              element: <TratamientoDetalleWrapper />
+              element: <TratamientoDetalleWrapper />,
             },
             {
               path: Routes.DIETA_APLICADA_ROUTE,
-              element: <DietasAplicadasList />
+              element: <DietasAplicadasList />,
             },
             {
               path: Routes.ALIMENTACION_ROUTE,
-              element: <AlimentacionList />
+              element: <AlimentacionList />,
+            },
+            {
+              path: Routes.ALIMENTACION_ESPECIES_ROUTE,
+              element: <AlimentosEspeciesList />
             },
             {
               path: Routes.HABITAT_ROUTE,
-              element: <HabitatList />
+              element: <HabitatList />,
             },
             {
               path: Routes.COMPORTAMIENTO_ROUTE,
               element: <ComportamientosList />,
             },
-
             {
               path: Routes.COMPORTAMIENTO_DETALLE_ROUTE,
               element: <ComportamientoLayout />,
               children: [
                 {
                   path: Routes.DETALLE_COMPORTAMIENTO_ROUTE,
-                  element: <DetallesComportamientos />
-                }
-              ]
+                  element: <DetallesComportamientos />,
+                },
+              ],
             },
             {
               path: Routes.REPORTES_ROUTE,
               element: <VistaReportes />,
             },
+          ],
+        },
+        {
+          path: Routes.SETTINGS_ROUTE,
+          element: renderSettingsLayout(<Outlet />),
+          children: [
             {
-              id: "settings-root",
-              path: Routes.SETTINGS_ROUTE,
-              element: <SettingsLayout />, // Aquí se incluye el layout con el menú
-              children: [
-                {
-                  path: "",
-                  id: "settings",
-                  element: <Settings />,
-                },
-                {
-                  id: "roles",
-                  path: Routes.ROLES_ROUTE,
-                  element: <Roles />,
-                },
-                {
-                  id: "estados",
-                  path: Routes.ESTADOS_ROUTE,
-                  element: <Estados />
-                },
-                {
-                  id: "cargos",
-                  path: Routes.CARGOS_ROUTE,
-                  element: <Cargos />,
-                },
-                {
-                  id: "departamentos",
-                  path: Routes.DEPARTAMENTOS_ROUTE,
-                  element: <Departamentos />
-                },
-                {
-                  id: "zonas",
-                  path: Routes.ZONAS_ROUTE,
-                  element: <Zonas />
-                }
-              ],
+              path: Routes.ROLES_ROUTE,
+              element: <Roles />,
             },
-
+            {
+              path: Routes.ESTADOS_ROUTE,
+              element: <Estados />,
+            },
+            {
+              path: Routes.CARGOS_ROUTE,
+              element: <Cargos />,
+            },
+            {
+              path: Routes.DEPARTAMENTOS_ROUTE,
+              element: <Departamentos />,
+            },
+            {
+              path: Routes.ZONAS_ROUTE,
+              element: <Zonas />,
+            },
           ],
         },
       ],

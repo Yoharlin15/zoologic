@@ -10,10 +10,7 @@ const EMPLEADOS_BASE = "Empleado";
 const TRATAMIENTOS_BASE = "Tratamiento";
 const NECROPSIAS_BASE = "Necropsia";
 const ZONAS_BASE = "Zona";
-const ALIMENTO_BASE = "Alimentacion";
-const INVENTARIO_BASE = "Alimentacion";
-const DIETA_BASE = "Alimentacion";
-const DIETA_APLICADA_BASE = "Alimentacion";
+const ALIMENTACION_BASE = "Alimentacion";
 const HABITATS_BASE = "Habitat";
 const COMPORTAMIENTO_BASE = "Comportamiento";
 const USUARIOS_BASE = "Usuario";
@@ -84,7 +81,9 @@ export const ANIMALES_BY_HABITATID = `${ANIMALES_BASE}/GetHabitatByAnimalId`
 export const ANIMALES_REPORTES = `${ANIMALES_BASE}/GetReporteAnimales`
 export const ANIMALES_CREATE = `${ANIMALES_BASE}/${CREATE}`;
 export const ANIMLAES_UPDATE = `${ANIMALES_BASE}/${UPDATE}/{id}`
+export const ANIMLAES_ESTADO_UPDATE = `${ANIMALES_BASE}/UpdateAnimalEstado/{id}`
 export const ANIMALES_HABITATS_UPDATE = `${ANIMALES_BASE}/UpdateAnimalHabitat/{id}`
+export const ANIMALES_DELETE = `${ANIMALES_BASE}/AnularAnimal/{id}`
 
 //CRUD Especies
 export const ESPECIES_GET = `${ESPECIES_BASE}/${GET}`;
@@ -114,20 +113,29 @@ export const PROCEDENCIAS_CREATE = `${ESPECIES_BASE}/CreateProcedencia`;
 export const PROCEDENCIAS_UPDATE = `${ESPECIES_BASE}/UpdateProcedencia`;
 
 //CRUD Alimentos
-export const ALIMENTO_GET = `${ALIMENTO_BASE}/GetAlimentos`;
-export const ALIMENTO_CREATE = `${ALIMENTO_BASE}/CreateAlimento`;
+export const ALIMENTO_GET = `${ALIMENTACION_BASE}/GetAlimentos`;
+export const ALIMENTO_GETBYID = `${ALIMENTACION_BASE}/GetAlimentoById`
+export const ALIMENTO_CREATE = `${ALIMENTACION_BASE}/CreateAlimento`;
+export const ALIMENTO_UPDATE = `${ALIMENTACION_BASE}/UpdateAlimento/{id}`;
+
+//CRUD ALIMENTOS-ESPECIES
+export const ALIMENTO_ESPECIE_GET = `${ALIMENTACION_BASE}/GetAlimentosEspecies`;
+export const ALIMENTO_ESPECIE_CREATE = `${ALIMENTACION_BASE}/CreateAlimentoEspecie`;
 
 //CRUD Inventario
-export const INVENTARIO_GET = `${INVENTARIO_BASE}/GetInventario`;
-export const INVENTARIO_CREATE = `${INVENTARIO_BASE}/CreateInventario`;
+export const INVENTARIO_GET = `${ALIMENTACION_BASE}/GetInventario`;
+export const INVENTARIO_GETBYID = `${ALIMENTACION_BASE}/GetInventarioById`
+export const UNIDADMEDIDA_BY_ALIMENTOID = `${ALIMENTACION_BASE}/GetUnidadMedidaByAlimentoId`
+export const INVENTARIO_CREATE = `${ALIMENTACION_BASE}/CreateInventario`;
+export const INVENTARIO_UPDATE = `${ALIMENTACION_BASE}/UpdateInventario/{id}`;
 
-//CRUD Dieta
-export const DIETA_GET = `${DIETA_BASE}/GetDietas`;
-export const DIETA_CREATE = `${DIETA_BASE}/CreateDieta`;
+//CRUD UNIDA-MEDIDA
+export const UNIDAD_MEDIDA_GET =`${ALIMENTACION_BASE}/GetUnidadMedida`;
+export const UNIDAD_MEDIDA_CREATE = `${ALIMENTACION_BASE}/CreateUnidadMedida`;
 
 //CRUD DietasAplicadas
-export const dietaAPLICADA_GET = `${DIETA_APLICADA_BASE}/GetDietasAplicadas`;
-export const DIETA_APLICADA_CREATE = `${DIETA_APLICADA_BASE}/CreateDietasAplicadas`;
+export const dietaAPLICADA_GET = `${ALIMENTACION_BASE}/GetDietasAplicadas`;
+export const DIETA_APLICADA_CREATE = `${ALIMENTACION_BASE}/CreateDietasAplicadas`;
 
 //CRUD Habitats
 export const HABITATS_GET = `${HABITATS_BASE}/${GET}`;

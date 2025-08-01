@@ -1,6 +1,7 @@
 export interface IZona {
     ZonaId: number,
     NombreZona: string
+    FechaCreacion: string
 }
 
 export interface IZonaCurrent{

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Calendar } from "primereact/calendar";
 import "react-datepicker/dist/react-datepicker.css";
 import { Controller, FieldValues } from "react-hook-form";
@@ -7,12 +7,12 @@ import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";
 import {
     Dropdown,
-    InputNumber,
+    InputText,
 } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
-import { IDietaAplicadaCreate } from "#interfaces";
+import { IDietaAplicadaCreate, IUnidadMedidaByAlimentoId } from "#interfaces";
 import { Toast } from "primereact/toast";
-import { useFetchAlimentos, useFetchAnimales, useFetchDietas } from "ClientApp/hooks/useFetch";
+import { useFetchAlimentosEspecies, useFetchAnimales, useFetchUnidadMedidaByAlimentoId } from "ClientApp/hooks/useFetch";
 import { useCreateDietasAplicadas } from "ClientApp/hooks/useMutation";
 
 interface IDietaAplicadaSidebarProps {
@@ -25,25 +25,50 @@ interface IDietaAplicadaSidebarProps {
 const DietaAplicadaSidebarCreate = ({ onHide, visible }: IDietaAplicadaSidebarProps) => {
     const toast = useRef<Toast>(null);
     const { data: animales } = useFetchAnimales();
-    const { data: alimentos } = useFetchAlimentos();
-
+    const { data: alimentoEspecies } = useFetchAlimentosEspecies();
     const createDieta = useCreateDietasAplicadas();
 
-    const { control, handleSubmit, reset } = useForm<IDietaAplicadaCreate, FieldValues>({
+    const { control, handleSubmit, reset, watch, } = useForm<IDietaAplicadaCreate, FieldValues>({
         mode: "onChange",
         defaultValues: {
             AnimalId: undefined,
             AlimentoId: undefined,
             UnidadMedidaId: undefined,
+            Cantidad: undefined,
             FechaAplicacion: null,
         },
     });
+    const selectedAnimalId = watch("AnimalId");
+    const selectedAlimentoId = watch("AlimentoId");
+
+    const selectedAnimal = useMemo(() => {
+        return animales?.find((a) => a.AnimalId === selectedAnimalId);
+    }, [animales, selectedAnimalId]);
+
+    const especieId = selectedAnimal?.EspecieId;
+
+    const alimentosFiltrados = useMemo(() => {
+        if (!especieId || !alimentoEspecies) return [];
+        return alimentoEspecies.filter((t) => t.EspecieId === especieId);
+    }, [alimentoEspecies, especieId]);
+
+    const { data: UnidadByAlimento } = useFetchUnidadMedidaByAlimentoId(selectedAlimentoId);
+    const [filteredUnidades, setFilteredUnidades] = useState<IUnidadMedidaByAlimentoId[]>([]);
+
+    useEffect(() => {
+        if (UnidadByAlimento) {
+            setFilteredUnidades(Array.isArray(UnidadByAlimento) ? UnidadByAlimento : [UnidadByAlimento]);
+        } else {
+            setFilteredUnidades([]);
+        }
+    }, [UnidadByAlimento]);
 
     const onSubmit = async (data: IDietaAplicadaCreate) => {
         const payload = {
             AnimalId: Number(data.AnimalId),
             AlimentoId: Number(data.AlimentoId),
             UnidadMedidaId: Number(data.UnidadMedidaId),
+            Cantidad: Number(data.Cantidad),
             FechaAplicacion: data.FechaAplicacion?.toISOString() || null,
         };
         console.log("Payload:", payload);
@@ -76,11 +101,11 @@ const DietaAplicadaSidebarCreate = ({ onHide, visible }: IDietaAplicadaSidebarPr
                     reset();
                     onHide();
                 }}
-                className="w-full sm:w-8 md:w-6 lg:w-6 xl:w-4"
+                className="w-full sm:w-8 md:w-6 lg:w-6 xl:w-3"
                 header={<h1 className="font-semibold text-2xl text-900">Aplicar dieta</h1>}
             >
                 <Form>
-                    <FieldColumn label="Animal(codigo)" columns={{ sm: 6 }}>
+                    <FieldColumn label="Animal(codigo)" columns={{ sm: 12 }}>
                         <Dropdown
                             name="AnimalId"
                             control={control}
@@ -91,19 +116,33 @@ const DietaAplicadaSidebarCreate = ({ onHide, visible }: IDietaAplicadaSidebarPr
                             optionValue="AnimalId" />
                     </FieldColumn>
 
-                    <FieldColumn label="Alimento" columns={{ sm: 6 }}>
+                    <FieldColumn label="Alimento" columns={{ sm: 12 }}>
                         <Dropdown
                             name="AlimentoId"
                             control={control}
                             placeholder="Seleccione el alimentos"
                             rules={{ required: "Campo obligatorio" }}
-                            options={alimentos || []}
-                            optionLabel="Nombre"
-                            optionValue="DietaId" />
+                            options={alimentosFiltrados}
+                            optionLabel="AlimentoNombre"
+                            optionValue="AlimentoId"
+                            disabled={!especieId} />
                     </FieldColumn>
 
-                    <FieldColumn label="Cantidad" columns={{ sm: 6 }}>
-                        <InputNumber
+                    <FieldColumn label="Unidad de medida">
+                        <Dropdown
+                            name="UnidadMedidaId"
+                            control={control}
+                            placeholder="Seleccione una Especie"
+                            rules={{ required: "Campo obligatorio" }}
+                            options={filteredUnidades || []}
+                            optionLabel="UnidadMedida"
+                            optionValue="UnidadMedidaId"
+                            disabled={!selectedAlimentoId}
+                        />
+                    </FieldColumn>
+
+                    <FieldColumn label="Cantidad" columns={{ sm: 12 }}>
+                        <InputText
                             name="Cantidad"
                             control={control}
                             placeholder="Cantidad"
@@ -111,20 +150,7 @@ const DietaAplicadaSidebarCreate = ({ onHide, visible }: IDietaAplicadaSidebarPr
                         />
                     </FieldColumn>
 
-                    <FieldColumn label="Unidad de medida" columns={{ sm: 6 }}>
-                        <Dropdown
-                            name="UnidadMedida"
-                            control={control}
-                            placeholder="Seleccione"
-                            rules={{ required: "Campo obligatorio" }}
-                            options={[
-                                { label: "Kilogramo", value: 1 },
-                                { label: "Tonelda", value: 2 },
-                            ]}
-                        />
-                    </FieldColumn>
-
-                    <FieldColumn label="Fecha de aplicacion" columns={{ sm: 6 }}>
+                    <FieldColumn label="Fecha de aplicacion" columns={{ sm: 12 }}>
                         <Controller
                             name="FechaAplicacion"
                             control={control}

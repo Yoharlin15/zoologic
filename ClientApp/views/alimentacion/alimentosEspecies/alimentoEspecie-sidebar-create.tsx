@@ -5,37 +5,42 @@ import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
 import { useForm } from "react-hook-form";
 import {
+    Dropdown,
   InputText,
+  MultiSelect,
 } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
-import { IAlimentoCreate, IAnimalCreate } from "#interfaces";
+import { IAlimentoEspecieCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
 import { useCreateAlimentos } from "ClientApp/hooks/useMutation/useMutationAlimentos";
+import { useFetchAlimentos, useFetchEspecies } from "ClientApp/hooks/useFetch";
+import { useCreateAlimentosEspecies } from "ClientApp/hooks/useMutation/useMutationAlimentosEspecies";
 
-interface IAlimentoSidebarProps {
+interface IAlimentoEspecieSidebarProps {
   id?: number;
   visible: boolean;
   onHide: () => void;
-  alimentoId: number | undefined;
+  alimentoEspecieId: number | undefined;
 }
 
-const AlimentoSidebarCreate = ({ onHide, visible }: IAlimentoSidebarProps) => {
+const AlimentoEspecieSidebarCreate = ({ onHide, visible }: IAlimentoEspecieSidebarProps) => {
   const toast = useRef<Toast>(null);
-  
-  const createAlimento = useCreateAlimentos();
+  const { data: alimentos } = useFetchAlimentos();
+  const { data: especies } = useFetchEspecies();
+  const createAlimento = useCreateAlimentosEspecies();
 
-  const { control, handleSubmit, reset } = useForm<IAlimentoCreate, FieldValues>({
+  const { control, handleSubmit, reset } = useForm<IAlimentoEspecieCreate, FieldValues>({
     mode: "onChange",
     defaultValues: {
-        Nombre: "",
-        Descripcion: "",
+        AlimentoId: undefined,
+        EspecieId: undefined,
     },
   });
 
-  const onSubmit = async (data: IAlimentoCreate) => {
+  const onSubmit = async (data: IAlimentoEspecieCreate) => {
     const payload = {
-        Nombre: data.Nombre,
-        Descripcion: data.Descripcion,
+        AlimentoId: Number(data.AlimentoId),
+        EspecieId: data.EspecieId,
     };
 
     console.log("Payload:", payload);
@@ -68,24 +73,32 @@ const AlimentoSidebarCreate = ({ onHide, visible }: IAlimentoSidebarProps) => {
           reset();
           onHide();
         }}
-        className="w-full sm:w-8 md:w-6 lg:w-6 xl:w-4"
+        className="w-full sm:w-8 md:w-6 lg:w-6 xl:w-3"
         header={<h1 className="font-semibold text-2xl text-900">Nuevo alimento</h1>}
       >
         <Form>
-          <FieldColumn label="Nombre" columns={{ sm: 6 }}>
-            <InputText
-              name="Nombre"
+          <FieldColumn label="Alimento" columns={{ sm: 12 }}>
+            <Dropdown
+              name="AlimentoId"
               control={control}
-              placeholder="nombre del alimento"
-              rules={{ required: "Campo obligatorio" }} />
+              placeholder="Seleccione un cargo"
+              rules={{ required: "Campo obligatorio" }}
+              options={alimentos || []}
+              optionLabel="Nombre"
+              optionValue="AlimentoId"
+            />
           </FieldColumn>
 
-          <FieldColumn label="Descripcion" columns={{ sm: 6 }}>
-            <InputText
-              name="Descripcion"
+          <FieldColumn label="Especie" columns={{ sm: 12 }}>
+            <Dropdown
+              name="EspecieId"
               control={control}
-              placeholder="Descrpcion del alimento"
-              rules={{ required: "Campo obligatorio" }} />
+              placeholder="Seleccione un cargo"
+              rules={{ required: "Campo obligatorio" }}
+              options={especies || []}
+              optionLabel="NombreComun"
+              optionValue="EspecieId"
+            />
           </FieldColumn>
 
         </Form>
@@ -107,4 +120,4 @@ const AlimentoSidebarCreate = ({ onHide, visible }: IAlimentoSidebarProps) => {
   );
 };
 
-export default AlimentoSidebarCreate;
+export default AlimentoEspecieSidebarCreate;

@@ -1,6 +1,7 @@
 export interface IDepartamento {
     DepartamentoId: number,
     Nombre: string
+    FechaCreacion: string;
 }
 
 export interface ICurrentDepartamento {

@@ -118,22 +118,12 @@ const UsuarioSidebarCreate = ({ onHide, visible, onCreateSuccess }: IUsuarioSide
 
           <FieldColumn label="Email" columns={{ sm: 6 }}>
             <InputText
+              id="email"
               name="Email"
               control={control}
               placeholder="Email"
-              rules={{
-                required: "Campo obligatorio",
-                validate: (value) => {
-                  if (emailExistente) {
-                    return "Este email ya está registrado";
-                  }
-                  return true;
-                },
-              }}
+              rules={{required: "Campo obligatorio",}}
             />
-            {isLoading && <small>Verificando email...</small>}
-            {isError && <small>Hubo un error al verificar el email.</small>}
-            {emailExistente && <small style={{ color: "red" }}>Este email ya está registrado.</small>}
           </FieldColumn>
 
           <FieldColumn label="Rol" columns={{ sm: 6 }}>

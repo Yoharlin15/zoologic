@@ -16,6 +16,7 @@ export interface IEmpleado {
     EstadoId: number;
     NombreEstado: string;
     Email: string;
+    FechaCreacion: Date | string | null;
 }
 
 export interface IEmpleadoCurrent {

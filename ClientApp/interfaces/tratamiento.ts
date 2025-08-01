@@ -40,6 +40,7 @@ export interface ITratamientoAplicadoCreate {
     FechaSalida: Date | null;
     UsuarioId: number;
     Razon: string;
+    ActivarFechas?: boolean;
 }
 
 export interface ITratamientoEspecie {

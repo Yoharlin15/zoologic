@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import { debounce } from "radash";
 import { IAnimal } from "#interfaces";
-import { AppQueryHooks } from "#hooks";
+import { AppMutationHooks, AppQueryHooks } from "#hooks";
 import { Button } from "primereact/button";
 import { ContextMenu } from "primereact/contextmenu";
 import { Menu } from "primereact/menu";
@@ -18,24 +18,25 @@ import {
 
 import { CardTable, ICardTableProps } from "../../components/card-table";
 import dayjs from "dayjs";
-
-import AnimalSidebarCreate from "./animal-sidebar-form";
 import { Reducers } from "#core";
 import AnimalSidebarForm from "./animal-sidebar-form";
 import HabitatModalUpdate from "./animal-habitat-form";
+import ChangeStateModal from "./ChangeStateModal";
 
 interface IAnimalTableProps {
   dispatch: React.Dispatch<any>;
 }
 
 const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
-
   const [habitatModalVisible, setHabitatModalVisible] = useState(false);
   const [animalIdToAssignHabitat, setAnimalIdToAssignHabitat] = useState<number | undefined>(undefined);
   const [especieIdToAssignHabitat, setEspecieIdToAssignHabitat] = useState<number | undefined>(undefined);
 
+  const [stateModalVisible, setStateModalVisible] = useState(false);
+  const [animalIdToChangeState, setAnimalIdToChangeState] = useState<number | undefined>(undefined);
 
   const animal = AppQueryHooks.useFetchAnimales();
+  const updateAnimalEstado = AppMutationHooks.useUpdateAnimalEstado(); // Hook para actualizar estado
   const [selectedAnimal, setSelectedAnimal] = useState<IAnimal>();
 
   const navigate = useNavigate();
@@ -66,19 +67,16 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         }
       },
     },
-
     {
-      label: "Asignar habitat",
-      icon: "pi pi-clipboard",
+      label: "Cambiar estado",
+      icon: "pi pi-flag",
       command: () => {
         if (selectedAnimal) {
-          setAnimalIdToAssignHabitat(selectedAnimal.AnimalId);
-          setEspecieIdToAssignHabitat(selectedAnimal.EspecieId);
-          setHabitatModalVisible(true);
+          setAnimalIdToChangeState(selectedAnimal.AnimalId);
+          setStateModalVisible(true);
         }
       },
-    }
-
+    },
   ];
 
   const [confirmState, confirmDispatch] = useReducer(Reducers.DialogsReducer, {
@@ -90,7 +88,6 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
 
   const columns = useMemo<ICardTableProps<IAnimal>["columns"]>(
     () => [
-
       {
         filter: true,
         sortable: true,
@@ -98,7 +95,6 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         field: "IdentificadorUnico",
         style: { minWidth: "12rem" },
       },
-
       {
         filter: true,
         sortable: true,
@@ -106,7 +102,6 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         field: "TipoIdentificador",
         style: { minWidth: "12rem" },
       },
-
       {
         filter: true,
         sortable: true,
@@ -114,7 +109,6 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         field: "Alias",
         style: { minWidth: "12rem" },
       },
-
       {
         filter: true,
         sortable: true,
@@ -122,7 +116,6 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         field: "NombreComun",
         style: { minWidth: "12rem" },
       },
-
       {
         filter: true,
         sortable: true,
@@ -130,32 +123,34 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         field: "Sexo",
         style: { minWidth: "10rem" },
       },
-
       {
         filter: true,
         sortable: true,
         header: "Fecha de nacimiento",
         field: "FechaNacimiento",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "18rem" },
         body: (rowData: IAnimal | null) => {
           if (!rowData?.FechaNacimiento) return "";
           return dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY");
         },
       },
-
       {
         filter: true,
         sortable: true,
-        header: "Padre",
-        field: "Padre",
-        style: { minWidth: "15em" },
+        header: "Creado por",
+        field: "NombreUsuario",
+        style: { minWidth: "12rem" },
       },
       {
         filter: true,
         sortable: true,
-        header: "Madre",
-        field: "Madre",
-        style: { minWidth: "15em" },
+        header: "Fecha de creacion",
+        field: "FechaCreacion",
+        style: { minWidth: "18rem" },
+        body: (rowData: IAnimal | null) => {
+          if (!rowData?.FechaCreacion) return "";
+          return dayjs(rowData.FechaCreacion).format("DD/MM/YYYY");
+        },
       },
     ],
     []
@@ -167,6 +162,42 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
       t.IdentificadorUnico?.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [animal.data, searchText]);
+
+  const handleStateChange = async (AnimalId: number, newState: string) => {
+    try {
+      // Ejecutamos la mutación para actualizar el estado
+      await updateAnimalEstado.mutateAsync({
+        AnimalId,
+        EstadoId: parseInt(newState) // Convertimos a número si es necesario
+      });
+      
+      // Actualizamos la lista de animales
+      await animal.refetch();
+      
+      // Mostramos mensaje de éxito
+      dispatch({
+        type: "SHOW_TOAST",
+        payload: {
+          severity: "success",
+          summary: "Éxito",
+          detail: "Estado del animal actualizado correctamente",
+        },
+      });
+    } catch (error) {
+      // Mostramos mensaje de error
+      dispatch({
+        type: "SHOW_TOAST",
+        payload: {
+          severity: "error",
+          summary: "Error",
+          detail: "No se pudo actualizar el estado del animal",
+        },
+      });
+    } finally {
+      // Cerramos el modal
+      setStateModalVisible(false);
+    }
+  };
 
   return (
     <div className="h-full">
@@ -193,7 +224,6 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             label="Nuevo Animal"
           />
-
         ]}
         tableProps={{
           rows: 8,
@@ -209,8 +239,9 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
           ) => setSelectedAnimal(e.value),
         }}
       />
+      
       <AnimalSidebarForm
-        id={selectedAnimalId ?? undefined} // importante para edición
+        id={selectedAnimalId ?? undefined}
         visible={sidebarVisible}
         onHide={() => setSidebarVisible(false)}
         especieId={undefined}
@@ -223,6 +254,12 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         onHide={() => setHabitatModalVisible(false)}
       />
 
+      <ChangeStateModal
+        visible={stateModalVisible}
+        animalId={animalIdToChangeState}
+        onHide={() => setStateModalVisible(false)}
+        onStateChange={handleStateChange}
+      />
     </div>
   );
 };

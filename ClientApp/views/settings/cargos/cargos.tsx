@@ -90,6 +90,20 @@ const Cargos = () => {
           </div>
         ),
       },
+      {
+        filter: true,
+        sortable: true,
+        header: "Fecha de creacion",
+        field: "FechaCreacion",
+        body: (rowData: ICargo) => (
+          <div className="flex items-center gap-2">
+            <i className="pi pi-calendar text-green-500"></i>
+            <span className="font-medium">
+              {rowData.FechaCreacion.split('T')[0]} {/* Esto elimina la parte de la hora */}
+            </span>
+          </div>
+        ),
+      },
     ],
     [],
   );

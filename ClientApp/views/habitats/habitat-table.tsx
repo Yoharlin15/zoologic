@@ -63,9 +63,9 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Cantidad maxima de Animales",
+        header: "Animales permitidos",
         field: "CantidadAnimales",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "14rem" },
       },
 
       {
@@ -74,6 +74,15 @@ const HabitatTable = ({ dispatch }: IHabitatTableProps) => {
         header: "Estado",
         field: "NombreEstado",
         style: { minWidth: "10rem" },
+      },
+
+      {
+        filter: true,
+        sortable: true,
+        header: "Tamaño",
+        field: "Tamaño",
+        style: { minWidth: "10rem" },
+        body: (rowData: IHabitat) => `${rowData.Tamaño} Mt2`, 
       },
 
       {

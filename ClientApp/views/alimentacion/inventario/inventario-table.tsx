@@ -17,10 +17,9 @@ import {
 } from "primereact/datatable";
 
 import { CardTable, ICardTableProps } from "../../../components/card-table";
-
-// import InventarioSidebarCreate from "./Inventario-sidebar-create";
 import { Reducers } from "#core";
-import InventarioSidebarCreate from "./inventario-sibebar-create";
+import dayjs from "dayjs";
+import InventarioSidebarForm from "./inventario-sibebar-form";
 
 interface IInventarioTableProps {
   dispatch: React.Dispatch<any>;
@@ -35,8 +34,7 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
   const cm = useRef<ContextMenu>(null);
   const menu = useRef<Menu>(null);
 
-  const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
-  const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
+   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedInventarioId, setSelectedInventarioId] = useState<number | null>(null);
 
   const menuModel = [
@@ -46,7 +44,7 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
       command: () => {
         if (selectedInventario) {
           setSelectedInventarioId(selectedInventario.InventarioId);
-          setSidebarUpdateVisible(true); // Abre el sidebar
+          setSidebarVisible(true); // Abre el sidebar
         }
       },
     },
@@ -101,21 +99,32 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
         field: "Nombre",
         style: { minWidth: "12rem" },
       },
-
       {
         filter: true,
         sortable: true,
         header: "Cantidad",
         field: "Cantidad",
         style: { minWidth: "12rem" },
+        body: (rowData) => `${rowData.Cantidad} ${rowData.UnidadMedida}`,
       },
       {
         filter: true,
         sortable: true,
-        header: "Unidad de Medida",
-        field: "UnidadMedida",
+        header: "Creado por",
+        field: "NombreUsuario",
         style: { minWidth: "12rem" },
-      }
+      },
+      {
+        filter: true,
+        sortable: true,
+        header: "Fecha de creacion",
+        field: "FechaCreacion",
+        style: { minWidth: "12rem" },
+        body: (rowData: IInventario | null) => {
+          if (!rowData?.FechaCreacion) return "";
+          return dayjs(rowData.FechaCreacion).format("DD/MM/YYYY");
+        },
+      },
     ],
     []
   );
@@ -148,7 +157,7 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
             key="btn_add"
             onClick={() => {
               setSelectedInventarioId(null);
-              setSidebarCreateVisible(true);
+              setSidebarVisible(true);
             }}
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             label="Agregar alimento"
@@ -168,9 +177,10 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
           ) => setSelectedInventario(e.value),
         }}
       />
-      <InventarioSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
+      <InventarioSidebarForm
+        id={selectedInventarioId ?? undefined}
+        visible={sidebarVisible}
+        onHide={() => setSidebarVisible(false)}
         inventarioId={selectedInventarioId ?? undefined}
       />
     </div>

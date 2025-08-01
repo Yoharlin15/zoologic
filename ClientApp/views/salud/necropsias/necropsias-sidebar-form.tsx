@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Calendar } from "primereact/calendar";
 import { Controller, FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
@@ -9,6 +9,8 @@ import { INecropsiaCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
 import { useFetchAnimales, useFetchOneNecropsia, useFetchUsuarios } from "ClientApp/hooks/useFetch";
 import { useCreateNecropsias, useUpdateNecropsias } from "ClientApp/hooks/useMutation/useMutationNecropsias";
+import { useDeleteAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales"; // Suponiendo que el hook está en este lugar
+import { Dialog } from "primereact/dialog";  // Importar el Dialog
 
 interface INecropsiaSidebarProps {
   id?: number;
@@ -22,10 +24,11 @@ const NecropsiaSidebarForm = ({ id, onHide, visible }: INecropsiaSidebarProps) =
   const { data: animales } = useFetchAnimales();
   const { data: usuarios } = useFetchUsuarios();
   const { data: necropsiaData } = useFetchOneNecropsia(id!);
-
+  
   const createNecropsia = useCreateNecropsias();
   const updateNecropsia = useUpdateNecropsias();
-
+  const deleteAnimal = useDeleteAnimal(); // Usando el hook para eliminar el animal
+  
   const { control, handleSubmit, reset } = useForm<INecropsiaCreate, FieldValues>({
     mode: "onChange",
     defaultValues: {
@@ -36,7 +39,10 @@ const NecropsiaSidebarForm = ({ id, onHide, visible }: INecropsiaSidebarProps) =
       UsuarioId: undefined,
     },
   });
-
+  
+  const [isDialogVisible, setIsDialogVisible] = useState(false); // Estado para controlar el dialogo
+  const [animalToDelete, setAnimalToDelete] = useState<number | null>(null); // Guardar el ID del animal a eliminar
+  
   // Prellenar el formulario si es edición
   useEffect(() => {
     if (necropsiaData) {
@@ -62,19 +68,6 @@ const NecropsiaSidebarForm = ({ id, onHide, visible }: INecropsiaSidebarProps) =
     }
   }, [necropsiaData, reset]);
 
-  useEffect(() => {
-    if (!id && visible) {
-      reset({
-        AnimalId: undefined,
-        CausaMuerte: "",
-        FechaMuerte: null,
-        FechaNecropsia: null,
-        UsuarioId: undefined,
-      });
-    }
-  }, [id, visible, reset]);
-
-
   const onSubmit = async (data: INecropsiaCreate) => {
     const payload = {
       AnimalId: Number(data.AnimalId),
@@ -98,6 +91,11 @@ const NecropsiaSidebarForm = ({ id, onHide, visible }: INecropsiaSidebarProps) =
         detail: res?.mensaje || `Necropsia ${id ? "actualizada" : "creada"} correctamente.`,
       });
 
+      // Si se registra correctamente, desactivar el animal
+      const animalId = Number(data.AnimalId);
+      setAnimalToDelete(animalId); // Guardamos el ID del animal para eliminarlo
+      setIsDialogVisible(true); // Mostrar el diálogo de confirmación
+
       reset();
       onHide();
     } catch (error: any) {
@@ -108,6 +106,40 @@ const NecropsiaSidebarForm = ({ id, onHide, visible }: INecropsiaSidebarProps) =
         detail: error.response?.data?.mensaje || `Hubo un error al ${id ? "actualizar" : "crear"} la necropsia.`,
       });
     }
+  };
+
+  // Función para manejar la eliminación del animal
+  const handleDeleteAnimal = async () => {
+    if (animalToDelete) {
+      try {
+        // Crear un objeto con las propiedades esperadas por el hook useDeleteAnimal
+        const animalData = {
+          AnimalId: animalToDelete,
+          Estado: "desactivado", // Suponiendo que la propiedad "Estado" se refiere a la desactivación
+        };
+        
+        await deleteAnimal.mutateAsync(animalData); // Desactivar el animal
+        toast.current?.show({
+          severity: "success",
+          summary: "Animal Desactivado",
+          detail: "El animal ha sido desactivado correctamente.",
+        });
+      } catch (error : any) {
+        console.error("Error:", error.response?.data || error);
+        toast.current?.show({
+          severity: "error",
+          summary: "Error",
+          detail: "Hubo un error al desactivar el animal.",
+        });
+      } finally {
+        setIsDialogVisible(false); // Cerrar el diálogo
+        setAnimalToDelete(null); // Limpiar el estado
+      }
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setIsDialogVisible(false); // Cerrar el diálogo sin eliminar el animal
   };
 
   return (
@@ -194,7 +226,6 @@ const NecropsiaSidebarForm = ({ id, onHide, visible }: INecropsiaSidebarProps) =
               rules={{ required: "Campo obligatorio" }}
             />
           </FieldColumn>
-
         </Form>
 
         <div className="flex justify-content-end gap-2 mt-4">
@@ -213,6 +244,21 @@ const NecropsiaSidebarForm = ({ id, onHide, visible }: INecropsiaSidebarProps) =
           />
         </div>
       </Sidebar>
+
+      {/* Dialogo de confirmación */}
+      <Dialog
+        visible={isDialogVisible}
+        onHide={handleCancelDelete}
+        header="Confirmación"
+        footer={
+          <>
+            <Button label="Cancelar" onClick={handleCancelDelete} />
+            <Button label="Eliminar" severity="danger" onClick={handleDeleteAnimal} />
+          </>
+        }
+      >
+        <p>¿Está seguro de que desea desactivar este animal?</p>
+      </Dialog>
     </>
   );
 };

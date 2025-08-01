@@ -80,19 +80,11 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
             {
                 filter: true,
                 sortable: true,
-                header: "Unidad de medida",
-                field: "UnidadMedida",
-                style: { minWidth: "12rem"}
-            },
-
-             {
-                filter: true,
-                sortable: true,
                 header: "Cantidad",
                 field: "Cantidad",
-                style: { minWidth: "12rem"}
+                style: { minWidth: "12rem" },
+                body: (rowData) => `${rowData.Cantidad} ${rowData.UnidadMedida}`,
             },
-
             {
                 filter: true,
                 sortable: true,

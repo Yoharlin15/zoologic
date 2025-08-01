@@ -1,47 +1,46 @@
-import React from "react";
-import { Menu } from "primereact/menu";
-import { Image } from "primereact/image";
-import { MenuItem } from "primereact/menuitem";
-import { useNavigate, Routes, Route, Outlet } from "react-router-dom";
+import React, { useState } from "react";
+import { TabView, TabPanel, TabViewTabChangeEvent } from "primereact/tabview";
+import Clases from "./clase/clase";
+import Familias from "./familia/familia";
+import Procedencias from "./procedencia/procedencia";
 
-const EspecieLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const navigate = useNavigate();
+const Especie = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
 
-  const createMenuItem = React.useCallback(
-    (route: string, label: string, iconName: string): MenuItem => ({
-      label,
-      icon: `pi pi-${iconName}`,
-      command: () => navigate(route),
-    }),
-    [navigate]
-  );
-
-  const items: MenuItem[] = [
-    createMenuItem("familias", "Familias", "users"),
-    createMenuItem("clases", "Clases", "book"),
-    createMenuItem("procedencias", "Procedencias", "map"),
-  ];
+  const handleTabChange = (e: TabViewTabChangeEvent) => {
+    setActiveIndex(e.index);
+  };
 
   return (
-    <div className="flex h-full border-round-md overflow-hidden">
-      <Menu model={items} className="w-fit p-0 border-round-md min-w-max" />
-        <Outlet />
+    <div className="flex flex-column h-full overflow-hidden">
+      <TabView
+        className="flex flex-column h-full"
+        activeIndex={activeIndex}
+        onTabChange={handleTabChange}
+        panelContainerClassName="flex-grow-1 overflow-hidden"
+        renderActiveOnly={false}
+      >
+        <TabPanel header="🦁Familias" contentClassName="h-full overflow-hidden">
+          <div className="h-full overflow-hidden">
+            <Familias />
+          </div>
+        </TabPanel>
+        
+        <TabPanel header="📚Clases" contentClassName="h-full overflow-hidden">
+          <div className="h-full overflow-hidden">
+            <Clases />
+          </div>
+        </TabPanel>
+
+        <TabPanel header="🌍Procedencias" contentClassName="h-full overflow-hidden">
+          <div className="h-full overflow-hidden">
+            <Procedencias />
+          </div>
+        </TabPanel>
+
+      </TabView>
     </div>
   );
 };
 
-export const Settings: React.FC = () => (
-  <div className="flex flex-1 flex-column align-items-center justify-content-center">
-    <Image
-      width="400rem"
-      alt="settings"
-      className="max-w-40rem mb-4"
-      src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1749073522/Settings-amico_aylrzv.svg"
-    />
-    <span className="font-semibold md:text-lg xl:text-xl text-700 text-center">
-      Seleccione una opción
-    </span>
-  </div>
-);
-
-export default EspecieLayout;
+export default Especie;

@@ -28,6 +28,7 @@ export const DETALLE_COMPORTAMIENTO_ROUTE = "detalleComportamiento"
 export const COMPORTAMIENTO_DETALLE_ROUTE = "detalle"
 export const DIETA_APLICADA_ROUTE = "dietas"
 export const ALIMENTACION_ROUTE = "alimentacion"
+export const ALIMENTACION_ESPECIES_ROUTE = "alimentacion-especies"
 export const VENTA_BOLETOS_ROUTE = "venta-boletos";
 export const REPORTES_ROUTE = "reportes";
 export const SETTINGS_ROUTE = "settings";

@@ -1,6 +1,7 @@
 export interface ICargo {
     CargoId: number,
     Cargo: string
+    FechaCreacion: string;
 }
 
 export interface ICurrentCargo {

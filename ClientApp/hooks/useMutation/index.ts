@@ -15,3 +15,4 @@ export * from "./useMutationExamenes";
 export * from "./useMutationDetalleComportamiento";
 export * from "./useMutationDepartamentos";
 export * from "./useMutationRolesPermisos";
+export * from "./useMutationAnimales";
