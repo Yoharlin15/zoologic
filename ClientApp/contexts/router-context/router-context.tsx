@@ -44,6 +44,7 @@ import TratamientosEspecies from "ClientApp/views/salud/tratamientoEspecie/trata
 import VistaReportes from "ClientApp/views/reportes/reportes";
 import { CustomSettingsLayout, SettingsLayout } from "ClientApp/components/layouts/settings";
 import AlimentosEspeciesList from "ClientApp/views/alimentacion/alimentosEspecies/alimentoEspecie-list";
+import MapaPage from "ClientApp/views/landing/MapaPage";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -69,6 +70,11 @@ const Provider = () => {
       id: "landing-page",
       element: <ZoologicLandingPage />,
       path: Routes.LANDING_ROUTE,
+    },
+    {
+      id: "mapa",
+      element: <MapaPage />,
+      path: Routes.MAPA_ROUTE
     },
     {
       id: "catalogo",

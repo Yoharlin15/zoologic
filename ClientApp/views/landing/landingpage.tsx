@@ -64,21 +64,40 @@ const LandingPage = () => {
       {/* Header modificado */}
       <div className="bg-green-800 shadow-md py-4 px-6 w-full">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="text-4xl font-bold text-white">zoologic</div>
+          <div className="text-4xl font-bold text-white mr-4">zoologic</div>
 
-          <Button
-            label="Catálogo"
-            icon="pi pi-book"
-            className="p-button-rounded p-button-outlined ml-auto text-white border-white"
-            onClick={() => navigate(Routes.CATALOGO_ROUE)}
-          />
+          <div className="flex gap-4">
+            {/* Catálogo */}
+            <Button
+              icon="pi pi-book"
+              className="p-button-rounded p-button-outlined text-white border-white md:hidden"
+              onClick={() => navigate(Routes.CATALOGO_ROUE)}
+              tooltip="Catálogo"
+              tooltipOptions={{ position: 'bottom' }}
+            />
+            <Button
+              label="Catálogo"
+              icon="pi pi-book"
+              className="p-button-rounded p-button-outlined text-white border-white hidden md:flex"
+              onClick={() => navigate(Routes.CATALOGO_ROUE)}
+            />
 
-          <Button
-            label="Iniciar Sesión"
-            icon="pi pi-user"
-            className="p-button-rounded p-button-outlined ml-auto text-white border-white"
-            onClick={handleLoginClick}
-          />
+            {/* Iniciar Sesión */}
+            <Button
+              icon="pi pi-user"
+              className="p-button-rounded p-button-outlined text-white border-white md:hidden"
+              onClick={handleLoginClick}
+              tooltip="Iniciar sesión"
+              tooltipOptions={{ position: 'bottom' }}
+            />
+            <Button
+              label="Iniciar Sesión"
+              icon="pi pi-user"
+              className="p-button-rounded p-button-outlined text-white border-white hidden md:flex"
+              onClick={handleLoginClick}
+            />
+          </div>
+
         </div>
       </div>
 
@@ -104,7 +123,15 @@ const LandingPage = () => {
         )}
       </section>
 
-      <MapaInteractivo />
+      <div className="text-center mb-6">
+        <Button
+          label="Ver Mapa Interactivo"
+          icon="pi pi-map"
+          className="p-button-rounded p-button-lg bg-green-600 border-green-600 hover:bg-green-700"
+          onClick={() => navigate(Routes.MAPA_ROUTE)}
+        />
+      </div>
+
 
       {/* Sección de Boletas con imagen al lado */}
       <section className="py-12 px-6 bg-indigo-50 mt-8">

@@ -1,27 +1,30 @@
-import React, { useRef, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Button } from "primereact/button";
-import { Form, InputText, FieldColumn } from "#components";
-import { Routes } from "#core";
-import ControlledInputText from "ClientApp/components/inputs/input-text/input-text";
-import { Toast } from "primereact/toast";
-import { useLoginUsuario } from "ClientApp/hooks/useMutation/useMutationSignup";
-import { LoginDatos } from "#interfaces";
-import { useNavigate } from "react-router-dom";
-import { Divider } from "primereact/divider";
-import { ProgressSpinner } from "primereact/progressspinner";
-import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
+"use client"
+
+import type React from "react"
+import { useRef, useState } from "react"
+import { useForm } from "react-hook-form"
+import { Button } from "primereact/button"
+import { Form, FieldColumn } from "#components"
+import { Routes } from "#core"
+import ControlledInputText from "ClientApp/components/inputs/input-text/input-text"
+import { Toast } from "primereact/toast"
+import { useLoginUsuario } from "ClientApp/hooks/useMutation/useMutationSignup"
+import type { LoginDatos } from "#interfaces"
+import { useNavigate } from "react-router-dom"
+import { Divider } from "primereact/divider"
+import { ProgressSpinner } from "primereact/progressspinner"
+import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext"
 
 interface LoginFormData {
-  Correo: string;
-  Password: string;
+  Correo: string
+  Password: string
 }
 
 const LoginContainer = ({ children }: React.PropsWithChildren) => (
-  <div className="flex justify-content-center align-items-center h-screen flex-1 flex-column">
+  <div className="flex justify-content-center align-items-center h-screen flex-1 flex-column px-4 md:px-0">
     {children}
   </div>
-);
+)
 
 const LoginSideImage = () => (
   <div
@@ -31,95 +34,101 @@ const LoginSideImage = () => (
     }}
     className="hidden md:flex flex-1 bg-no-repeat bg-cover justify-content-center align-items-center flex-column p-5 text-black"
   >
-    <h1 className="text-7xl font-bold mb-4">Zoologic</h1>
-    <p className="text-lg text-justify max-w-md mb-4">
-      Zoologic es un sistema web integral diseñado para optimizar la gestión operativa del Parque Zoológico de Santo Domingo, en la República Dominicana. Esta plataforma permite a los empleados del zoológico gestionar de manera eficiente sus tareas diarias, desde el cuidado de los animales hasta la organización de sus rutinas. Además, Zoologic facilita el control y el seguimiento detallado de las especies que habitan en el zoológico, incluyendo su estado de salud, alimentación, reproducción y hábitats.    </p>
-    <p className="text-lg text-justify max-w-md mb-4">
-      El sistema busca mejorar la eficiencia operativa y fomentar la conservación de la biodiversidad. Zoologic está diseñado para garantizar un manejo adecuado de los recursos y contribuir al bienestar de las especies, al mismo tiempo que ofrece una experiencia más organizada y profesional para el personal del zoológico.    </p>
-    <span className="text-xl font-semibold mb-4">"Protegiendo el futuro de la vida silvestre"</span>
+    <h1 className="text-5xl md:text-7xl font-bold mb-4">Zoologic</h1>
+    <p className="text-sm md:text-lg text-justify max-w-md mb-4">
+      Zoologic es un sistema web integral diseñado para optimizar la gestión operativa del Parque Zoológico de Santo
+      Domingo, en la República Dominicana. Esta plataforma permite a los empleados del zoológico gestionar de manera
+      eficiente sus tareas diarias, desde el cuidado de los animales hasta la organización de sus rutinas.
+    </p>
+    <p className="text-sm md:text-lg text-justify max-w-md mb-4">
+      El sistema busca mejorar la eficiencia operativa y fomentar la conservación de la biodiversidad. Zoologic está diseñado para garantizar un manejo adecuado de los recursos y contribuir al bienestar de las especies, al mismo tiempo que ofrece una experiencia más organizada y profesional para el personal del zoológico.
+    </p>
+    <span className="text-lg md:text-xl font-semibold mb-4">"Protegiendo el futuro de la vida silvestre"</span>
     <div className="flex justify-content-center gap-4">
-      <img src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742418550/MEDIO-AMBIENTE_ftjbxt.png" alt="Logo 1" className="w-8rem h-auto" />
-      <img src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742419070/zoodom_atpfei.png" alt="Logo 2" className="w-8rem h-auto" />
+      <img
+        src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742418550/MEDIO-AMBIENTE_ftjbxt.png"
+        alt="Logo 1"
+        className="w-6rem md:w-8rem h-auto"
+      />
+      <img
+        src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742419070/zoodom_atpfei.png"
+        alt="Logo 2"
+        className="w-6rem md:w-8rem h-auto"
+      />
     </div>
   </div>
-);
+)
 
 const LoginCard = ({ children }: React.PropsWithChildren) => (
-  <div className="surface-card p-4 shadow-2 border-round w-6 sm:w-8 md:w-6 lg:w-8 max-w-28rem relative">
+  <div className="surface-card p-4 shadow-2 border-round w-full max-w-sm sm:w-8 md:w-6 lg:w-8 md:max-w-28rem relative mx-auto">
     {children}
   </div>
-);
+)
 
 const LoginHeader = () => (
   <div className="text-center mb-3 flex flex-column align-items-center">
     <img
-      height={150}
+      height={120}
       src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1748732918/Captura_de_pantalla_2025-03-14_133841-removebg-preview_ibdy4g_wakmup.png"
       alt="nubeteck"
-      className="mb-6"
+      className="mb-4 md:mb-6"
     />
-    <div className="text-900 text-3xl font-bold mb-1">¡Bienvenido!</div>
-    <span className="text-600 font-medium line-height-3 mb-3">Ingresa tus credenciales para acceder</span>
+    <div className="text-900 text-2xl md:text-3xl font-bold mb-1">¡Bienvenido!</div>
+    <span className="text-600 font-medium line-height-3 text-sm md:text-base">Ingresa tus credenciales para acceder</span>
   </div>
-);
+)
 
 const Login = () => {
-  const { setAuthData } = useAuth();
-  const navigate = useNavigate();
+  const { setAuthData } = useAuth()
+  const navigate = useNavigate()
   const {
     handleSubmit,
     control,
     formState: { errors },
-  } = useForm<LoginFormData>();
-
-  const toast = useRef<Toast>(null);
-  const { mutate: loginUsuario } = useLoginUsuario();
-  const [isLoadingLogin, setIsLoadingLogin] = useState(false);
+  } = useForm<LoginFormData>()
+  const toast = useRef<Toast>(null)
+  const { mutate: loginUsuario } = useLoginUsuario()
+  const [isLoadingLogin, setIsLoadingLogin] = useState(false)
 
   const onSubmit = (data: LoginFormData) => {
-    setIsLoadingLogin(true);
-
+    setIsLoadingLogin(true)
     const datos: LoginDatos = {
       Correo: data.Correo,
       Password: data.Password,
-    };
-
+    }
     loginUsuario(datos, {
       onSuccess: (res: any) => {
         toast.current?.show({
           severity: "success",
           summary: "Éxito",
           detail: res.mensaje || "Has iniciado sesión correctamente.",
-        });
-
-        const { TokenJwt, NombreUsuario, RolId, Permisos } = res;
-        setAuthData({ nombreUsuario: NombreUsuario, rolId: RolId, token: TokenJwt, permisos: Permisos });
-
-        const rol = res.RolId;
-
+        })
+        const { TokenJwt, UsuarioId, NombreUsuario, RolId, Permisos } = res
+        setAuthData({ usuarioId: UsuarioId, nombreUsuario: NombreUsuario, rolId: RolId, token: TokenJwt, permisos: Permisos })
+        const rol = res.RolId
         setTimeout(() => {
-          setIsLoadingLogin(false);
+          setIsLoadingLogin(false)
           if (rol === 2) {
-            navigate(Routes.LANDING_ROUTE, { replace: true });
+            navigate(Routes.LANDING_ROUTE, { replace: true })
           } else {
-            navigate(Routes.EMPLEADOS_ROUTE, { replace: true });
+            navigate(Routes.EMPLEADOS_ROUTE, { replace: true })
           }
-        }, 2000);
+        }, 2000)
       },
       onError: (error: any) => {
         toast.current?.show({
           severity: "error",
           summary: "Error",
           detail: error.message || "Hubo un error al iniciar sesión.",
-        });
-        setIsLoadingLogin(false);
+        })
+        setIsLoadingLogin(false)
       },
-    });
-  };
+    })
+  }
 
   const handleSignupClick = () => {
-    navigate(Routes.SIGNUP_ROUTE, { replace: true });
-  };
+    navigate(Routes.SIGNUP_ROUTE, { replace: true })
+  }
 
   return (
     <div className="flex">
@@ -131,7 +140,6 @@ const Login = () => {
               <ProgressSpinner />
             </div>
           )}
-
           <LoginHeader />
           <div className="flex flex-column">
             <Form onSubmit={handleSubmit(onSubmit)}>
@@ -151,7 +159,6 @@ const Login = () => {
                   disabled={isLoadingLogin}
                 />
               </FieldColumn>
-
               <FieldColumn label="Contraseña">
                 <ControlledInputText
                   name="Password"
@@ -165,7 +172,6 @@ const Login = () => {
                   disabled={isLoadingLogin}
                 />
               </FieldColumn>
-
               <Button
                 className="w-full mt-3 p-button-rounded"
                 loading={isLoadingLogin}
@@ -175,11 +181,9 @@ const Login = () => {
                 severity="success"
                 disabled={isLoadingLogin}
               />
-
               <Divider align="center" className="my-3">
                 <span className="text-600 text-sm">O</span>
               </Divider>
-
               <Button
                 className="w-full p-button-rounded p-button-outlined"
                 label="Crear una nueva cuenta"
@@ -195,7 +199,7 @@ const Login = () => {
       </LoginContainer>
       <LoginSideImage />
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login

@@ -38,5 +38,6 @@ export const CARGOS_ROUTE = "cargos";
 export const DEPARTAMENTOS_ROUTE = "departamentos";
 export const ZONAS_ROUTE = "zonas";
 export const ACCESS_DENIED_ROUTE = "/access-denied";
+export const MAPA_ROUTE = "mapa"
 
 
