@@ -36,7 +36,6 @@ import SaludLayout from "ClientApp/views/salud/opciones";
 import NecropsiasList from "ClientApp/views/salud/necropsias/necropsias-list";
 import Examenes from "ClientApp/views/salud/examenes/examen";
 import ComportamientoLayout from "ClientApp/views/comportamientos/comportamiento";
-import DetallesComportamientos from "ClientApp/views/comportamientos/detalleComportamiento/detalleComportamiento";
 import Departamentos from "ClientApp/views/settings/departamentos/departamentos";
 import TratamientoDetalleWrapper from "ClientApp/views/salud/tratamientosAplicados/tratamiento-datails-view";
 import { CatalogoEspecies } from "ClientApp/views/landing/CatalogoEspecies";
@@ -45,6 +44,7 @@ import VistaReportes from "ClientApp/views/reportes/reportes";
 import { CustomSettingsLayout, SettingsLayout } from "ClientApp/components/layouts/settings";
 import AlimentosEspeciesList from "ClientApp/views/alimentacion/alimentosEspecies/alimentoEspecie-list";
 import MapaPage from "ClientApp/views/landing/MapaPage";
+import ChooseOptionView from "ClientApp/views/dashboard/chooseOptions";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -112,8 +112,11 @@ const Provider = () => {
               ),
             },
             {
+              path: Routes.ChooseOptions,
+              element: <ChooseOptionView />
+            },
+            {
               path: Routes.EMPLEADOS_ROUTE,
-              
               element: <EmpleadosList/>,
             },
             {
@@ -199,16 +202,6 @@ const Provider = () => {
             {
               path: Routes.COMPORTAMIENTO_ROUTE,
               element: <ComportamientosList />,
-            },
-            {
-              path: Routes.COMPORTAMIENTO_DETALLE_ROUTE,
-              element: <ComportamientoLayout />,
-              children: [
-                {
-                  path: Routes.DETALLE_COMPORTAMIENTO_ROUTE,
-                  element: <DetallesComportamientos />,
-                },
-              ],
             },
             {
               path: Routes.REPORTES_ROUTE,

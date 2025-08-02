@@ -9,12 +9,18 @@ interface ApiCustom<T> extends Omit<Api<T>, "update"> {
   nullify?: (id: number) => Promise<number>;
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
+  getDietaByAnimalId?: (id: number) => Promise<any>;
 }
 
 const DietaAplicadaApi: ApiCustom<IDietaAplicada> = {
 
   getAll: async () => {
     const result = await API().get(Endpoints.dietaAPLICADA_GET);
+    return result.data;
+  },
+
+  getDietaByAnimalId: async (id: number) => {
+    const result = await API().get(`${Endpoints.DIETA_BY_ANIMALID}/${id}`);
     return result.data;
   },
 

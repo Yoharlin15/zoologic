@@ -8,3 +8,11 @@ export const useFetchDietasAplicadas = () => {
     queryFn: DietaAplicadaApi.getAll,
   });
 };
+
+export const useFetchDietasAplicadasByAnimalId = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.DIETASAPLICADAS, id],
+    queryFn: () => DietaAplicadaApi.getDietaByAnimalId?.(id),
+  });
+};

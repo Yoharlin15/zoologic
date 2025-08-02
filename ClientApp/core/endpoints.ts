@@ -136,6 +136,7 @@ export const UNIDAD_MEDIDA_CREATE = `${ALIMENTACION_BASE}/CreateUnidadMedida`;
 //CRUD DietasAplicadas
 export const dietaAPLICADA_GET = `${ALIMENTACION_BASE}/GetDietasAplicadas`;
 export const DIETA_APLICADA_CREATE = `${ALIMENTACION_BASE}/CreateDietasAplicadas`;
+export const DIETA_BY_ANIMALID = `${ALIMENTACION_BASE}/GetDietaByAnimalId`
 
 //CRUD Habitats
 export const HABITATS_GET = `${HABITATS_BASE}/${GET}`;
@@ -147,7 +148,9 @@ export const HABITATS_UPDATE = `${HABITATS_BASE}/Update/{id}`
 
 //CRUD Comportamiento
 export const COMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/${GET}`;
+export const COMPORTAMIENTO_GETBYID = `${COMPORTAMIENTO_BASE}/GetById`
 export const COMPORTAMIENTO_CREATE = `${COMPORTAMIENTO_BASE}/CreateComportamiento`;
+export const COMPORTAMIENTO_UPDATE = `${COMPORTAMIENTO_BASE}/Update/{id}`
 
 //CRUD DetalleComportamiento
 export const DETALLECOMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/GetDetallesComportamiento`;

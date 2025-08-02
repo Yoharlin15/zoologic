@@ -5,22 +5,20 @@ import React, {
   useReducer,
 } from "react";
 import { debounce } from "radash";
-import { IComportamiento, ITratamientoAplicado } from "#interfaces";
+import { IComportamiento } from "#interfaces";
 import { AppQueryHooks } from "#hooks";
-import { Button } from "primereact/button";
 import { ContextMenu } from "primereact/contextmenu";
-import { Menu } from "primereact/menu";
 import { useNavigate } from "react-router-dom";
 import {
   DataTableFilterMeta,
   DataTableSelectionSingleChangeEvent,
 } from "primereact/datatable";
 
-import { CardTable, ICardTableProps } from "../../../components/card-table";
+import { CardTable, ICardTableProps } from "../../components/card-table";
 import dayjs from "dayjs";
 import { Reducers } from "#core";
 import { SplitButton } from "primereact/splitbutton";
-import ComportamientoSidebarCreate from "./comportamiento-sidebar-create";
+import ComportamientoSidebarCreate from "./comportamiento-sidebar-form";
 
 interface IComportamientoTableProps {
   dispatch: React.Dispatch<any>;
@@ -32,8 +30,7 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
   const [selectedComportamiento, setSelectedComportamiento] = useState<IComportamiento>();
   const cm = useRef<ContextMenu>(null);
 
-  const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
-  const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedComportamientoId, setSelectedComportamientoId] = useState<number | null>(null);
 
   const menuModel = [
@@ -43,7 +40,7 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
       command: () => {
         if (selectedComportamiento) {
           setSelectedComportamientoId(selectedComportamiento.ComportamientoId);
-          setSidebarUpdateVisible(true); // Abre el sidebar
+          setSidebarVisible(true); // Abre el sidebar
         }
       },
     },
@@ -61,15 +58,15 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Animal(Alias)",
-        field: "Alias",
+        header: "Animal(Codigo)",
+        field: "IdentificadorUnico",
         style: { minWidth: "12rem" },
       },
 
       {
         filter: true,
         sortable: true,
-        header: "Registrado por",
+        header: "Creado por",
         field: "NombreUsuario",
         style: { minWidth: "12rem" },
       },
@@ -77,12 +74,12 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Fecha",
-        field: "Fecha",
+        header: "Fecha de creacion",
+        field: "FechaCreacion",
         style: { minWidth: "12rem" },
         body: (rowData: IComportamiento | null) => {
-          if (!rowData?.Fecha) return "";
-          return dayjs(rowData.Fecha).format("DD/MM/YYYY");
+          if (!rowData?.FechaCreacion) return "";
+          return dayjs(rowData.FechaCreacion).format("DD/MM/YYYY");
         },
       },
 
@@ -97,8 +94,8 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
        {
         filter: true,
         sortable: true,
-        header: "Comportamiento",
-        field: "DetallesComportamiento",
+        header: "Entrenamiento",
+        field: "Entrenamiento",
         style: { minWidth: "10rem" },
       },
     ],
@@ -108,7 +105,7 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
   const filteredComportamientos = useMemo(() => {
     if (!Array.isArray(comportamiento.data)) return [];
     return comportamiento.data.filter((t) =>
-      t.Alias?.toLowerCase().includes(searchText.toLowerCase())
+      t.IdentificadorUnico?.toLowerCase().includes(searchText.toLowerCase())
     );
   }, [comportamiento.data, searchText]);
 
@@ -136,7 +133,7 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
             color="primary"
             onClick={() => {
               setSelectedComportamientoId(null);
-              setSidebarCreateVisible(true);
+              setSidebarVisible(true);
             }}
             model={[
               {
@@ -163,8 +160,8 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
         }}
       />
       <ComportamientoSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
+        visible={sidebarVisible}
+        onHide={() => setSidebarVisible(false)}
         comportamientoId={selectedComportamientoId ?? undefined}
       />
     </div>

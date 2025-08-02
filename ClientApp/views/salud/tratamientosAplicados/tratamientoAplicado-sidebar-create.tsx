@@ -35,8 +35,6 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
     const { data: usuarios } = useFetchUsuarios();
     const { data: tratamientosEspecie } = useFetchTratamientoEspecie();
 
-    const usuariosFiltrados = (usuarios ?? []).filter((u: IUsuario) => u.RolId === 2);
-
     const {
         control,
         handleSubmit,
@@ -149,7 +147,7 @@ const TratamientoAplicadoSidebarCreate = ({ onHide, visible }: ITratamientoAplic
                             control={control}
                             placeholder="Seleccione el usuario"
                             rules={{ required: "Campo obligatorio" }}
-                            options={usuariosFiltrados}
+                            options={usuarios}
                             optionLabel="NombreUsuario"
                             optionValue="UsuarioId"
                         />

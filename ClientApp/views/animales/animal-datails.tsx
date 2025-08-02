@@ -1,13 +1,14 @@
 "use client"
-
-import React, { useState, useEffect } from "react"
+import type React from "react"
+import { useState, useEffect } from "react"
 import { TabView, TabPanel, type TabViewTabChangeEvent } from "primereact/tabview"
 import { Card } from "primereact/card"
 import dayjs from "dayjs"
 import { useFetchOneAnimal } from "ClientApp/hooks/useFetch/useFetchAnimales"
 import { useFetchOneFoto } from "ClientApp/hooks/useFetch/useFetchEspecies"
-import { IAnimal, IEspecieFoto } from "#interfaces"
+import type { IAnimal, IEspecieFoto } from "#interfaces"
 import AnimalTratamientos from "./animal-tratamientos"
+import AnimalDietas from "./animal-dietas"
 
 // Mock hook for demonstration
 const useFetchOneDieta = (animalId: number) => ({
@@ -65,56 +66,39 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
     <div className="flex flex-col h-full bg-gray-100 p-4 gap-4 max-w-screen-xl mx-auto">
       {/* Animal Info Card */}
       <Card className="shadow-sm w-full max-w-md mx-auto">
-        <div>
+        <div className="h-22 w-22 border-3 border-green-500">
           <img
-            src={imageUrl}
+            src={imageUrl || "/placeholder.svg"}
             alt={animal.Alias}
-            className="h-20 w-20 object-cover rounded-full"
+            className="h-full w-full object-cover rounded-full"
           />
         </div>
-
         {/* Animal Details */}
         <div className="space-y-2 text-sm md:text-sm">
           <div className="pt-2">
             <span className="font-bold">Codigo: </span>
-            <span>{animal.Codigo || "N/A"}</span>
+            <span>{animal.IdentificadorUnico || "N/A"}</span>
           </div>
-
           <div className="pt-2">
             <span className="font-bold">Alias: </span>
             <span>{animal.Alias}</span>
           </div>
-
           <div className="pt-2">
             <span className="font-bold">Especie: </span>
-            <span>{animal.NombreCientifico || "N/A"}</span>
+            <span>{animal.NombreComun || "N/A"}</span>
           </div>
-
           <div className="pt-2">
             <span className="font-bold">Color: </span>
             <span>{animal.Color || "N/A"}</span>
           </div>
-
           <div className="pt-2">
             <span className="font-bold">Sexo: </span>
             <span>{animal.Sexo}</span>
           </div>
-
           <div className="pt-2">
             <span className="font-bold">Fecha de nacimiento: </span>
             <span>{formatDate(animal.FechaNacimiento)}</span>
           </div>
-
-          <div className="pt-2">
-            <span className="font-bold">Padre: </span>
-            <span>{animal.Padre || "N/A"}</span>
-          </div>
-
-          <div className="pt-2">
-            <span className="font-bold">Madre: </span>
-            <span>{animal.Madre || "N/A"}</span>
-          </div>
-
           {animal.Observaciones && (
             <div className="pt-2">
               <span className="font-bold">Observaciones: </span>
@@ -123,7 +107,6 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
           )}
         </div>
       </Card>
-
       {/* Tabs Section */}
       <Card className="shadow-sm w-full max-w-8xl mx-auto flex-grow">
         <TabView
@@ -133,20 +116,15 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
           panelContainerClassName="p-0 h-full"
         >
           <TabPanel header="Dietas aplicadas">
-            <div className="h-full p-4">
-              <h2 className="text-xl font-bold mb-4">Dietas aplicadas</h2>
-              <div className="space-y-4">
-                <p>Contenido de dietas aplicadas...</p>
-              </div>
+            <div className="h-full overflow-hidden">
+              <AnimalDietas animalId={animalId} />
             </div>
           </TabPanel>
-
           <TabPanel header="Tratamientos aplicados">
             <div className="h-full overflow-hidden">
               <AnimalTratamientos animalId={animalId} />
             </div>
           </TabPanel>
-
           <TabPanel header="Trasladados">
             <div className="h-full p-4">
               <h2 className="text-xl font-bold mb-4">Trasladados</h2>
@@ -155,12 +133,11 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
               </div>
             </div>
           </TabPanel>
-
           <TabPanel header="Comportamientos">
             <div className="h-full p-4">
-              <h2 className="text-xl font-bold mb-4">Trasladados</h2>
+              <h2 className="text-xl font-bold mb-4">Comportamientos</h2>
               <div className="space-y-4">
-                <p>Contenido de trasladados...</p>
+                <p>Contenido de comportamientos...</p>
               </div>
             </div>
           </TabPanel>

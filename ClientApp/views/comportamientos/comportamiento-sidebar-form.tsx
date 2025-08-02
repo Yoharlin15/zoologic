@@ -13,7 +13,6 @@ import { FieldColumn, Form } from "ClientApp/components/form";
 import { IComportamientoCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
 import { useFetchAnimales, useFetchHabitats, useFetchUsuarios } from "ClientApp/hooks/useFetch";
-import { useFetchDetalleComportamiento } from "ClientApp/hooks/useFetch/useFetchDetalleComportamiento";
 import { useCreateComportamientos } from "ClientApp/hooks/useMutation/useMutationComportamientos";
 
 interface IComportamientoSidebarProps {
@@ -28,7 +27,6 @@ const ComportamientoSidebarCreate = ({ onHide, visible }: IComportamientoSidebar
   const { data: animales } = useFetchAnimales();
   const { data: usuarios } = useFetchUsuarios();
   const { data: habitats } = useFetchHabitats(); // Assuming this fetches habitats, adjust if necessary
-  const { data: detalleComportamientos } = useFetchDetalleComportamiento(); // Moved inside the component
   const createComportamiento = useCreateComportamientos();
 
   const { control, handleSubmit, reset } = useForm<IComportamientoCreate, FieldValues>({
@@ -120,17 +118,6 @@ const ComportamientoSidebarCreate = ({ onHide, visible }: IComportamientoSidebar
               options={habitats || []}
               optionLabel="Nombre"
               optionValue="HabitatId" />
-          </FieldColumn>
-
-          <FieldColumn label="Comportamiento" columns={{ sm: 6 }}>
-            <Dropdown
-              name="DetalleComportamientoId"
-              control={control}
-              placeholder="Seleccione el habitat"
-              rules={{ required: "Campo obligatorio" }}
-              options={detalleComportamientos || []}
-              optionLabel="DetallesComportamiento"
-              optionValue="DetalleComportamientoId" />
           </FieldColumn>
 
           <FieldColumn label="Fecha de registro" columns={{ sm: 12 }}>

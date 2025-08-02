@@ -1,6 +1,22 @@
 export interface IComportamiento {
     ComportamientoId: number;
     AnimalId: number;
+    IdentificadorUnico: string;
+    CreadoPor: number;
+    NombreUsuario: string;
+    FechaCreacion: Date | string | null;
+    HabitatId: number;
+    Nombre: string
+    AlimentoEspecieId: number;
+    Entrenamiento: string;
+    Conducta: string;
+    ObservacionFisica: string;
+    ObservacionGeneral: string;
+}
+
+export interface IComportamientoCurrent {
+    ComportamientoId: number;
+    AnimalId: number;
     Alias: string;
     UsuarioId: number;
     NombreUsuario: string;
@@ -17,23 +33,4 @@ export interface IComportamientoCreate {
     Fecha: Date | null;
     HabitatId: number;
     DetalleComportamientoId: string;
-}
-
-export interface IDetalleComportamiento {
-    DetalleComportamientoId: number;
-    DetallesComportamiento: string;
-}
-
-export interface IDetalleComportamientoCurrent {
-    DetalleComportamientoId: number;
-    DetallesComportamiento: string;
-}
-
-export interface IDetalleComportamientoCreate {
-    DetallesComportamiento: number;
-}
-
-export interface IDetalleComportamientoUpdate {
-    DetalleComportamientoId: number;
-    DetallesComportamiento: string;
 }

@@ -169,7 +169,7 @@ const LayoutContent = ({
   );
 
   const handleGoBack = () => {
-    navigate("/dashboard"); // Redirige a la vista de Dashboard
+    navigate(Routes.ChooseOptions); // Redirige a la vista de Dashboard
   };
 
   return (
@@ -181,7 +181,7 @@ const LayoutContent = ({
       >
         <span className="font-semibold text-lg text-700 flex">{title}</span>
         <Button 
-          label="Volver al Dashboard" 
+          label="Volver" 
           icon="pi pi-arrow-left" 
           onClick={handleGoBack} 
           className="p-button-text p-button-secondary"
