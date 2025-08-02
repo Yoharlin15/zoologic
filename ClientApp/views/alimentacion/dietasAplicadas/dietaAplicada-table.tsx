@@ -83,7 +83,11 @@ const DietaAplicadaTable = ({ dispatch }: IDietaAplicadaTableProps) => {
                 header: "Cantidad",
                 field: "Cantidad",
                 style: { minWidth: "12rem" },
-                body: (rowData) => `${rowData.Cantidad} ${rowData.UnidadMedida}`,
+                body: (rowData) =>
+                    rowData?.Cantidad != null
+                        ? `${rowData.Cantidad} ${rowData.UnidadMedida ?? ""}`
+                        : "Sin cantidad",
+
             },
             {
                 filter: true,
