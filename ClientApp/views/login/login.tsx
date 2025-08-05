@@ -30,7 +30,7 @@ const LoginSideImage = () => (
   <div
     style={{
       backgroundImage: `url("https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b")`,
-      backgroundColor: "#B6E388",
+      backgroundColor: "hsla(110, 56%, 61%, 1.00)",
     }}
     className="hidden md:flex flex-1 bg-no-repeat bg-cover justify-content-center align-items-center flex-column p-5 text-black"
   >
@@ -103,8 +103,8 @@ const Login = () => {
           summary: "Éxito",
           detail: res.mensaje || "Has iniciado sesión correctamente.",
         })
-        const { TokenJwt, UsuarioId, NombreUsuario, RolId, Permisos } = res
-        setAuthData({ usuarioId: UsuarioId, nombreUsuario: NombreUsuario, rolId: RolId, token: TokenJwt, permisos: Permisos })
+        const { TokenJwt, UsuarioId, EmpleadoId, NombreUsuario, RolId, Permisos } = res
+        setAuthData({ usuarioId: UsuarioId, empleadoId: EmpleadoId, nombreUsuario: NombreUsuario, rolId: RolId, token: TokenJwt, permisos: Permisos })
         const rol = res.RolId
         setTimeout(() => {
           setIsLoadingLogin(false)

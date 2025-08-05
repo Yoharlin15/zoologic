@@ -45,6 +45,7 @@ import { CustomSettingsLayout, SettingsLayout } from "ClientApp/components/layou
 import AlimentosEspeciesList from "ClientApp/views/alimentacion/alimentosEspecies/alimentoEspecie-list";
 import MapaPage from "ClientApp/views/landing/MapaPage";
 import ChooseOptionView from "ClientApp/views/dashboard/chooseOptions";
+import PerfilUsuario from "ClientApp/views/usuarios/usuario-profile";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -207,6 +208,10 @@ const Provider = () => {
               path: Routes.REPORTES_ROUTE,
               element: <VistaReportes />,
             },
+            {
+              path: Routes.PROFILE_ROUTE,
+              element: <PerfilUsuario />
+            }
           ],
         },
         {

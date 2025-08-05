@@ -29,12 +29,15 @@ export const registrarUsuario = (datos: RegistroDatos) =>
 export const loginUsuario = async (credenciales: LoginDatos): Promise<RespuestaServidor> => {
   const response = await api.post<RespuestaServidor>('/api/Usuario/Login', credenciales);
 
-  const { TokenJwt, UsuarioId, NombreUsuario, RolId, Permisos } = response.data;
+  const { TokenJwt, UsuarioId, EmpleadoId, NombreUsuario, RolId, Permisos } = response.data;
 
   if (TokenJwt) {
     localStorage.setItem('token', TokenJwt);
     if (UsuarioId !== undefined) {
       localStorage.setItem('usuarioId', UsuarioId.toString());
+    }
+    if (EmpleadoId !== undefined) {
+    localStorage.setItem('empleadoId', EmpleadoId.toString());
     }
     if (NombreUsuario) {
       localStorage.setItem('nombreUsuario', NombreUsuario);

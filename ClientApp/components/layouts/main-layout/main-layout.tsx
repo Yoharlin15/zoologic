@@ -4,6 +4,7 @@ import { useMediaQuery } from "usehooks-ts";
 import { classNames } from "primereact/utils";
 import { useNavigate } from 'react-router-dom';
 import { Routes } from "#core";
+import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
 
 interface IMainLayoutProps {
   logoProps: ILogoProps;
@@ -92,6 +93,10 @@ const MainLayout = ({
     navigate(Routes.SETTINGS_ROUTE);
   };
 
+  const handleProfileNavigation = () => {
+    navigate(Routes.PROFILE_ROUTE);
+  };
+
   const toggleSidebar = () => {
     if (isMobile) {
       setSidebarVisible(!sidebarVisible);
@@ -110,6 +115,7 @@ const MainLayout = ({
     ...headerProps,
     dropdown: {
       ...headerProps.dropdown,
+      accountAction: headerProps.dropdown?.accountAction || handleProfileNavigation,  
       logoutAction: headerProps.dropdown?.logoutAction || handleLogout,
       configAction: headerProps.dropdown?.configAction || handleConfigNavigation,
     },
@@ -313,6 +319,7 @@ const LayoutContent = ({
   );
 
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
+  const { nombreUsuario } = useAuth();
 
   return (
     <div className="flex flex-column relative flex-auto max-h-screen">
@@ -340,6 +347,9 @@ const LayoutContent = ({
           >
             <div className="hidden lg:flex align-items-center">
               <div className="p-overlay-badge flex">
+                <i className="pi pi-bell text-[24px] mr-4 cursor-pointer"></i>
+              </div>
+              <div className="p-overlay-badge flex">
                 {dropdown?.avatarSrc && (
                   <img
                     alt="avatar"
@@ -349,7 +359,7 @@ const LayoutContent = ({
                 )}
               </div>
               <div className="font-semibold text-lg text-900 flex ml-2">
-                {dropdown?.title}
+                {nombreUsuario || dropdown?.title}
               </div>
               <div className="flex">
                 <i
@@ -357,6 +367,7 @@ const LayoutContent = ({
                 ></i>
               </div>
             </div>
+
             <div className="lg:hidden">
               <i className="pi pi-ellipsis-v text-[28px]"></i>
             </div>
@@ -375,7 +386,7 @@ const LayoutContent = ({
                   <div className="flex text-base mr-2">
                     <i className="pi pi-user text-[28px]"></i>
                   </div>
-                  <span className="font-medium">Cuenta</span>
+                  <span className="font-medium">Perfil</span>
                   <Ripple />
                 </a>
               </li>

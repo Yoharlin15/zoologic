@@ -1,14 +1,12 @@
 import React from 'react';
 import { Button } from 'primereact/button';
-import { Carousel } from 'primereact/carousel';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { useNavigate } from 'react-router-dom';
 import { Routes } from '#core';
-import MapaInteractivo from './mapa';
 import { useFetchEspecies } from 'ClientApp/hooks/useFetch';
-import { IEspecie } from '#interfaces';
+import Carrusel from './carrusel';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -16,26 +14,6 @@ const LandingPage = () => {
 
   const handleLoginClick = () => {
     navigate(Routes.login_ROUTE);
-  };
-
-  const carouselTemplate = (especie: IEspecie) => {
-    return (
-      <div className="relative mx-auto" style={{ maxWidth: '700px' }}>
-        <img
-          src={especie.FotoUrl || "https://via.placeholder.com/700x400?text=Imagen+no+disponible"}
-          alt={especie.NombreComun}
-          className="w-full h-auto rounded-lg shadow-md object-cover"
-          style={{ height: '400px' }}
-          onError={(e) => {
-            (e.target as HTMLImageElement).src = 'https://via.placeholder.com/700x400?text=Imagen+no+disponible';
-          }}
-        />
-        <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black to-transparent text-white">
-          <h3 className="text-xl font-bold">{especie.NombreComun}</h3>
-          <p className="text-sm italic">{especie.NombreCientifico}</p>
-        </div>
-      </div>
-    );
   };
 
   if (isLoading) {
@@ -62,12 +40,14 @@ const LandingPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header modificado */}
-      <div className="bg-green-800 shadow-md py-4 px-6 w-full">
+      <div className="bg-green-600 shadow-md py-4 px-6 w-full">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div className="text-4xl font-bold text-white mr-4">zoologic</div>
+          {/* Logo (izquierda) */}
+          <div className="text-4xl font-bold text-white">zoologic</div>
 
-          <div className="flex gap-4">
-            {/* Catálogo */}
+          {/* Botones (derecha) */}
+          <div className="flex gap-4 ml-auto">  {/* ← `ml-auto` fuerza alineación a la derecha */}
+            {/* Catálogo (responsive) */}
             <Button
               icon="pi pi-book"
               className="p-button-rounded p-button-outlined text-white border-white md:hidden"
@@ -78,11 +58,11 @@ const LandingPage = () => {
             <Button
               label="Catálogo"
               icon="pi pi-book"
-              className="p-button-rounded p-button-outlined text-white border-white hidden md:flex"
+              className="p-button-rounded p-button-outlined text-white border-white hidden md:inline-flex"
               onClick={() => navigate(Routes.CATALOGO_ROUE)}
             />
 
-            {/* Iniciar Sesión */}
+            {/* Iniciar Sesión (responsive) */}
             <Button
               icon="pi pi-user"
               className="p-button-rounded p-button-outlined text-white border-white md:hidden"
@@ -93,37 +73,15 @@ const LandingPage = () => {
             <Button
               label="Iniciar Sesión"
               icon="pi pi-user"
-              className="p-button-rounded p-button-outlined text-white border-white hidden md:flex"
+              className="p-button-rounded p-button-outlined text-white border-white hidden md:inline-flex"
               onClick={handleLoginClick}
             />
           </div>
-
         </div>
       </div>
+      <Carrusel />
 
-      {/* Carrusel de Especies */}
-      <section className="py-12 px-6 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-3 text-gray-800">Nuestras Especies</h2>
-        {especiesConImagen.length > 0 ? (
-          <div className="px-4">
-            <Carousel
-              value={especiesConImagen}
-              numVisible={1}
-              numScroll={1}
-              itemTemplate={carouselTemplate}
-              className="custom-carousel"
-              circular
-              autoplayInterval={3000}
-            />
-          </div>
-        ) : (
-          <div className="text-center py-8">
-            <p className="text-gray-600">No hay especies disponibles para mostrar</p>
-          </div>
-        )}
-      </section>
-
-      <div className="text-center mb-6">
+      <div className="text-center mb-6 mt-6">
         <Button
           label="Ver Mapa Interactivo"
           icon="pi pi-map"
@@ -132,28 +90,23 @@ const LandingPage = () => {
         />
       </div>
 
-
-      {/* Sección de Boletas con imagen al lado */}
-      <section className="py-12 px-6 bg-indigo-50 mt-8">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-8">
-          <div className="flex-1">
-            <img
-              src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1750957578/Ecommerce_web_page-bro_x5jps9.svg"
-              alt="Boletas"
-              className="w-full h-auto rounded-lg shadow-md"
-            />
-          </div>
-
-          <div className="flex-1 text-center md:text-left">
-            <h2 className="text-3xl font-bold mb-4 text-gray-800">No te quedes sin tu entrada</h2>
-            <p className="text-lg text-gray-600 mb-6">
-              Evita las molestias y el tiempo perdido en largas filas. Adquiere tus boletas en línea de forma rápida, segura y desde la comodidad de tu hogar.
+      <section className="py-12 px-6 bg-green-600 mt-8">
+        <div className="max-w-8xl mx-auto flex flex-col items-center">
+          <div className="w-full md:w-3/4 lg:w-1/2 text-center">
+            <h2 className="text-4xl font-bold mb-4 text-white">Planifica Tu Visita Hoy</h2>
+            <p className="text-xl text-white mb-8">
+              No te pierdas la oportunidad de vivir una experiencia inolvidable. ¡Te esperamos!
             </p>
-            <Button
-              label="Comprar Boletas"
-              icon="pi pi-ticket"
-              className="p-button-rounded p-button-lg bg-indigo-600 border-indigo-600 hover:bg-indigo-700"
-            />
+            <div className="flex justify-content-center mb-4">
+              <Button
+                className="p-button-rounded p-button-lg bg-white text-green-600 border-white hover:bg-white hover:text-green-700 transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
+                style={{ fontWeight: '600' }}
+              >
+                <i className="pi pi-ticket"></i>
+                <span>Comprar Entradas Ahora</span>
+                <i className="pi pi-arrow-right"></i>
+              </Button>
+            </div>
           </div>
         </div>
       </section>

@@ -32,6 +32,7 @@ export const ALIMENTACION_ESPECIES_ROUTE = "alimentacion-especies"
 export const VENTA_BOLETOS_ROUTE = "venta-boletos";
 export const REPORTES_ROUTE = "reportes";
 export const SETTINGS_ROUTE = "settings";
+export const PROFILE_ROUTE = "profile";
 export const ROLES_ROUTE = "roles";
 export const ESTADOS_ROUTE = "estados"
 export const CARGOS_ROUTE = "cargos";

@@ -17,6 +17,7 @@ export interface RespuestaServidor {
   exito: boolean;
   TokenJwt?: string; 
   UsuarioId?: number;
+  EmpleadoId?: number;
   NombreUsuario?: string;
   RolId: number;
   Permisos?: { // Estructura más detallada de los permisos

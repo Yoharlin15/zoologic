@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 interface AuthData {
     usuarioId: number;
+    empleadoId: number;
     nombreUsuario: string;
     rolId: number;
     token: string;
@@ -10,6 +11,7 @@ interface AuthData {
 
 interface AuthContextType {
     usuarioId: number | null;
+    empleadoId: number | null;
     nombreUsuario: string | null;
     rolId: number | null;
     token: string | null;
@@ -22,6 +24,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: React.PropsWithChildren) => {
     const [usuarioId, setUsuarioId] = useState<number | null>(null);
+    const [empleadoId, setEmpleadoId] = useState<number | null>(null);
     const [nombreUsuario, setNombreUsuario] = useState<string | null>(null);
     const [rolId, setRolId] = useState<number | null>(null);
     const [token, setToken] = useState<string | null>(null);
@@ -29,7 +32,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
 
     const [forceRender, setForceRender] = useState(0);
 
-    const setAuthData = ({ usuarioId, nombreUsuario, rolId, token, permisos }: AuthData) => {
+    const setAuthData = ({ usuarioId, nombreUsuario, empleadoId, rolId, token, permisos }: AuthData) => {
         if (nombreUsuario && token) {
             localStorage.setItem("nombreUsuario", nombreUsuario);
             if (rolId !== null) {
@@ -39,6 +42,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
             localStorage.setItem("permisos", JSON.stringify(permisos));  // Guardar permisos en localStorage
             
             setUsuarioId(usuarioId)
+            setEmpleadoId(empleadoId)
             setNombreUsuario(nombreUsuario);
             setRolId(rolId);
             setToken(token);
@@ -51,6 +55,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
     useEffect(() => {
         const usuario = localStorage.getItem("usuarioId")
         const nombre = localStorage.getItem("nombreUsuario");
+        const empleado = localStorage.getItem("empleadoId");
         const rol = localStorage.getItem("rolId");
         const tokenGuardado = localStorage.getItem("token");
         const permisosGuardados = localStorage.getItem("permisos");
@@ -58,6 +63,7 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
         if (usuario && nombre && rol && tokenGuardado) {
             setUsuarioId(Number(usuario));
             setNombreUsuario(nombre);
+            setEmpleadoId(Number(empleado));
             setRolId(Number(rol));
             setToken(tokenGuardado);
             if (permisosGuardados) {
@@ -70,13 +76,14 @@ export const AuthProvider = ({ children }: React.PropsWithChildren) => {
         localStorage.clear();
         setUsuarioId(null);
         setNombreUsuario(null);
+        setEmpleadoId(null);
         setRolId(null);
         setToken(null);
         setPermisos([]);  // Limpiar permisos al hacer logout
     };
 
     return (
-        <AuthContext.Provider value={{ usuarioId, nombreUsuario, rolId, token, permisos, setAuthData, logout }}>
+        <AuthContext.Provider value={{ usuarioId, nombreUsuario, empleadoId, rolId, token, permisos, setAuthData, logout }}>
             {children}
         </AuthContext.Provider>
     );
