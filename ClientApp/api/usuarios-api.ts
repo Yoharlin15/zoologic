@@ -36,9 +36,9 @@ export const loginUsuario = async (credenciales: LoginDatos): Promise<RespuestaS
     if (UsuarioId !== undefined) {
       localStorage.setItem('usuarioId', UsuarioId.toString());
     }
-    if (EmpleadoId !== undefined) {
-    localStorage.setItem('empleadoId', EmpleadoId.toString());
-    }
+    if (EmpleadoId !== undefined && EmpleadoId !== null) {
+      localStorage.setItem('empleadoId', EmpleadoId.toString());
+    } 
     if (NombreUsuario) {
       localStorage.setItem('nombreUsuario', NombreUsuario);
     }

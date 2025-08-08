@@ -13,6 +13,7 @@ const ZONAS_BASE = "Zona";
 const ALIMENTACION_BASE = "Alimentacion";
 const HABITATS_BASE = "Habitat";
 const COMPORTAMIENTO_BASE = "Comportamiento";
+const VENTAS_BASE = "Venta";
 const USUARIOS_BASE = "Usuario";
 const LOGIN = "Login";
 const LOGOUT = "Logout";
@@ -180,6 +181,22 @@ export const NECROPSIAS_GET = `${NECROPSIAS_BASE}/GetNecropsia`;
 export const NECROPSIAS_CREATE = `${NECROPSIAS_BASE}/CreateNecropsia`;
 export const NECROPSIAS_GETBYID = `${NECROPSIAS_BASE}/GetById`
 export const NECROPSIAS_UPDATE = `${NECROPSIAS_BASE}/Update/{id}`;
+
+//CRUD TipoBoletos
+export const TIPOBOLETO_GET = `${VENTAS_BASE}/GetTiposBoletos`;
+export const TIPOBOLETO_CREATE = `${VENTAS_BASE}/CreateTipoBoleto`;
+
+//CRUD Compra
+export const COMPRA_GET = `${VENTAS_BASE}/GetCompra`;
+export const COMPRA_CREATE = `${VENTAS_BASE}/CreateCompra`;
+
+//CRUD Pago
+export const PAGO_GET = `${VENTAS_BASE}/GetPago`;
+export const PAGO_CREATE = `${VENTAS_BASE}/CreatePago`;
+
+//CRUD Factura
+export const FACTURA_GET = `${VENTAS_BASE}/GetFactura`;
+export const FACTURA_CREATE = `${VENTAS_BASE}/CreateFactura`;
 
 //CRUD Usuarios
 export const USUARIOS_GET = `${USUARIOS_BASE}/${GET}`;

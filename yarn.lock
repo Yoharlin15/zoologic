@@ -1086,6 +1086,18 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
+"@stripe/react-stripe-js@^3.9.0":
+  version "3.9.0"
+  resolved "https://registry.yarnpkg.com/@stripe/react-stripe-js/-/react-stripe-js-3.9.0.tgz#6b35291c23fdfcd24afcb4c27dc7e09cc18d1da3"
+  integrity sha512-pN1Re7zUc3m61FFQROok685g3zsBQRzCmZDmTzO8iPU6zhLvu2JnC0LrG0FCzSp6kgGa8AQSzq4rpFSgyhkjKg==
+  dependencies:
+    prop-types "^15.7.2"
+
+"@stripe/stripe-js@^7.8.0":
+  version "7.8.0"
+  resolved "https://registry.yarnpkg.com/@stripe/stripe-js/-/stripe-js-7.8.0.tgz#01390d31030f04b64a7ff13adcccbafd615c7b77"
+  integrity sha512-DNXRfYUgkZlrniQORbA/wH8CdFRhiBSE0R56gYU0V5vvpJ9WZwvGrz9tBAZmfq2aTgw6SK7mNpmTizGzLWVezw==
+
 "@swc/core-darwin-arm64@1.11.9":
   version "1.11.9"
   resolved "https://registry.yarnpkg.com/@swc/core-darwin-arm64/-/core-darwin-arm64-1.11.9.tgz#6506cf6704adae19fcc4f607dc435f1f9bd3b5ac"
@@ -4065,7 +4077,7 @@ prompts@^2.0.1:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.8.1:
+prop-types@^15.5.8, prop-types@^15.6.2, prop-types@^15.7.2, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.npmjs.org/prop-types/-/prop-types-15.8.1.tgz"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
@@ -4102,6 +4114,11 @@ pure-rand@^6.0.0:
   version "6.1.0"
   resolved "https://registry.npmjs.org/pure-rand/-/pure-rand-6.1.0.tgz"
   integrity sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==
+
+qr.js@0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/qr.js/-/qr.js-0.0.0.tgz#cace86386f59a0db8050fa90d9b6b0e88a1e364f"
+  integrity sha512-c4iYnWb+k2E+vYpRimHqSu575b1/wKl4XFeJGpFmrJQz5I88v9aY2czh7s0w36srfCM1sXgC/xpoJz5dJfq+OQ==
 
 querystringify@^2.1.1:
   version "2.2.0"
@@ -4201,6 +4218,14 @@ react-leaflet@^5.0.0:
   integrity sha512-CWbTpr5vcHw5bt9i4zSlPEVQdTVcML390TjeDG0cK59z1ylexpqC6M1PJFjV8jD7CF+ACBFsLIDs6DRMoLEofw==
   dependencies:
     "@react-leaflet/core" "^3.0.0"
+
+react-qr-code@^2.0.18:
+  version "2.0.18"
+  resolved "https://registry.yarnpkg.com/react-qr-code/-/react-qr-code-2.0.18.tgz#237de8fbab537885d6b2b10f4fd5318b371e3b17"
+  integrity sha512-v1Jqz7urLMhkO6jkgJuBYhnqvXagzceg3qJUWayuCK/c6LTIonpWbwxR1f1APGd4xrW/QcQEovNrAojbUz65Tg==
+  dependencies:
+    prop-types "^15.8.1"
+    qr.js "0.0.0"
 
 react-responsive-carousel@^3.2.23:
   version "3.2.23"

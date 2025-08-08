@@ -7,9 +7,11 @@ import { useNavigate } from 'react-router-dom';
 import { Routes } from '#core';
 import { useFetchEspecies } from 'ClientApp/hooks/useFetch';
 import Carrusel from './carrusel';
+import { useAuth } from 'ClientApp/contexts/AuthContext/AuthContext';
 
 const LandingPage = () => {
   const navigate = useNavigate();
+  const { token, nombreUsuario, logout } = useAuth();
   const { data: especies, isLoading, isError } = useFetchEspecies();
 
   const handleLoginClick = () => {
@@ -34,20 +36,19 @@ const LandingPage = () => {
     );
   }
 
-  // Filtrar especies que tienen imagen
   const especiesConImagen = especies?.filter(especie => especie.FotoUrl) || [];
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header modificado */}
+      {/* Header */}
       <div className="bg-green-600 shadow-md py-4 px-6 w-full">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
-          {/* Logo (izquierda) */}
+          {/* Logo */}
           <div className="text-4xl font-bold text-white">zoologic</div>
 
-          {/* Botones (derecha) */}
-          <div className="flex gap-4 ml-auto">  {/* ← `ml-auto` fuerza alineación a la derecha */}
-            {/* Catálogo (responsive) */}
+          {/* Botones derechos */}
+          <div className="flex gap-4 ml-auto items-center">
+            {/* Botón Catálogo */}
             <Button
               icon="pi pi-book"
               className="p-button-rounded p-button-outlined text-white border-white md:hidden"
@@ -62,25 +63,51 @@ const LandingPage = () => {
               onClick={() => navigate(Routes.CATALOGO_ROUE)}
             />
 
-            {/* Iniciar Sesión (responsive) */}
-            <Button
-              icon="pi pi-user"
-              className="p-button-rounded p-button-outlined text-white border-white md:hidden"
-              onClick={handleLoginClick}
-              tooltip="Iniciar sesión"
-              tooltipOptions={{ position: 'bottom' }}
-            />
-            <Button
-              label="Iniciar Sesión"
-              icon="pi pi-user"
-              className="p-button-rounded p-button-outlined text-white border-white hidden md:inline-flex"
-              onClick={handleLoginClick}
-            />
+            {/* Condicional: Usuario logueado o no */}
+            {token ? (
+              <>
+                <div className="hidden md:flex items-center text-white font-semibold mt-2">
+                  👋 {nombreUsuario}
+                </div>
+                <Button
+                  icon="pi pi-sign-out"
+                  className="p-button-rounded p-button-outlined text-white border-white md:hidden"
+                  onClick={logout}
+                  tooltip="Cerrar sesión"
+                  tooltipOptions={{ position: 'bottom' }}
+                />
+                <Button
+                  label="Cerrar sesión"
+                  icon="pi pi-sign-out"
+                  className="p-button-rounded p-button-outlined text-white border-white hidden md:inline-flex"
+                  onClick={logout}
+                />
+              </>
+            ) : (
+              <>
+                <Button
+                  icon="pi pi-user"
+                  className="p-button-rounded p-button-outlined text-white border-white md:hidden"
+                  onClick={handleLoginClick}
+                  tooltip="Iniciar sesión"
+                  tooltipOptions={{ position: 'bottom' }}
+                />
+                <Button
+                  label="Iniciar Sesión"
+                  icon="pi pi-user"
+                  className="p-button-rounded p-button-outlined text-white border-white hidden md:inline-flex"
+                  onClick={handleLoginClick}
+                />
+              </>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Carrusel de especies */}
       <Carrusel />
 
+      {/* Botón Mapa Interactivo */}
       <div className="text-center mb-6 mt-6">
         <Button
           label="Ver Mapa Interactivo"
@@ -90,6 +117,7 @@ const LandingPage = () => {
         />
       </div>
 
+      {/* Sección promocional */}
       <section className="py-12 px-6 bg-green-600 mt-8">
         <div className="max-w-8xl mx-auto flex flex-col items-center">
           <div className="w-full md:w-3/4 lg:w-1/2 text-center">
@@ -99,18 +127,21 @@ const LandingPage = () => {
             </p>
             <div className="flex justify-content-center mb-4">
               <Button
+                onClick={() => navigate(Routes.TICKETS_ROUTE)}
                 className="p-button-rounded p-button-lg bg-white text-green-600 border-white hover:bg-white hover:text-green-700 transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
                 style={{ fontWeight: '600' }}
               >
                 <i className="pi pi-ticket"></i>
                 <span>Comprar Entradas Ahora</span>
                 <i className="pi pi-arrow-right"></i>
+
               </Button>
             </div>
           </div>
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="bg-gray-800 text-white py-8 px-6">
         <div className="max-w-6xl mx-auto text-center">
           <p>© 2025 zoologic. Todos los derechos reservados.</p>

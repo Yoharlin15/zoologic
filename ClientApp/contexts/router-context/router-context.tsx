@@ -46,6 +46,10 @@ import AlimentosEspeciesList from "ClientApp/views/alimentacion/alimentosEspecie
 import MapaPage from "ClientApp/views/landing/MapaPage";
 import ChooseOptionView from "ClientApp/views/dashboard/chooseOptions";
 import PerfilUsuario from "ClientApp/views/usuarios/usuario-profile";
+import CompraBoletos from "ClientApp/views/ventas/CompraBoletos";
+import PagoStep from "ClientApp/views/ventas/PagoStep";
+import Paso2PagoWrapper from "ClientApp/views/ventas/Paso2PagoWrapper";
+import PagoExitoso from "ClientApp/views/ventas/PagoExitoso";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -71,6 +75,21 @@ const Provider = () => {
       id: "landing-page",
       element: <ZoologicLandingPage />,
       path: Routes.LANDING_ROUTE,
+    },
+    {
+      id: "tickets",
+      element: <CompraBoletos />,
+      path: Routes.TICKETS_ROUTE,
+    },
+    {
+      id: "payment",
+      element: <Paso2PagoWrapper />,
+      path: Routes.PAYMENT_ROUTE,
+    },
+    {
+      id: "successful-payment",
+      element: <PagoExitoso />,
+      path: Routes.SUCCESSFUL_PAYMENT_ROUTE,
     },
     {
       id: "mapa",
@@ -118,7 +137,7 @@ const Provider = () => {
             },
             {
               path: Routes.EMPLEADOS_ROUTE,
-              element: <EmpleadosList/>,
+              element: <EmpleadosList />,
             },
             {
               path: Routes.EJEMPLARES_ROUTE,
@@ -211,7 +230,8 @@ const Provider = () => {
             {
               path: Routes.PROFILE_ROUTE,
               element: <PerfilUsuario />
-            }
+            },
+
           ],
         },
         {
