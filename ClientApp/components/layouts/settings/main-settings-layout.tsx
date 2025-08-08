@@ -4,7 +4,6 @@ import { useMediaQuery } from "usehooks-ts";
 import { classNames } from "primereact/utils";
 import { useNavigate } from 'react-router-dom';
 import { Routes } from "#core";
-import { title } from "process";
 import { Button } from "primereact/button";
 
 interface IMainLayoutProps {
@@ -24,49 +23,83 @@ interface ISidebarItem {
   label?: string;
   active?: boolean;
   onClick?: () => void;
-  style?: React.CSSProperties; // Acepta un objeto de estilo
-  type?: 'divider' | 'item'; // Puedes añadir más tipos según lo necesites
+  style?: React.CSSProperties;
+  type?: 'divider' | 'item';
 }
 
 interface ISidebarItemsProps {
   items: ISidebarItem[];
+  collapsed?: boolean;
 }
 
 interface ILayoutContentProps {
   removePadding: boolean;
   children?: React.ReactNode;
   withStyledContainer?: boolean;
-  btnRef: React.MutableRefObject<null>;
-  headerProps?: IHeaderProps; 
+  headerProps?: IHeaderProps;
+  onToggleSidebar: () => void;
+  sidebarCollapsed: boolean;
 }
 
 const MainSettingsLayout = ({
   children,
-  headerProps,
   sideBarItems,
   activeTabIndex,
   removePadding = false,
 }: IMainLayoutProps) => {
-  const btnRef = React.useRef(null);
+  const isMobile = useMediaQuery("(max-width: 992px)");
+  const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
+  const [sidebarVisible, setSidebarVisible] = React.useState(false);
+
+  const toggleSidebar = () => {
+    if (isMobile) {
+      setSidebarVisible(!sidebarVisible);
+    } else {
+      setSidebarCollapsed(!sidebarCollapsed);
+    }
+  };
+
+  const closeSidebar = () => {
+    if (isMobile) {
+      setSidebarVisible(false);
+    }
+  };
 
   return (
     <LayoutContainer>
-      <LayoutSidebar>
+      {/* Overlay para móvil cuando el sidebar está abierto */}
+      {isMobile && sidebarVisible && (
+        <div
+          className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 z-4"
+          onClick={closeSidebar}
+        />
+      )}
+
+      <LayoutSidebar 
+        isMobile={isMobile} 
+        visible={isMobile ? sidebarVisible : true}
+        collapsed={!isMobile && sidebarCollapsed}
+      >
         <SidebarItems
           items={sideBarItems.map((item, index) => {
             return {
               ...item,
-              onClick: item.onClick,
+              onClick: () => {
+                item.onClick?.();
+                closeSidebar();
+              },
               active: activeTabIndex === index,
             };
           })}
+          collapsed={sidebarCollapsed}
         />
       </LayoutSidebar>
       <LayoutContent
-        btnRef={btnRef}
         headerProps={{title: "Configuraciones generales del sistema"}}
         removePadding={removePadding}
         withStyledContainer
+        onToggleSidebar={toggleSidebar}
+        sidebarCollapsed={sidebarCollapsed}
       >
         {children}
       </LayoutContent>
@@ -78,27 +111,52 @@ const LayoutContainer = ({ children }: React.PropsWithChildren) => (
   <div className="min-h-screen flex relative surface-ground">{children}</div>
 );
 
-const LayoutSidebar = ({ children }: React.PropsWithChildren) => (
-  <div
-    id="app-sidebar"
-    className="h-screen hidden lg:flex flex-shrink-0 sticky left-0 top-0 z-1 border-right-1 surface-border select-none"
-    style={{
-      width: '280px',
-      boxShadow: '4px 0 10px rgba(0, 0, 0, 0.05)',
-      transition: 'all 0.3s ease',
-      backgroundColor: '#f5f5f5' // Fondo gris claro
-    }}
-  >
-    <div className="flex flex-column h-full w-full">{children}</div>
-  </div>
-);
+const LayoutSidebar = ({ 
+  children, 
+  isMobile = false, 
+  visible = false,
+  collapsed = false
+}: { 
+  children: React.ReactNode;
+  isMobile?: boolean;
+  visible?: boolean;
+  collapsed?: boolean;
+}) => {
+  const sidebarStyle: React.CSSProperties = {
+    boxShadow: '4px 0 10px rgba(0, 0, 0, 0.05)',
+    transition: 'transform 0.3s ease, width 0.3s ease',
+    backgroundColor: '#f5f5f5',
+    overflow: 'hidden'
+  };
 
-const SidebarItems = ({ items }: ISidebarItemsProps) => {
-  const isLaptop = useMediaQuery("(max-width: 1200px)");
-  const navigate = useNavigate();
+  if (isMobile) {
+    sidebarStyle.width = '250px';
+    sidebarStyle.position = 'fixed';
+    sidebarStyle.top = '0';
+    sidebarStyle.left = '0';
+    sidebarStyle.height = '100vh';
+    sidebarStyle.zIndex = '5';
+    sidebarStyle.transform = visible ? 'translateX(0)' : 'translateX(-100%)';
+  } else {
+    sidebarStyle.width = collapsed ? '70px' : '280px';
+    sidebarStyle.position = 'sticky';
+    sidebarStyle.height = '100vh';
+  }
 
   return (
-    <div className="overflow-y-auto px-3 py-5 flex-1">
+    <div
+      id="app-sidebar"
+      className="flex-shrink-0 border-right-1 surface-border select-none"
+      style={sidebarStyle}
+    >
+      <div className="flex flex-column h-full w-full">{children}</div>
+    </div>
+  );
+};
+
+const SidebarItems = ({ items, collapsed = false }: ISidebarItemsProps) => {
+  return (
+    <div className="overflow-y-auto px-2 py-7 flex-1">
       <ul className="list-none m-0 p-0 flex flex-column gap-1">
         {items.map((item) => (
           <li key={item.label}>
@@ -107,14 +165,18 @@ const SidebarItems = ({ items }: ISidebarItemsProps) => {
               className={classNames(
                 "flex align-items-center cursor-pointer p-3 border-round transition-all transition-duration-200",
                 {
-                  "bg-green-100": item.active, // Verde claro cuando está activo
-                  "text-green-700": item.active, // Texto verde oscuro para contraste
+                  "bg-green-100": item.active,
+                  "text-green-700": item.active,
                   "hover:surface-100": !item.active,
-                  "w-full": true
+                  "w-full": true,
+                  "justify-content-center": collapsed,
+                  "px-2": collapsed
                 }
               )}
+              title={collapsed ? item.label : undefined}
             >
-              <div className="flex align-items-center justify-content-center" style={{ width: '40px' }}>
+              <div className="flex align-items-center justify-content-center" 
+                   style={{ width: collapsed ? '30px' : '40px' }}>
                 {typeof item.icon === 'string' ? (
                   <img
                     src={item.icon}
@@ -127,7 +189,7 @@ const SidebarItems = ({ items }: ISidebarItemsProps) => {
                 ) : (
                   <div style={{
                     fontSize: '1.25rem',
-                    color: item.active ? '#15803d' : 'var(--text-color-secondary)', // Verde oscuro cuando está activo
+                    color: item.active ? '#15803d' : 'var(--text-color-secondary)',
                     width: '24px',
                     display: 'flex',
                     justifyContent: 'center'
@@ -136,7 +198,7 @@ const SidebarItems = ({ items }: ISidebarItemsProps) => {
                   </div>
                 )}
               </div>
-              {!isLaptop && (
+              {!collapsed && (
                 <span className={classNames("font-medium ml-3", {
                   "text-green-700": item.active,
                   "text-600": !item.active,
@@ -154,11 +216,12 @@ const SidebarItems = ({ items }: ISidebarItemsProps) => {
 };
 
 const LayoutContent = ({
-  btnRef,
   children,
   headerProps,
   removePadding,
   withStyledContainer = true,
+  onToggleSidebar,
+  sidebarCollapsed
 }: ILayoutContentProps) => {
   const { title } = headerProps || {};
   const navigate = useNavigate();
@@ -169,7 +232,7 @@ const LayoutContent = ({
   );
 
   const handleGoBack = () => {
-    navigate(Routes.ChooseOptions); // Redirige a la vista de Dashboard
+    navigate(Routes.ChooseOptions);
   };
 
   return (
@@ -179,7 +242,18 @@ const LayoutContent = ({
         style={{ height: "60px" }}
         className="flex justify-content-between align-items-center px-5 surface-0 border-bottom-1 surface-border absolute top-0 w-full z-5 bg-gray-100 shadow-3"
       >
-        <span className="font-semibold text-lg text-700 flex">{title}</span>
+        <div className="flex align-items-center">
+          {/* Botón de hamburguesa visible en todas las vistas */}
+          <button
+            onClick={onToggleSidebar}
+            className="p-ripple p-2 border-none bg-transparent cursor-pointer text-600 hover:text-900 mr-3"
+          >
+            <i className={`pi ${sidebarCollapsed ? 'pi-times' : 'pi-bars'} text-[28px]`}></i>
+            <Ripple />
+          </button>
+          <span className="font-semibold text-lg text-700 flex">{title}</span>
+        </div>
+        
         <Button 
           label="Volver" 
           icon="pi pi-arrow-left" 
@@ -187,6 +261,7 @@ const LayoutContent = ({
           className="p-button-text p-button-secondary"
         />
       </div>
+      
       {/* CONTENT */}
       <div
         style={{ marginTop: 60 }}

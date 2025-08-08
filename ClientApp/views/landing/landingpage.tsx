@@ -127,14 +127,19 @@ const LandingPage = () => {
             </p>
             <div className="flex justify-content-center mb-4">
               <Button
-                onClick={() => navigate(Routes.TICKETS_ROUTE)}
+                onClick={() => {
+                  if (!token) {
+                    navigate(Routes.login_ROUTE);
+                  } else {
+                    navigate(Routes.TICKETS_ROUTE);
+                  }
+                }}
                 className="p-button-rounded p-button-lg bg-white text-green-600 border-white hover:bg-white hover:text-green-700 transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
                 style={{ fontWeight: '600' }}
               >
                 <i className="pi pi-ticket"></i>
                 <span>Comprar Entradas Ahora</span>
                 <i className="pi pi-arrow-right"></i>
-
               </Button>
             </div>
           </div>

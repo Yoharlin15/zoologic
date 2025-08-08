@@ -2,11 +2,10 @@
 
 import type React from "react"
 import { useRef, useState } from "react"
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { Button } from "primereact/button"
 import { Form, FieldColumn } from "#components"
 import { Routes } from "#core"
-import ControlledInputText from "ClientApp/components/inputs/input-text/input-text"
 import { Toast } from "primereact/toast"
 import { useLoginUsuario } from "ClientApp/hooks/useMutation/useMutationSignup"
 import type { LoginDatos } from "#interfaces"
@@ -14,6 +13,8 @@ import { useNavigate } from "react-router-dom"
 import { Divider } from "primereact/divider"
 import { ProgressSpinner } from "primereact/progressspinner"
 import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext"
+import { InputText } from "primereact/inputtext"
+import ControlledInputText from "ClientApp/components/inputs/input-text/input-text"
 
 interface LoginFormData {
   Correo: string
@@ -21,7 +22,7 @@ interface LoginFormData {
 }
 
 const LoginContainer = ({ children }: React.PropsWithChildren) => (
-  <div className="flex justify-content-center align-items-center h-screen flex-1 flex-column px-4 md:px-0">
+  <div className="flex justify-content-center align-items-center h-screen flex-1 flex-column px-4 md:px-0 bg-gray-100">
     {children}
   </div>
 )
@@ -30,20 +31,20 @@ const LoginSideImage = () => (
   <div
     style={{
       backgroundImage: `url("https://images.unsplash.com/photo-1612838320302-4b3b3b3b3b3b")`,
-      backgroundColor: "hsla(110, 56%, 61%, 1.00)",
+      backgroundColor: "hsla(110, 67%, 66%, 1.00)",
     }}
     className="hidden md:flex flex-1 bg-no-repeat bg-cover justify-content-center align-items-center flex-column p-5 text-black"
   >
-    <h1 className="text-5xl md:text-7xl font-bold mb-4">Zoologic</h1>
-    <p className="text-sm md:text-lg text-justify max-w-md mb-4">
+    <h1 className="text-5xl md:text-8xl font-bold mb-4 text-green-900">Zoologic</h1>
+    <p className="text-sm md:text-lg text-justify max-w-md mb-4 text-green-800 font-bold">
       Zoologic es un sistema web integral diseñado para optimizar la gestión operativa del Parque Zoológico de Santo
       Domingo, en la República Dominicana. Esta plataforma permite a los empleados del zoológico gestionar de manera
       eficiente sus tareas diarias, desde el cuidado de los animales hasta la organización de sus rutinas.
     </p>
-    <p className="text-sm md:text-lg text-justify max-w-md mb-4">
+    <p className="text-sm md:text-lg text-justify max-w-md mb-4 text-green-800 font-bold">
       El sistema busca mejorar la eficiencia operativa y fomentar la conservación de la biodiversidad. Zoologic está diseñado para garantizar un manejo adecuado de los recursos y contribuir al bienestar de las especies, al mismo tiempo que ofrece una experiencia más organizada y profesional para el personal del zoológico.
     </p>
-    <span className="text-lg md:text-xl font-semibold mb-4">"Protegiendo el futuro de la vida silvestre"</span>
+    <span className="text-lg md:text-xl font-semibold mb-4 text-green-900 font-bold">"Protegiendo el futuro de la vida silvestre"</span>
     <div className="flex justify-content-center gap-4">
       <img
         src="https://res.cloudinary.com/dlbb3qssp/image/upload/v1742418550/MEDIO-AMBIENTE_ftjbxt.png"
@@ -116,13 +117,21 @@ const Login = () => {
         }, 2000)
       },
       onError: (error: any) => {
+        const mensaje = error?.response?.data?.mensaje || error?.message || "";
+
+        // Validación básica por texto del mensaje (ajústalo según la respuesta real del backend)
+        const esCredencialInvalida = mensaje.toLowerCase().includes("correo") || mensaje.toLowerCase().includes("contraseña") || mensaje.toLowerCase().includes("credencial");
+
         toast.current?.show({
           severity: "error",
           summary: "Error",
-          detail: error.message || "Hubo un error al iniciar sesión.",
-        })
-        setIsLoadingLogin(false)
-      },
+          detail: esCredencialInvalida
+            ? "Credenciales incorrectas. Por favor verifica tu correo y contraseña."
+            : "Credenciales incorrectas. Por favor verifica tu correo y contraseña.",
+        });
+
+        setIsLoadingLogin(false);
+      }
     })
   }
 
@@ -144,7 +153,7 @@ const Login = () => {
           <div className="flex flex-column">
             <Form onSubmit={handleSubmit(onSubmit)}>
               <FieldColumn label="Correo">
-                <ControlledInputText
+                <Controller
                   name="Correo"
                   control={control}
                   rules={{
@@ -154,11 +163,22 @@ const Login = () => {
                       message: "Correo electrónico inválido",
                     },
                   }}
-                  placeholder="ejemplo@correo.com"
-                  className="w-full"
-                  disabled={isLoadingLogin}
+                  render={({ field, fieldState }) => (
+                    <>
+                      <InputText
+                        {...field}
+                        placeholder="ejemplo@correo.com"
+                        className={`w-full ${fieldState.invalid ? 'p-invalid' : ''}`}
+                        disabled={isLoadingLogin}
+                      />
+                      {fieldState.error && (
+                        <small className="p-error">{fieldState.error.message}</small>
+                      )}
+                    </>
+                  )}
                 />
               </FieldColumn>
+
               <FieldColumn label="Contraseña">
                 <ControlledInputText
                   name="Password"

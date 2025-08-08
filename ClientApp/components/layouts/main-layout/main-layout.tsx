@@ -86,6 +86,12 @@ const MainLayout = ({
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('usuarioId');
+    localStorage.removeItem('nombreUsuario');
+    localStorage.removeItem('rolId');
+    localStorage.removeItem('permisos');
+    localStorage.removeItem('empleadoId');
+    localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE');
     navigate(Routes.LANDING_ROUTE, { replace: true });
   };
 
@@ -115,7 +121,7 @@ const MainLayout = ({
     ...headerProps,
     dropdown: {
       ...headerProps.dropdown,
-      accountAction: headerProps.dropdown?.accountAction || handleProfileNavigation,  
+      accountAction: headerProps.dropdown?.accountAction || handleProfileNavigation,
       logoutAction: headerProps.dropdown?.logoutAction || handleLogout,
       configAction: headerProps.dropdown?.configAction || handleConfigNavigation,
     },
