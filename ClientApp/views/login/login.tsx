@@ -168,6 +168,7 @@ const Login = () => {
                       <InputText
                         {...field}
                         placeholder="ejemplo@correo.com"
+                        autoComplete="off"
                         className={`w-full ${fieldState.invalid ? 'p-invalid' : ''}`}
                         disabled={isLoadingLogin}
                       />
