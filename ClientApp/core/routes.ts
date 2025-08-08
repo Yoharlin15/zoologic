@@ -41,6 +41,7 @@ export const ZONAS_ROUTE = "zonas";
 export const ACCESS_DENIED_ROUTE = "/access-denied";
 export const ChooseOptions = "/Choose"
 export const MAPA_ROUTE = "mapa"
+export const STEPS_ROUTE = "steps"
 export const TICKETS_ROUTE = "tickets"
 export const PAYMENT_ROUTE = "payment"
 export const SUCCESSFUL_PAYMENT_ROUTE = "successful-payment"

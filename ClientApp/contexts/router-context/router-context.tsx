@@ -50,6 +50,7 @@ import CompraBoletos from "ClientApp/views/ventas/CompraBoletos";
 import PagoStep from "ClientApp/views/ventas/PagoStep";
 import Paso2PagoWrapper from "ClientApp/views/ventas/Paso2PagoWrapper";
 import PagoExitoso from "ClientApp/views/ventas/PagoExitoso";
+import PreCompraPasos from "ClientApp/views/ventas/steps";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -75,6 +76,11 @@ const Provider = () => {
       id: "landing-page",
       element: <ZoologicLandingPage />,
       path: Routes.LANDING_ROUTE,
+    },
+    {
+      id: "steps-page",
+      element: <PreCompraPasos />,
+      path: Routes.STEPS_ROUTE,
     },
     {
       id: "tickets",

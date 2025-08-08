@@ -49,6 +49,9 @@ const LandingPage = () => {
           {/* Botones derechos */}
           <div className="flex gap-4 ml-auto items-center">
             {/* Botón Catálogo */}
+            <div className="hidden md:flex items-center text-white font-semibold mt-2 text-lg">
+              {nombreUsuario}
+            </div>
             <Button
               icon="pi pi-book"
               className="p-button-rounded p-button-outlined text-white border-white md:hidden"
@@ -66,9 +69,7 @@ const LandingPage = () => {
             {/* Condicional: Usuario logueado o no */}
             {token ? (
               <>
-                <div className="hidden md:flex items-center text-white font-semibold mt-2">
-                  👋 {nombreUsuario}
-                </div>
+
                 <Button
                   icon="pi pi-sign-out"
                   className="p-button-rounded p-button-outlined text-white border-white md:hidden"
@@ -76,12 +77,16 @@ const LandingPage = () => {
                   tooltip="Cerrar sesión"
                   tooltipOptions={{ position: 'bottom' }}
                 />
+
+
                 <Button
                   label="Cerrar sesión"
                   icon="pi pi-sign-out"
                   className="p-button-rounded p-button-outlined text-white border-white hidden md:inline-flex"
                   onClick={logout}
                 />
+
+
               </>
             ) : (
               <>
@@ -131,7 +136,7 @@ const LandingPage = () => {
                   if (!token) {
                     navigate(Routes.login_ROUTE);
                   } else {
-                    navigate(Routes.TICKETS_ROUTE);
+                    navigate(Routes.STEPS_ROUTE);
                   }
                 }}
                 className="p-button-rounded p-button-lg bg-white text-green-600 border-white hover:bg-white hover:text-green-700 transform hover:scale-105 transition-all duration-300 flex items-center gap-2"
