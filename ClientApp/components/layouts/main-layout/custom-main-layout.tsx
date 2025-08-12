@@ -73,7 +73,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
       {
         icon: <FontAwesomeIcon icon="ticket" />,
         label: "Venta de boletos",
-        path: "/admin/",
+        path: Routes.VENTA_BOLETOS_ROUTE,
       },
       {
         icon: <FontAwesomeIcon icon="user-gear" />,

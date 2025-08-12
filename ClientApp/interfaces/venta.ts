@@ -14,10 +14,11 @@ export interface ICreateTipoBoletos {
 export interface ICompra {
   CompraId: number;
   UsuarioId: number;
+  NombreUsuario:string;
   FechaCompra: string;
   TotalCompra: number;
   EstadoId: number;
-  EstadoNombre: string;
+  NombreEstado: string;
   FechaVisita: string;
 }
 
@@ -50,9 +51,20 @@ export interface IFactura {
   FacturaId: number;
   CompraId: number;
   UsuarioId: number;
+  NombreUsuario: string;
   FechaFactura: string;
   MontoTotal: number;
   NumeroFactura: number;
+}
+
+export interface IFacturaDetalle {
+  DetalleFacturaId: number;
+  FacturaId: number;
+  TipoBoletoId: number;
+  Descripcion: string;
+  Cantidad: number;
+  PrecioUnitario: number;
+  precioTotal: number;
 }
 
 export interface ICreateFactura {

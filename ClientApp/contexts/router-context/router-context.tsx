@@ -51,6 +51,9 @@ import PagoStep from "ClientApp/views/ventas/PagoStep";
 import Paso2PagoWrapper from "ClientApp/views/ventas/Paso2PagoWrapper";
 import PagoExitoso from "ClientApp/views/ventas/PagoExitoso";
 import PreCompraPasos from "ClientApp/views/ventas/steps";
+import FacturaView from "ClientApp/views/ventas/factura";
+import FacturaComprobante from "ClientApp/views/ventas/factura";
+import TicketList from "ClientApp/views/tickets/ticket-list";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -96,6 +99,11 @@ const Provider = () => {
       id: "successful-payment",
       element: <PagoExitoso />,
       path: Routes.SUCCESSFUL_PAYMENT_ROUTE,
+    },
+    {
+      id: "invoice",
+      element: <FacturaComprobante />,
+      path: Routes.INVOICE_ROUTE,
     },
     {
       id: "mapa",
@@ -228,6 +236,10 @@ const Provider = () => {
             {
               path: Routes.COMPORTAMIENTO_ROUTE,
               element: <ComportamientosList />,
+            },
+            {
+              path: Routes.VENTA_BOLETOS_ROUTE,
+              element: <TicketList />,
             },
             {
               path: Routes.REPORTES_ROUTE,

@@ -25,3 +25,5 @@ export * from "./useFetchExamenes";
 export * from "./useFetchDepartamentos";
 export * from "./useFetchRolesPermisos";
 export * from "./useFetchUnidadesMedida";
+export * from "./useFetchFacturas";
+export * from "./useFetchCompras";

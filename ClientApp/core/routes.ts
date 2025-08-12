@@ -29,7 +29,7 @@ export const COMPORTAMIENTO_DETALLE_ROUTE = "detalle"
 export const DIETA_APLICADA_ROUTE = "dietas"
 export const ALIMENTACION_ROUTE = "alimentacion"
 export const ALIMENTACION_ESPECIES_ROUTE = "alimentacion-especies"
-export const VENTA_BOLETOS_ROUTE = "venta-boletos";
+export const VENTA_BOLETOS_ROUTE = "/venta-boletos";
 export const REPORTES_ROUTE = "reportes";
 export const SETTINGS_ROUTE = "settings";
 export const PROFILE_ROUTE = "profile";
@@ -45,5 +45,6 @@ export const STEPS_ROUTE = "steps"
 export const TICKETS_ROUTE = "tickets"
 export const PAYMENT_ROUTE = "payment"
 export const SUCCESSFUL_PAYMENT_ROUTE = "successful-payment"
+export const INVOICE_ROUTE = "invoice/:facturaId";
 
 

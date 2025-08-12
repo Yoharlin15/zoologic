@@ -110,7 +110,7 @@ const Login = () => {
         setTimeout(() => {
           setIsLoadingLogin(false)
           if (rol === 2) {
-            navigate(Routes.LANDING_ROUTE, { replace: true })
+            navigate(Routes.VENTA_BOLETOS_ROUTE, { replace: true })
           } else {
             navigate(Routes.EMPLEADOS_ROUTE, { replace: true })
           }

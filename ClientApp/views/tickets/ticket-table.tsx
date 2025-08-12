@@ -16,16 +16,15 @@ import {
 } from "primereact/datatable";
 
 import { CardTable, ICardTableProps } from "../../components/card-table";
-import UsuarioSidebarCreate from "./usuario-sidebar-create";
-import UsuarioSidebarUpdate from "./usuario-sidebar-update";
+import { ICompra } from "ClientApp/interfaces/venta";
 
-interface IUsuarioTableProps {
+interface ITicketTableProps {
   dispatch: React.Dispatch<any>;
 }
 
-const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
-  const usuario = AppQueryHooks.useFetchUsuarios();
-  const [selectedUsuario, setSelectedUsuario] = useState<IUsuario>();
+const TicketTable = ({ dispatch }: ITicketTableProps) => {
+  const ticket = AppQueryHooks.useFetchCompras();
+  const [selectedTicket, setSelectedTicket] = useState<ICompra>();
 
   const cm = useRef<ContextMenu>(null);
 
@@ -38,8 +37,8 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
       label: "Editar",
       icon: "pi pi-pencil",
       command: () => {
-        if (selectedUsuario) {
-          setSelectedUsuarioId(selectedUsuario.UsuarioId);
+        if (selectedTicket) {
+          setSelectedUsuarioId(selectedTicket.UsuarioId);
           setSidebarUpdateVisible(true); // Abre el sidebar
         }
       },
@@ -54,7 +53,7 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
   const [filters, setFilters] = useState<DataTableFilterMeta>(
   );
 
-  const columns = useMemo<ICardTableProps<IUsuario>["columns"]>(
+  const columns = useMemo<ICardTableProps<ICompra>["columns"]>(
     () => [
       {
         filter: true,
@@ -66,102 +65,74 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
       {
         filter: true,
         sortable: true,
-        header: "Correo electronico",
-        field: "Email",
+        header: "Fecha de compra",
+        field: "FechaCompra",
         style: { minWidth: "16rem" },
       },
       {
         filter: true,
         sortable: true,
-        header: "Rol",
-        field: "Nombre",
+        header: "Monto total",
+        field: "TotalCompra",
         style: { minWidth: "10rem" },
+        body: (rowData: ICompra) => `$ ${rowData.TotalCompra} pesos` 
       },
       {
         filter: true,
         sortable: true,
-        header: "Empleado/a",
-        field: "Nombres",
+        header: "Estado de pago",
+        field: "NombreEstado",
         style: { minWidth: "10rem" },
       },
-      {
+            {
         filter: true,
         sortable: true,
-        header: "¿Cuenta verificada?",
-        field: "Verificado",
+        header: "Fecha de visita",
+        field: "FechaVisita",
         style: { minWidth: "10rem" },
-        body: (rowData: IUsuario | null) => (rowData?.Verificado ? "Sí" : "No"),
-      }
+      },
     ],
     []
   );
 
-  const filteredUsuarios = useMemo(() => {
-    if (!Array.isArray(usuario.data)) return [];
-    return usuario.data.filter((t) =>
+  const filteredTickets = useMemo(() => {
+    if (!Array.isArray(ticket.data)) return [];
+    return ticket.data.filter((t) =>
       t.NombreUsuario?.toLowerCase().includes(searchText.toLowerCase())
     );
-  }, [usuario.data, searchText]);
+  }, [ticket.data, searchText]);
 
   return (
     <div className="h-full p-4">
       <ContextMenu
         ref={cm}
         model={menuModel}
-        onHide={() => setSelectedUsuario(undefined)}
+        onHide={() => setSelectedTicket(undefined)}
       />
-      <CardTable<IUsuario>
-        title="Lista de usuarios registrados en el sistema"
+      <CardTable<ICompra>
+        title="Boletos comprados"
         columns={columns}
-        value={filteredUsuarios}
-        skeletonLoading={usuario.isPending}
+        value={filteredTickets}
+        skeletonLoading={ticket.isPending}
         onChangeSearch={debounce({ delay: 500 }, (e) =>
           setSearchText(e.target.value)
         )}
-        renderHeadActions={[
-          <Button
-            key="btn_add"
-            onClick={() => {
-              setSelectedUsuarioId(null);
-              setSidebarCreateVisible(true);
-            }}
-            className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
-            label="Nuevo usuario"
-          />
-        ]}
         tableProps={{
           rows: 8,
           size: "small",
           filters,
-          dataKey: "UsuarioId",
-          loading: usuario.isFetching,
-          paginator: filteredUsuarios.length > 8,
-          contextMenuSelection: selectedUsuario,
+          dataKey: "CompraId",
+          loading: ticket.isFetching,
+          paginator: filteredTickets.length > 8,
+          contextMenuSelection: selectedTicket,
           onContextMenu: (e) => cm.current?.show(e.originalEvent),
           onContextMenuSelectionChange: (
-            e: DataTableSelectionSingleChangeEvent<IUsuario[]>
-          ) => setSelectedUsuario(e.value),
+            e: DataTableSelectionSingleChangeEvent<ICompra[]>
+          ) => setSelectedTicket(e.value),
         }}
       />
-      <UsuarioSidebarCreate
-        visible={sidebarCreateVisible}
-        onHide={() => setSidebarCreateVisible(false)}
-        usuarioId={selectedUsuarioId ?? undefined}
-        onCreateSuccess={() => usuario.refetch()}
-      />
-
-      <UsuarioSidebarUpdate
-        visible={sidebarUpdateVisible}
-        onHide={() => setSidebarUpdateVisible(false)}
-        usuarioId={selectedUsuarioId ?? 0}
-        onUpdateSuccess={() => {
-          usuario.refetch();
-          setSidebarUpdateVisible(false);
-        }}
-      />
-
     </div>
   );
 };
 
-export default UsuarioTable;
+export default TicketTable;

@@ -7,14 +7,17 @@ import QRCode from "react-qr-code";
 const PagoExitoso = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
-
   const compraId = state?.compraId ?? null;
   const facturaId = state?.facturaId ?? null;
   const codigoQR = state?.codigoQR ?? null;
 
   const handleVerFactura = () => {
     if (!facturaId) return alert("Factura no disponible");
-    navigate(`/factura/${facturaId}`);
+    navigate(`/invoice/${facturaId}`, {
+      state: {
+        codigoQR
+      }
+    })
   };
 
   const handleVolverInicio = () => {

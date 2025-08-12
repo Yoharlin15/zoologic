@@ -187,7 +187,7 @@ export const TIPOBOLETO_GET = `${VENTAS_BASE}/GetTiposBoletos`;
 export const TIPOBOLETO_CREATE = `${VENTAS_BASE}/CreateTipoBoleto`;
 
 //CRUD Compra
-export const COMPRA_GET = `${VENTAS_BASE}/GetCompra`;
+export const COMPRA_GET = `${VENTAS_BASE}/GetCompras`;
 export const COMPRA_CREATE = `${VENTAS_BASE}/CreateCompra`;
 
 //CRUD Pago
@@ -196,6 +196,8 @@ export const PAGO_CREATE = `${VENTAS_BASE}/CreatePago`;
 
 //CRUD Factura
 export const FACTURA_GET = `${VENTAS_BASE}/GetFactura`;
+export const FACTURA_GETBYID = `${VENTAS_BASE}/GetFacturaById`;
+export const FACTURA_DETALLE_GETBYID = `${VENTAS_BASE}/GetDetalleFacturaById`;
 export const FACTURA_CREATE = `${VENTAS_BASE}/CreateFactura`;
 
 //CRUD Usuarios

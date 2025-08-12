@@ -52,12 +52,15 @@ const ComprarBoletos = () => {
     }, 0) ?? 0;
 
   const formatoFecha = fechaVisita
-    ? fechaVisita.toLocaleDateString("es-MX", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      })
+    ? fechaVisita.toLocaleDateString("es-DO", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    })
     : "No seleccionada";
 
   // Filtramos solo lo seleccionado para mostrar en el diálogo
@@ -146,6 +149,10 @@ const ComprarBoletos = () => {
               placeholder="Selecciona una fecha"
               minDate={new Date()}
               inputClassName="w-full"
+              showTime
+              hourFormat="24"
+              showSeconds={false}
+              disabledDays={[1]}
             />
             {!fechaValida && fechaVisita && (
               <small className="text-red-500 mt-1 block">Por favor selecciona una fecha válida (hoy o en el futuro)</small>
@@ -169,7 +176,7 @@ const ComprarBoletos = () => {
                 >
                   <div>
                     <p className="font-semibold m-0">{tipo.Descripcion}</p>
-                    <p className="text-sm text-600 mt-1">${tipo.Precio.toFixed(2)} c/u</p>
+                    <p className="text-sm text-600 mt-1">DOP${tipo.Precio.toFixed(2)} c/u</p>
                   </div>
                   <div className="flex align-items-center gap-2">
                     <Button
@@ -204,7 +211,7 @@ const ComprarBoletos = () => {
             </div>
             <div className="flex justify-between align-items-center">
               <span className="font-medium text-700">Subtotal:</span>
-              <span className="font-bold text-xl text-primary">${subtotal.toFixed(2)}</span>
+              <span className="font-bold text-xl text-primary">DOP ${subtotal.toFixed(2)}</span>
             </div>
           </div>
 
@@ -284,7 +291,7 @@ const ComprarBoletos = () => {
                 <span className="flex-1">Subtotal</span>
                 <span style={{ width: 60 }}></span>
                 <span style={{ width: 100 }}></span>
-                <span style={{ width: 110, textAlign: "right" }}>${subtotal.toFixed(2)}</span>
+                <span style={{ width: 110, textAlign: "right" }}>DOP ${subtotal.toFixed(2)}</span>
               </div>
             </div>
           ) : (
