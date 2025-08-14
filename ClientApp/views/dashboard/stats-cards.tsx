@@ -22,7 +22,7 @@ interface IStatsCardsProps {
 }
 
 const defaultTotals: ITotals = {
-  
+
   Animales: 0,
   Empleados: 0,
   Habitats: 0,
@@ -95,24 +95,24 @@ const StatsCardsSkeleton = () => {
   const skeletonItems = [1, 2, 3, 4];
 
   return (
-    <div className="col-10">
-      <div>
-        {skeletonItems.map((_, index) => (
-          <div key={index} className="col-12 md:col-6 xl:col-3">
-            <div className="border-1 border-300 border-round surface-card p-2">
-              <div className="flex align-items-center justify-content-between">
-                <div>
-                  <Skeleton width="3rem" height="2rem" className="mb-2" />
-                  <Skeleton width="100%" height="1rem" />
-                </div>
-                <div>
-                  <Skeleton shape="circle" size="64px" />
+    <div className="col-12">
+      <div className="grid">
+          {skeletonItems.map((_, index) => (
+            <div key={index} className="col-12 md:col-6 xl:col-3">
+              <div className="border-1 border-300 border-round surface-card p-3">
+                <div className="flex align-items-center justify-content-between">
+                  <div>
+                    <Skeleton width="3rem" height="2rem" className="mb-2" />
+                    <Skeleton width="100%" height="1rem" />
+                  </div>
+                  <div>
+                    <Skeleton shape="circle" size="64px" />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
     </div>
   );
 };

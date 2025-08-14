@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import {IClase, IFamilia } from "#interfaces";
 import { AppMutationHooks, AppQueryHooks } from "#hooks";
 import toast from "react-hot-toast";
+import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
 
 interface ClaseFormDialogProps {
   id: number;
@@ -27,6 +28,7 @@ export const ClaseFormDialog: React.FC<ClaseFormDialogProps> = ({
   const createMutation = AppMutationHooks.useCreateClases();
   const updateMutation = AppMutationHooks.useUpdateClases();
 
+  const { usuarioId } = useAuth();  // Obtenemos el usuarioId desde el contexto
   const {
     register,
     handleSubmit,
@@ -83,6 +85,9 @@ export const ClaseFormDialog: React.FC<ClaseFormDialogProps> = ({
             <small className="p-error">{errors.ClaseNombre.message}</small>
           )}
         </div>
+
+        {/* Campo oculto para "CreadoPor" */}
+        <input type="hidden" {...register("CreadoPor")} value={usuarioId!} />
 
         <div className="flex justify-end gap-2 pt-4">
           <Button

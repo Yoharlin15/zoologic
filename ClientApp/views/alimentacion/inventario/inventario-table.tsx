@@ -34,7 +34,7 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
   const cm = useRef<ContextMenu>(null);
   const menu = useRef<Menu>(null);
 
-   const [sidebarVisible, setSidebarVisible] = useState(false);
+  const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedInventarioId, setSelectedInventarioId] = useState<number | null>(null);
 
   const menuModel = [
@@ -105,7 +105,11 @@ const InventarioTable = ({ dispatch }: IInventarioTableProps) => {
         header: "Cantidad",
         field: "Cantidad",
         style: { minWidth: "12rem" },
-        body: (rowData) => `${rowData.Cantidad} ${rowData.UnidadMedida}`,
+        body: (rowData) =>
+          rowData?.Cantidad != null
+            ? `${rowData.Cantidad} ${rowData.UnidadMedida ?? ""}`
+            : "Sin cantidad",
+
       },
       {
         filter: true,

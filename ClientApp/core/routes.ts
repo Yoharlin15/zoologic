@@ -46,5 +46,6 @@ export const TICKETS_ROUTE = "tickets"
 export const PAYMENT_ROUTE = "payment"
 export const SUCCESSFUL_PAYMENT_ROUTE = "successful-payment"
 export const INVOICE_ROUTE = "invoice/:facturaId";
+export const COMMENTS_ROUTE = "comments";
 
 

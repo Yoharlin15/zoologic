@@ -3,9 +3,10 @@ import { Dialog } from "primereact/dialog";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useForm } from "react-hook-form";
-import {IFamilia } from "#interfaces";
+import { IFamilia } from "#interfaces";
 import { AppMutationHooks, AppQueryHooks } from "#hooks";
 import toast from "react-hot-toast";
+import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
 
 interface FamiliaFormDialogProps {
   id: number;
@@ -27,6 +28,8 @@ export const FamiliaFormDialog: React.FC<FamiliaFormDialogProps> = ({
   const createMutation = AppMutationHooks.useCreateFamilias();
   const updateMutation = AppMutationHooks.useUpdateFamilias();
 
+  const { usuarioId } = useAuth();  // Obtenemos el usuarioId desde el contexto
+
   const {
     register,
     handleSubmit,
@@ -44,12 +47,15 @@ export const FamiliaFormDialog: React.FC<FamiliaFormDialogProps> = ({
 
   const onSubmit = async (data: IFamilia) => {
     try {
+      // Añadir el campo "CreadoPor" al objeto data
+      const formData = { ...data, CreadoPor: usuarioId };
+
       if (isEditMode) {
-        await updateMutation.mutateAsync(data);
-        toast.success("familia actualizado correctamente");
+        await updateMutation.mutateAsync(formData);
+        toast.success("Familia actualizada correctamente");
       } else {
-        await createMutation.mutateAsync(data);
-        toast.success("familia creado correctamente");
+        await createMutation.mutateAsync(formData);
+        toast.success("Familia creada correctamente");
       }
       onHide();
     } catch (error) {
@@ -83,6 +89,9 @@ export const FamiliaFormDialog: React.FC<FamiliaFormDialogProps> = ({
             <small className="p-error">{errors.FamiliaNombre.message}</small>
           )}
         </div>
+
+        {/* Campo oculto para "CreadoPor" */}
+        <input type="hidden" {...register("CreadoPor")} value={usuarioId!} />
 
         <div className="flex justify-end gap-2 pt-4">
           <Button

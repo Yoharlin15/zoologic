@@ -7,17 +7,36 @@ import { Tag } from 'primereact/tag';
 import { useFetchOneEmpleado, useFetchOneUsuario } from 'ClientApp/hooks/useFetch';
 import { useAuth } from 'ClientApp/contexts/AuthContext/AuthContext';
 
+const getInitials = (fullName?: string) => {
+  if (!fullName) return '';
+  return fullName
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(p => p[0]?.toUpperCase() ?? '')
+    .join('');
+};
+
 const PerfilUsuario: React.FC = () => {
   const { usuarioId, empleadoId } = useAuth();
 
-  // Datos del usuario
+  const hasEmpleado = !!empleadoId;
+
+  // Usuario
   const { data: usuario, isLoading: isLoadingUsuario, error: errorUsuario } = useFetchOneUsuario(usuarioId!);
 
-  // Datos del empleado
-  const { data: empleado, isLoading: isLoadingEmpleado, error: errorEmpleado } = useFetchOneEmpleado(empleadoId!);
+  // Empleado (solo si hay empleadoId)
+  type EmpleadoQuery = { data: any; isLoading: boolean; error: any };
+  const {
+    data: empleado,
+    isLoading: isLoadingEmpleado,
+    error: errorEmpleado
+  }: EmpleadoQuery = hasEmpleado
+    ? useFetchOneEmpleado(empleadoId!)
+    : { data: null, isLoading: false, error: null };
 
-  // Spinner mientras carga cualquiera
-  if (isLoadingUsuario || isLoadingEmpleado) {
+  // Loaders
+  if (isLoadingUsuario || (hasEmpleado && isLoadingEmpleado)) {
     return (
       <div className="flex justify-center items-center h-screen">
         <ProgressSpinner />
@@ -25,7 +44,7 @@ const PerfilUsuario: React.FC = () => {
     );
   }
 
-  // Error usuario
+  // Errores
   if (errorUsuario) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -38,8 +57,7 @@ const PerfilUsuario: React.FC = () => {
     );
   }
 
-  // Error empleado
-  if (errorEmpleado) {
+  if (hasEmpleado && errorEmpleado) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Card className="max-w-md w-full text-center p-4">
@@ -51,18 +69,24 @@ const PerfilUsuario: React.FC = () => {
     );
   }
 
-  if (!usuario || !empleado) {
+  if (!usuario) {
     return (
       <div className="flex justify-center items-center h-screen">
         <Card className="max-w-md w-full text-center p-4">
-          <div className="text-red-500">
-            No se pudo cargar el perfil del usuario o empleado.
-          </div>
+          <div className="text-red-500">No se pudo cargar el perfil del usuario.</div>
         </Card>
       </div>
     );
   }
 
+  // Nombre a mostrar y label del avatar
+  const displayName = empleado
+    ? `${empleado.Nombres} ${empleado.Apellidos}`
+    : usuario.Nombres ?? `@${usuario.NombreUsuario}`;
+
+  const avatarLabel = empleado
+    ? getInitials(`${empleado.Nombres} ${empleado.Apellidos}`)
+    : getInitials(usuario.Nombres ?? usuario.NombreUsuario);
 
   return (
     <div className="flex justify-center items-start min-h-screen bg-gray-50 p-4 md:items-center">
@@ -78,7 +102,7 @@ const PerfilUsuario: React.FC = () => {
           }}
         >
           <Avatar
-            label={usuario.Nombres.charAt(0)}
+            label={!usuario.ImagenUrl ? avatarLabel : undefined}
             size="xlarge"
             shape="circle"
             image={usuario.ImagenUrl ?? undefined}
@@ -90,12 +114,8 @@ const PerfilUsuario: React.FC = () => {
               backgroundColor: 'white'
             }}
           />
-          {empleado &&
-            <h1 className="text-2xl font-bold text-white mb-1">
-              {empleado ? empleado.Nombres + ' ' + empleado.Apellidos : 'Nombre no disponible'}
-            </h1>
-          }
 
+          <h1 className="text-2xl font-bold text-white mb-1">{displayName}</h1>
           <p className="text-white mb-2">@{usuario.NombreUsuario}</p>
         </div>
 
@@ -122,117 +142,119 @@ const PerfilUsuario: React.FC = () => {
               icon="pi pi-envelope"
               extra={
                 usuario.Verificado === 1 && (
-                  <Tag
-                    severity="success"
-                    icon="pi pi-check"
-                    className="ml-2 py-1"
-                  />
+                  <Tag severity="success" icon="pi pi-check" className="ml-2 py-1" />
                 )
               }
             />
           </div>
         </div>
 
-        {/*Información básica */}
+        {/* Si hay empleado, se muestran las secciones adicionales */}
         {empleado && (
-          <div className="p-4 mb-2">
-            <div className="flex align-items-center mb-3">
-              <i className="pi pi-address-book mr-2 text-green-600"></i>
-              <h2 className="text-lg font-semibold text-gray-700 m-0">
-                Información Básica
-              </h2>
+          <>
+            {/* Información básica */}
+            <div className="p-4 mb-2">
+              <div className="flex align-items-center mb-3">
+                <i className="pi pi-address-book mr-2 text-green-600"></i>
+                <h2 className="text-lg font-semibold text-gray-700 m-0">
+                  Información Básica
+                </h2>
+              </div>
+
+              <Divider className="my-2" />
+
+              <div className="grid">
+                <ProfileInfoItem
+                  label="Nombre completo"
+                  value={`${empleado.Nombres} ${empleado.Apellidos}`}
+                  icon="pi pi-user"
+                />
+                <ProfileInfoItem
+                  label="Cédula"
+                  value={empleado.Cedula}
+                  icon="pi pi-id-card"
+                />
+                <ProfileInfoItem
+                  label="Fecha de nacimiento"
+                  value={
+                    empleado.FechaNacimiento
+                      ? new Date(empleado.FechaNacimiento).toLocaleDateString()
+                      : '—'
+                  }
+                  icon="pi pi-calendar"
+                />
+                <ProfileInfoItem
+                  label="Nacionalidad"
+                  value={empleado.Nacionalidad}
+                  icon="pi pi-globe"
+                />
+              </div>
             </div>
 
-            <Divider className="my-2" />
+            {/* Información de Contacto */}
+            <div className="p-4 mb-2">
+              <div className="flex align-items-center mb-3">
+                <i className="pi pi-phone mr-2 text-blue-500"></i>
+                <h2 className="text-lg font-semibold text-gray-700 m-0">
+                  Información de Contacto
+                </h2>
+              </div>
 
-            <div className="grid">
-              {/* Ajusta los campos según lo que devuelve tu empleado */}
-              <ProfileInfoItem
-                label="Nombre completo"
-                value={`${empleado.Nombres} ${empleado.Apellidos}`}
-                icon="pi pi-user"
-              />
-              <ProfileInfoItem
-                label="Cédula"
-                value={empleado.Cedula}
-                icon="pi pi-id-card"
-              />
-              <ProfileInfoItem
-                label="Fecha de nacimiento"
-                value={new Date(empleado.FechaNacimiento).toLocaleDateString()}
-                icon="pi pi-calendar"
-              />
-              <ProfileInfoItem
-                label="Nacionalidad"
-                value={empleado.Nacionalidad}
-                icon="pi pi-globe"
-              />
-            </div>
-          </div>
-        )}
+              <Divider className="my-2" />
 
-        {/* Sección Información de Contacto */}
-        {empleado && (
-          <div className="p-4 mb-2">
-            <div className="flex align-items-center mb-3">
-              <i className="pi pi-phone mr-2 text-blue-500"></i>
-              <h2 className="text-lg font-semibold text-gray-700 m-0">
-                Información de Contacto
-              </h2>
+              <div className="grid">
+                <ProfileInfoItem
+                  label="Teléfono"
+                  value={empleado.Telefono}
+                  icon="pi pi-phone"
+                />
+                <ProfileInfoItem
+                  label="Dirección"
+                  value={empleado.Direccion}
+                  icon="pi pi-map-marker"
+                />
+              </div>
             </div>
 
-            <Divider className="my-2" />
+            {/* Información Laboral */}
+            <div className="p-4 mb-2">
+              <div className="flex align-items-center mb-3">
+                <i className="pi pi-briefcase mr-2 text-blue-500"></i>
+                <h2 className="text-lg font-semibold text-gray-700 m-0">
+                  Información Laboral
+                </h2>
+              </div>
 
-            <div className="grid">
-              <ProfileInfoItem
-                label="Teléfono"
-                value={empleado.Telefono}
-                icon="pi pi-phone"
-              />
-              <ProfileInfoItem
-                label="Dirección"
-                value={empleado.Direccion}
-                icon="pi pi-map-marker"
-              />
+              <Divider className="my-2" />
+
+              <div className="grid">
+                <ProfileInfoItem
+                  label="Cargo"
+                  value={empleado.CargoNombre}
+                  icon="pi pi-briefcase"
+                />
+                <ProfileInfoItem
+                  label="Departamento"
+                  value={empleado.NombreDepartamento}
+                  icon="pi pi-sitemap"
+                />
+                <ProfileInfoItem
+                  label="Estado del Empleado"
+                  value={empleado.NombreEstado}
+                  icon="pi pi-info-circle"
+                />
+                <ProfileInfoItem
+                  label="Fecha de Contratación"
+                  value={
+                    empleado.FechaContratacion
+                      ? new Date(empleado.FechaContratacion).toLocaleDateString()
+                      : '—'
+                  }
+                  icon="pi pi-calendar-plus"
+                />
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* Sección Información Laboral */}
-        {empleado && (
-          <div className="p-4 mb-2">
-            <div className="flex align-items-center mb-3">
-              <i className="pi pi-briefcase mr-2 text-blue-500"></i>
-              <h2 className="text-lg font-semibold text-gray-700 m-0">
-                Información Laboral
-              </h2>
-            </div>
-
-            <Divider className="my-2" />
-
-            <div className="grid">
-              <ProfileInfoItem
-                label="Cargo"
-                value={empleado.CargoNombre}
-                icon="pi pi-briefcase"
-              />
-              <ProfileInfoItem
-                label="Departamento"
-                value={empleado.NombreDepartamento}
-                icon="pi pi-sitemap"
-              />
-              <ProfileInfoItem
-                label="Estado del Empleado"
-                value={empleado.NombreEstado}
-                icon="pi pi-info-circle"
-              />
-              <ProfileInfoItem
-                label="Fecha de Contratación"
-                value={new Date(empleado.FechaContratacion).toLocaleDateString()}
-                icon="pi pi-calendar-plus"
-              />
-            </div>
-          </div>
+          </>
         )}
       </Card>
     </div>
@@ -252,7 +274,7 @@ const ProfileInfoItem: React.FC<{
       <div>
         <p className="text-sm text-gray-500 mb-1">{label}</p>
         <div className="flex align-items-center">
-          <p className="font-medium text-gray-900 m-0">{value}</p>
+          <p className="font-medium text-gray-900 m-0">{value ?? '—'}</p>
           {extra}
         </div>
       </div>

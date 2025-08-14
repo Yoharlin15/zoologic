@@ -54,6 +54,7 @@ import PreCompraPasos from "ClientApp/views/ventas/steps";
 import FacturaView from "ClientApp/views/ventas/factura";
 import FacturaComprobante from "ClientApp/views/ventas/factura";
 import TicketList from "ClientApp/views/tickets/ticket-list";
+import ComentariosDialog from "ClientApp/views/comentario/comentario";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -139,11 +140,7 @@ const Provider = () => {
           children: [
             {
               path: Routes.DASHBOARD_ROUTE,
-              element: (
-                <PrivateRoute requiredPermission="Ver" requiredModule="Home">
-                  <DashboardView />
-                </PrivateRoute>
-              ),
+              element: <DashboardView />
             },
             {
               path: Routes.ChooseOptions,
@@ -249,7 +246,10 @@ const Provider = () => {
               path: Routes.PROFILE_ROUTE,
               element: <PerfilUsuario />
             },
-
+            {
+              path: Routes.COMMENTS_ROUTE,
+              element: <ComentariosDialog />
+            }
           ],
         },
         {

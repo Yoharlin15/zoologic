@@ -14,6 +14,7 @@ const ALIMENTACION_BASE = "Alimentacion";
 const HABITATS_BASE = "Habitat";
 const COMPORTAMIENTO_BASE = "Comportamiento";
 const VENTAS_BASE = "Venta";
+const COMENTARIO_BASE = "Comentario"
 const USUARIOS_BASE = "Usuario";
 const LOGIN = "Login";
 const LOGOUT = "Logout";
@@ -188,6 +189,7 @@ export const TIPOBOLETO_CREATE = `${VENTAS_BASE}/CreateTipoBoleto`;
 
 //CRUD Compra
 export const COMPRA_GET = `${VENTAS_BASE}/GetCompras`;
+export const COMPRA_BY_USUARIOID = `${VENTAS_BASE}/GetCompraByUsuarioId`;
 export const COMPRA_CREATE = `${VENTAS_BASE}/CreateCompra`;
 
 //CRUD Pago
@@ -199,6 +201,9 @@ export const FACTURA_GET = `${VENTAS_BASE}/GetFactura`;
 export const FACTURA_GETBYID = `${VENTAS_BASE}/GetFacturaById`;
 export const FACTURA_DETALLE_GETBYID = `${VENTAS_BASE}/GetDetalleFacturaById`;
 export const FACTURA_CREATE = `${VENTAS_BASE}/CreateFactura`;
+
+export const COMENTARIO_GET = `${COMENTARIO_BASE}/Get`;
+export const COMENTARIO_CREATE = `${COMENTARIO_BASE}/Create`;
 
 //CRUD Usuarios
 export const USUARIOS_GET = `${USUARIOS_BASE}/${GET}`;

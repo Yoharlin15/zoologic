@@ -1,6 +1,4 @@
-"use client"
-import type React from "react"
-import { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { TabView, TabPanel, type TabViewTabChangeEvent } from "primereact/tabview"
 import { Card } from "primereact/card"
 import dayjs from "dayjs"
@@ -26,6 +24,28 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
   const { data: animal, isLoading: loadingAnimal, error: animalError } = useFetchOneAnimal(animalId)
   const { data: fotoData, isLoading: loadingFoto, error: fotoError } = useFetchOneFoto(animal?.EspecieId || 0)
   const { data: dieta, isLoading: loadingDieta } = useFetchOneDieta(animalId)
+
+  // Function to calculate the age of the animal in years, months, and days
+  const calculateAge = (birthDate: string | null) => {
+    if (!birthDate) return "N/A"
+    const birth = dayjs(birthDate)
+    const today = dayjs()
+
+    const years = today.diff(birth, "year")
+    birth.add(years, "years")
+
+    const months = today.diff(birth, "month")
+    birth.add(months, "months")
+
+    const days = today.diff(birth, "day")
+
+    // If age is 0 years, 0 months, and 0 days, return "Recién nacido/a"
+    if (years === 0 && months === 0 && days === 0) {
+      return "Recién nacido/a"
+    }
+
+    return `${years} años, ${months % 12} meses, ${days % 30} días`
+  }
 
   useEffect(() => {
     if (animalError) {
@@ -61,6 +81,8 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
   if (!animal) {
     return <p className="text-center text-red-600">No se pudo encontrar el animal.</p>
   }
+
+  const age = calculateAge(animal.FechaNacimiento)
 
   return (
     <div className="flex flex-col h-full bg-gray-100 p-4 gap-4 max-w-screen-xl mx-auto">
@@ -98,6 +120,11 @@ const AnimalDetail: React.FC<AnimalDetailProps> = ({ animalId, onEdit }) => {
           <div className="pt-2">
             <span className="font-bold">Fecha de nacimiento: </span>
             <span>{formatDate(animal.FechaNacimiento)}</span>
+            {/* Display Age */}
+            <div className="pt-2">
+              <span className="font-bold">Edad: </span>
+              <span>{age}</span>
+            </div>
           </div>
           {animal.Observaciones && (
             <div className="pt-2">

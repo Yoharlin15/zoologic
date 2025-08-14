@@ -7,6 +7,7 @@ import "primereact/resources/primereact.min.css";
 
 import { setupFontAwesomeIcons } from './utils/font-awesome-icons'; // <--- importa el util
 import { AuthProvider } from "./contexts/AuthContext/AuthContext";
+import { CommentsProvider } from "./views/comentario/CommentsContext";
 setupFontAwesomeIcons();
 
 
@@ -27,8 +28,10 @@ locale('es');
 const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <AuthProvider>   {/* Envuelve la app con AuthProvider */}
-                <RouterContextProvider />
+            <AuthProvider>
+                <CommentsProvider>   {/* 👈 Nuevo provider */}
+                    <RouterContextProvider />
+                </CommentsProvider>
             </AuthProvider>
         </QueryClientProvider>
     );

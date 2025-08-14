@@ -101,7 +101,7 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         src: "https://res.cloudinary.com/dlbb3qssp/image/upload/v1741974209/Captura_de_pantalla_2025-03-14_133841-removebg-preview_ibdy4g.png",
       }}
       headerProps={{
-        title: "ZOOLOGIC - Panel de Administrador",
+        title: "zoologic",
       }}
       sideBarItems={sidebarItems.map((item) => ({
         icon: item.icon,

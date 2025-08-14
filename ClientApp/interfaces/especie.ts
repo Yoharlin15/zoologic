@@ -51,6 +51,9 @@ export interface IEspecieFoto {
 export interface IFamilia {
     FamiliaId: number;
     FamiliaNombre: string;
+    CreadoPor: number;
+    NombreUsuario: string;
+    FechaCreacion: string;
 }
 
 export interface IFamiliaCurrent {
@@ -65,6 +68,9 @@ export interface IFamiliaCreate {
 export interface IClase {
     ClaseId: number;
     ClaseNombre: string;
+    CreadoPor: number;
+    NombreUsuario: string;
+    FechaCreacion: string;
 }
 
 export interface IClaseCurrent {
@@ -79,6 +85,9 @@ export interface IClaseCreate {
 export interface IProcedencia {
     ProcedenciaId: number;
     ProcedenciaNombre: string;
+    CreadoPor: number;
+    NombreUsuario: string;
+    FechaCreacion: string;
 }
 
 export interface IProcedenciaCurrent {

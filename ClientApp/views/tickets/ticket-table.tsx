@@ -1,36 +1,43 @@
-import React, {
-  useState,
-  useRef,
-  useMemo,
-  useReducer,
-} from "react";
+import React, { useState, useRef, useMemo, useReducer } from "react";
 import { debounce } from "radash";
-import { IUsuario } from "#interfaces";
 import { AppQueryHooks } from "#hooks";
-import { Button } from "primereact/button";
 import { Reducers } from "#core";
 import { ContextMenu } from "primereact/contextmenu";
 import {
   DataTableFilterMeta,
   DataTableSelectionSingleChangeEvent,
 } from "primereact/datatable";
-
 import { CardTable, ICardTableProps } from "../../components/card-table";
 import { ICompra } from "ClientApp/interfaces/venta";
+import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
 
 interface ITicketTableProps {
   dispatch: React.Dispatch<any>;
 }
 
 const TicketTable = ({ dispatch }: ITicketTableProps) => {
-  const ticket = AppQueryHooks.useFetchCompras();
-  const [selectedTicket, setSelectedTicket] = useState<ICompra>();
+  const { rolId, usuarioId } = useAuth();
+  const isAdmin = rolId === 1;
 
+  // Llamamos AMBOS hooks; habilitamos solo el que aplique
+  const comprasAll = AppQueryHooks.useFetchCompras({
+    enabled: isAdmin,
+  });
+
+  const comprasUser = AppQueryHooks.useFetchCompraByUsuarioId(usuarioId ?? undefined, {
+    enabled: !isAdmin && !!usuarioId,
+  });
+
+  // Fuente activa en función del rol
+  const data = (isAdmin ? comprasAll.data : comprasUser.data) ?? [];
+  const isPending = isAdmin ? comprasAll.isPending : comprasUser.isPending;
+  const isFetching = isAdmin ? comprasAll.isFetching : comprasUser.isFetching;
+
+  const [selectedTicket, setSelectedTicket] = useState<ICompra>();
   const cm = useRef<ContextMenu>(null);
 
   const [sidebarCreateVisible, setSidebarCreateVisible] = useState(false);
   const [sidebarUpdateVisible, setSidebarUpdateVisible] = useState(false);
-  const [selectedUsuarioId, setSelectedUsuarioId] = useState<number | null>(null);
 
   const menuModel = [
     {
@@ -38,8 +45,7 @@ const TicketTable = ({ dispatch }: ITicketTableProps) => {
       icon: "pi pi-pencil",
       command: () => {
         if (selectedTicket) {
-          setSelectedUsuarioId(selectedTicket.UsuarioId);
-          setSidebarUpdateVisible(true); // Abre el sidebar
+          setSidebarUpdateVisible(true);
         }
       },
     },
@@ -49,9 +55,9 @@ const TicketTable = ({ dispatch }: ITicketTableProps) => {
     id: 0,
     visible: false,
   });
+
   const [searchText, setSearchText] = useState("");
-  const [filters, setFilters] = useState<DataTableFilterMeta>(
-  );
+  const [filters, setFilters] = useState<DataTableFilterMeta>({});
 
   const columns = useMemo<ICardTableProps<ICompra>["columns"]>(
     () => [
@@ -61,6 +67,7 @@ const TicketTable = ({ dispatch }: ITicketTableProps) => {
         header: "Nombre de usuario",
         field: "NombreUsuario",
         style: { minWidth: "10rem" },
+        body: (row: ICompra) => (isAdmin ? row.NombreUsuario : "Tú"),
       },
       {
         filter: true,
@@ -75,7 +82,6 @@ const TicketTable = ({ dispatch }: ITicketTableProps) => {
         header: "Monto total",
         field: "TotalCompra",
         style: { minWidth: "10rem" },
-        body: (rowData: ICompra) => `$ ${rowData.TotalCompra} pesos` 
       },
       {
         filter: true,
@@ -84,7 +90,7 @@ const TicketTable = ({ dispatch }: ITicketTableProps) => {
         field: "NombreEstado",
         style: { minWidth: "10rem" },
       },
-            {
+      {
         filter: true,
         sortable: true,
         header: "Fecha de visita",
@@ -92,37 +98,34 @@ const TicketTable = ({ dispatch }: ITicketTableProps) => {
         style: { minWidth: "10rem" },
       },
     ],
-    []
+    [isAdmin]
   );
 
   const filteredTickets = useMemo(() => {
-    if (!Array.isArray(ticket.data)) return [];
-    return ticket.data.filter((t) =>
-      t.NombreUsuario?.toLowerCase().includes(searchText.toLowerCase())
+    if (!Array.isArray(data)) return [];
+    const q = searchText.toLowerCase();
+    return data.filter((t) =>
+      (t.NombreUsuario ?? "").toLowerCase().includes(q) ||
+      String(t.TotalCompra ?? "").toLowerCase().includes(q) ||
+      (t.NombreEstado ?? "").toLowerCase().includes(q)
     );
-  }, [ticket.data, searchText]);
+  }, [data, searchText]);
 
   return (
     <div className="h-full p-4">
-      <ContextMenu
-        ref={cm}
-        model={menuModel}
-        onHide={() => setSelectedTicket(undefined)}
-      />
+      <ContextMenu ref={cm} model={menuModel} onHide={() => setSelectedTicket(undefined)} />
       <CardTable<ICompra>
-        title="Boletos comprados"
+        title={isAdmin ? "Todas las compras" : "Mis boletos"}
         columns={columns}
         value={filteredTickets}
-        skeletonLoading={ticket.isPending}
-        onChangeSearch={debounce({ delay: 500 }, (e) =>
-          setSearchText(e.target.value)
-        )}
+        skeletonLoading={isPending}
+        onChangeSearch={debounce({ delay: 500 }, (e) => setSearchText(e.target.value))}
         tableProps={{
           rows: 8,
           size: "small",
           filters,
           dataKey: "CompraId",
-          loading: ticket.isFetching,
+          loading: isFetching,
           paginator: filteredTickets.length > 8,
           contextMenuSelection: selectedTicket,
           onContextMenu: (e) => cm.current?.show(e.originalEvent),

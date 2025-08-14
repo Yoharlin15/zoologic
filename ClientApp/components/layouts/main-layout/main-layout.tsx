@@ -5,6 +5,7 @@ import { classNames } from "primereact/utils";
 import { useNavigate } from 'react-router-dom';
 import { Routes } from "#core";
 import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
+import { useComments } from "ClientApp/views/comentario/CommentsContext";
 
 interface IMainLayoutProps {
   logoProps: ILogoProps;
@@ -43,6 +44,8 @@ interface ILayoutContentProps {
   sidebarCollapsed: boolean;
   onToggleSidebar: () => void;
   isMobile: boolean;
+  onOpenComments: () => void;
+  unreadComments: number;
 }
 
 interface IHeaderProps {
@@ -81,19 +84,16 @@ const MainLayout = ({
   const [sidebarCollapsed, setSidebarCollapsed] = React.useState(false);
   const [sidebarVisible, setSidebarVisible] = React.useState(false);
   const isMobile = useMediaQuery("(max-width: 992px)");
+  const { unreadComments, setUnreadComments } = useComments();
 
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('usuarioId');
-    localStorage.removeItem('nombreUsuario');
-    localStorage.removeItem('rolId');
-    localStorage.removeItem('permisos');
-    localStorage.removeItem('empleadoId');
-    localStorage.removeItem('REACT_QUERY_OFFLINE_CACHE');
+    logout(); // limpia estado + localStorage (ya lo haces en el provider)
     navigate(Routes.LANDING_ROUTE, { replace: true });
   };
+
 
   const handleConfigNavigation = () => {
     navigate(Routes.SETTINGS_ROUTE);
@@ -102,6 +102,11 @@ const MainLayout = ({
   const handleProfileNavigation = () => {
     navigate(Routes.PROFILE_ROUTE);
   };
+
+  const handleOpenComments = () => {
+    setUnreadComments(0);
+    navigate(Routes.COMMENTS_ROUTE);
+  }
 
   const toggleSidebar = () => {
     if (isMobile) {
@@ -126,6 +131,12 @@ const MainLayout = ({
       configAction: headerProps.dropdown?.configAction || handleConfigNavigation,
     },
   };
+
+  React.useEffect(() => {
+    const handleNewComment = () => setUnreadComments((n) => n + 1);
+    window.addEventListener("comments:new", handleNewComment);
+    return () => window.removeEventListener("comments:new", handleNewComment);
+  }, []);
 
   return (
     <LayoutContainer>
@@ -186,6 +197,8 @@ const MainLayout = ({
         sidebarCollapsed={sidebarCollapsed}
         onToggleSidebar={toggleSidebar}
         isMobile={isMobile}
+        onOpenComments={handleOpenComments}
+        unreadComments={unreadComments}
       >
         {children}
       </LayoutContent>
@@ -315,7 +328,9 @@ const LayoutContent = ({
   withStyledContainer = true,
   sidebarCollapsed,
   onToggleSidebar,
-  isMobile
+  onOpenComments,
+  isMobile,
+  unreadComments
 }: ILayoutContentProps) => {
   const { title, dropdown } = headerProps;
   const renderStyledContainer = (children: React.ReactNode) => (
@@ -325,7 +340,7 @@ const LayoutContent = ({
   );
 
   const [dropdownOpen, setDropdownOpen] = React.useState(false);
-  const { nombreUsuario } = useAuth();
+  const { nombreUsuario, rolId } = useAuth();
 
   return (
     <div className="flex flex-column relative flex-auto max-h-screen">
@@ -345,16 +360,42 @@ const LayoutContent = ({
           <span className="font-semibold text-lg text-700 flex">{title}</span>
         </div>
 
-        <div className="relative">
+        <div className="relative flex justify-content-center">
+          {rolId === 1 && (
+            <button
+              onClick={onOpenComments}
+              className="p-ripple p-2 border-none bg-transparent cursor-pointer text-600 hover:text-900 mr-3"
+              title="Ver comentarios de clientes"
+            >
+              <div className="relative inline-flex items-center justify-center">
+                {/* Ícono */}
+                <i className="pi pi-comments text-2xl leading-none align-middle"></i>
+
+                {/* Badge circular mejorado */}
+                {unreadComments > 0 && (
+                  <span className="
+                    absolute top-0 right-0
+                    transform translate-x-1/2 -translate-y-1/2
+                    bg-red-500 text-white text-xs font-semibold
+                    rounded-full h-5 w-5 min-w-5
+                    flex items-center justify-center
+                    ring-2 ring-white
+                    shadow-sm
+                  ">
+                    {unreadComments > 99 ? "99+" : unreadComments}
+                  </span>
+                )}
+              </div>
+              <Ripple />
+            </button>
+          )}
+
           <a
             ref={btnRef}
             onClick={() => setDropdownOpen((prev) => !prev)}
-            className="p-ripple cursor-pointer text-700 select-none"
+            className="p-ripple cursor-pointer text-700 select-none mt-2"
           >
             <div className="hidden lg:flex align-items-center">
-              <div className="p-overlay-badge flex">
-                <i className="pi pi-bell text-[24px] mr-4 cursor-pointer"></i>
-              </div>
               <div className="p-overlay-badge flex">
                 {dropdown?.avatarSrc && (
                   <img
@@ -396,21 +437,23 @@ const LayoutContent = ({
                   <Ripple />
                 </a>
               </li>
-              <li className="border-top-1 surface-border">
-                <a
-                  onClick={() => {
-                    dropdown?.configAction?.();
-                    setDropdownOpen(false);
-                  }}
-                  className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors w-full"
-                >
-                  <div className="flex text-base mr-2">
-                    <i className="pi pi-cog text-[28px]"></i>
-                  </div>
-                  <span className="font-medium">Configuración</span>
-                  <Ripple />
-                </a>
-              </li>
+              {rolId === 1 && (
+                <li className="border-top-1 surface-border">
+                  <a
+                    onClick={() => {
+                      dropdown?.configAction?.();
+                      setDropdownOpen(false);
+                    }}
+                    className="p-ripple flex p-3 align-items-center text-600 hover:text-900 hover:surface-100 font-medium border-round cursor-pointer transition-duration-150 transition-colors w-full"
+                  >
+                    <div className="flex text-base mr-2">
+                      <i className="pi pi-cog text-[28px]"></i>
+                    </div>
+                    <span className="font-medium">Configuración</span>
+                    <Ripple />
+                  </a>
+                </li>
+              )}
               <li className="border-top-1 surface-border">
                 <a
                   onClick={() => {
