@@ -7,10 +7,11 @@ import { Dropdown, InputText, InputTextArea } from "ClientApp/components/inputs"
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { IAnimalCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
-import { useCreateAnimal, useUpdateAnimalEstado } from "ClientApp/hooks/useMutation/useMutationAnimales";
+import { useCreateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales";
 import { useFetchAnimalByEspecieId, useFetchEspecies, useFetchOneAnimal } from "ClientApp/hooks/useFetch";
 import { useUpdateAnimal } from "ClientApp/hooks/useMutation/useMutationAnimales"; // Importar el hook de los animales filtrados por especie
 import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
+import { Checkbox } from "primereact/checkbox";
 
 interface IAnimalSidebarProps {
   id?: number;
@@ -41,9 +42,14 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
       FechaNacimiento: null,
       Color: "",
       Observaciones: "",
-      CreadoPor: usuarioId
+      PadreId: undefined,
+      MadreId: undefined,
+      CreadoPor: usuarioId,
+      ActivarPadres: false,
     },
   });
+
+  const activarPadres = watch("ActivarPadres");
 
   // Prellenar el formulario si es edición
   useEffect(() => {
@@ -57,6 +63,8 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
         FechaNacimiento: animalData.FechaNacimiento ? new Date(animalData.FechaNacimiento) : null,
         Color: animalData.Color || "",
         Observaciones: animalData.Observaciones || "",
+        PadreId: animalData.PadreId || undefined,
+        MadreId: animalData.MadreId || undefined,
         CreadoPor: animalData.CreadoPor || usuarioId
       });
     }
@@ -73,6 +81,8 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
         FechaNacimiento: null,
         Color: "",
         Observaciones: "",
+        PadreId: undefined,
+        MadreId: undefined,
         CreadoPor: usuarioId
       });
     }
@@ -100,6 +110,8 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
       FechaNacimiento: data.FechaNacimiento?.toISOString() || null,
       Color: data.Color,
       Observaciones: data.Observaciones,
+      PadreId: Number(data.PadreId),
+      MadreId: Number(data.MadreId),
       CreadoPor: data.CreadoPor || usuarioId
     };
 
@@ -143,15 +155,6 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
         header={<h1 className="font-semibold text-2xl text-900">{id ? "Editar Animal" : "Nuevo Animal"}</h1>}
       >
         <Form>
-          <FieldColumn label="Código" columns={{ sm: 6 }}>
-            <InputText
-              name="IdentificadorUnico"
-              control={control}
-              placeholder="Código"
-              rules={{ required: "Campo obligatorio" }}
-            />
-          </FieldColumn>
-
           <FieldColumn label="Identificador" columns={{ sm: 6 }}>
             <Dropdown
               name="TipoIdentificador"
@@ -215,7 +218,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
             />
           </FieldColumn>
 
-          <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 12 }}>
+          <FieldColumn label="Fecha de Nacimiento" columns={{ sm: 6 }}>
             <Controller
               name="FechaNacimiento"
               control={control}
@@ -223,7 +226,6 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
                 <Calendar
                   value={field.value}
                   onChange={(e) => field.onChange(e.value)}
-                  showIcon
                   dateFormat="dd/mm/yy"
                   placeholder="Seleccione una fecha"
                   className="w-full"
@@ -234,6 +236,47 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
             />
           </FieldColumn>
 
+          {/* Checkbox para activar/desactivar fechas */}
+          <FieldColumn label="¿Tiene padres?" columns={{ sm: 12 }}>
+            <Controller
+              name="ActivarPadres"
+              control={control}
+              render={({ field }) => (
+                <Checkbox
+                  {...field}  // Spread the `field` props here
+                  checked={field.value ?? true}  // Control the checked state
+                  onChange={(e) => field.onChange(e.checked)} // Handle change manually
+                />
+              )}
+            />
+          </FieldColumn>
+
+          {activarPadres && (
+            <FieldColumn label="Padre" columns={{ sm: 6 }}>
+              <Dropdown
+                name="PadreId"
+                control={control}
+                placeholder="Seleccione un padre"
+                options={padres.filter((animal: any) => animal.Sexo === "Macho") || []}
+                optionLabel="IdentificadorUnico"
+                optionValue="AnimalId"
+              />
+            </FieldColumn>
+          )}
+
+          {activarPadres && (
+            <FieldColumn label="Madre" columns={{ sm: 6 }}>
+              <Dropdown
+                name="MadreId"
+                control={control}
+                placeholder="Seleccione una madre"
+                options={padres.filter((animal: any) => animal.Sexo === "Hembra") || []}
+                optionLabel="IdentificadorUnico"
+                optionValue="AnimalId"
+              />
+            </FieldColumn>
+          )}
+
           <FieldColumn label="Observaciones">
             <InputTextArea
               rows={3}
@@ -243,7 +286,7 @@ const AnimalSidebarForm = ({ id, onHide, visible }: IAnimalSidebarProps) => {
               rules={{ required: "Campo obligatorio" }}
             />
           </FieldColumn>
-              
+
           <input type="hidden" name="CreadoPor" value={usuarioId!} />
         </Form>
 

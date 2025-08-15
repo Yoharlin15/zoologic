@@ -11,6 +11,10 @@ export interface IAnimal {
     Observaciones: string;
     EstadoId: number;
     NombreEstado: string;
+    PadreId: number;
+    Padre: string;
+    MadreId: number;
+    Madre: string;
     CreadoPor : number;
     NombreUsuario: string;
     FechaCreacion: Date | string | null;
@@ -27,6 +31,10 @@ export interface IAnimalCurrent {
     FechaNacimiento: Date | string | null;
     Color: string;
     Observaciones: string;
+    PadreId: number;
+    Padre: string;
+    MadreId: number;
+    Madre: string;
 }
 
 export interface IAnimalCreate {
@@ -38,7 +46,10 @@ export interface IAnimalCreate {
     FechaNacimiento: Date | null;
     Color: string
     Observaciones: string;
+    PadreId: number;
+    MadreId: number;
     CreadoPor: number | null;
+    ActivarPadres?: boolean;
 }
 
 export interface IAnimalUpdate {
@@ -51,6 +62,8 @@ export interface IAnimalUpdate {
     FechaNacimiento: Date | null;
     Color: string
     Observaciones: string;
+    PadreId: number;
+    MadreId: number;
 }
 
 export interface IAnimalHabitatUpdate {
