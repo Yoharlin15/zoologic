@@ -67,7 +67,7 @@ const TicketTable = ({ dispatch }: ITicketTableProps) => {
         header: "Nombre de usuario",
         field: "NombreUsuario",
         style: { minWidth: "10rem" },
-        body: (row: ICompra) => (isAdmin ? row.NombreUsuario! : "Tú"),
+        //body: (row: ICompra) => (isAdmin ? row.NombreUsuario : "Tú"),
       },
       {
         filter: true,
