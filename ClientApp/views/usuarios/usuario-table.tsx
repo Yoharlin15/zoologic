@@ -83,6 +83,7 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
         header: "Empleado/a",
         field: "Nombres",
         style: { minWidth: "10rem" },
+        body: (rowData: IUsuario | null) => rowData?.Nombres || "N/A",
       },
       {
         filter: true,
