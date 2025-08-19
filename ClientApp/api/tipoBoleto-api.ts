@@ -1,13 +1,14 @@
 import { Endpoints } from "../core";
 import { Api } from "#interfaces";
 import API from "./api";
-import { ITipoBoleto } from "ClientApp/interfaces/venta";
+import { ITipoBoleto, IValidacionBoleto } from "ClientApp/interfaces/venta";
 
 interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   create?: (data: any) => Promise<any>;
   nullify?: (id: number) => Promise<number>;
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
+  verifyTicket: (code: string, confirm?: boolean) => Promise<IValidacionBoleto>;
 }
 
 const TipoBoletoApi: ApiCustom<ITipoBoleto> = {
@@ -20,6 +21,13 @@ const TipoBoletoApi: ApiCustom<ITipoBoleto> = {
   create: async (data) => {
     const result = await API().post(Endpoints.TIPOBOLETO_CREATE, data);
     return result.data;
+  },
+
+  verifyTicket: async (code: string, confirm = false) => {
+    const res = await API().get(Endpoints.VERIFY_TICKET, {
+      params: { code, confirm },
+    });
+    return res.data as IValidacionBoleto;
   },
 }
 

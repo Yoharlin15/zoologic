@@ -11,6 +11,7 @@ import Carrusel from './carrusel';
 import { useAuth } from 'ClientApp/contexts/AuthContext/AuthContext';
 import ComentariosForm from './Comentarios-Form';
 import CarruselEspecies from './carrusel';
+import { replace } from 'radash';
 
 const LandingPage = () => {
   const navigate = useNavigate();
@@ -82,7 +83,10 @@ const LandingPage = () => {
                 <Button
                   icon="pi pi-sign-out"
                   className="p-button-rounded p-button-outlined text-white border-white md:hidden"
-                  onClick={logout}
+                  onClick={() => {
+                    logout();
+                    navigate(Routes.LANDING_ROUTE, { replace: true });
+                  }}
                   tooltip="Cerrar sesión"
                   tooltipOptions={{ position: 'bottom' }}
                 />
@@ -90,7 +94,10 @@ const LandingPage = () => {
                   label="Cerrar sesión"
                   icon="pi pi-sign-out"
                   className="p-button-rounded p-button-outlined text-white border-white hidden md:inline-flex"
-                  onClick={logout}
+                  onClick={() => {
+                    logout();
+                    navigate(Routes.LANDING_ROUTE, { replace: true });
+                  }}
                 />
               </>
             ) : (

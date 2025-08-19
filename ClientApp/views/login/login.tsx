@@ -103,18 +103,34 @@ const Login = () => {
           severity: "success",
           summary: "Éxito",
           detail: res.mensaje || "Has iniciado sesión correctamente.",
-        })
-        const { TokenJwt, UsuarioId, EmpleadoId, NombreUsuario, RolId, Permisos } = res
-        setAuthData({ usuarioId: UsuarioId, empleadoId: EmpleadoId, nombreUsuario: NombreUsuario, rolId: RolId, token: TokenJwt, permisos: Permisos })
-        const rol = res.RolId
+        });
+
+        const { TokenJwt, UsuarioId, EmpleadoId, NombreUsuario, RolId, Permisos } = res;
+        setAuthData({
+          usuarioId: UsuarioId,
+          empleadoId: EmpleadoId,
+          nombreUsuario: NombreUsuario,
+          rolId: Number(RolId), // guarda como número
+          token: TokenJwt,
+          permisos: Permisos,
+        });
+
+        const rol = Number(res?.RolId ?? res?.rolId ?? RolId);
+
         setTimeout(() => {
-          setIsLoadingLogin(false)
-          if (rol === 2) {
-            navigate(Routes.LANDING_ROUTE, { replace: true })
-          } else {
-            navigate(Routes.DASHBOARD_ROUTE, { replace: true })
+          setIsLoadingLogin(false);
+          switch (rol) {
+            case 2:
+              navigate(Routes.LANDING_ROUTE, { replace: true });
+              break;
+            case 3:
+              navigate(Routes.TICKET_VALIDATOR_ROUTE, { replace: true });
+              break;
+            default:
+              navigate(Routes.DASHBOARD_ROUTE, { replace: true });
+              break;
           }
-        }, 2000)
+        }, 2000);
       },
       onError: (error: any) => {
         const mensaje = error?.response?.data?.mensaje || error?.message || "";

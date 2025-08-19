@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { DataTable } from "primereact/datatable";
-import { Chart } from "primereact/chart";
-import { Column } from "primereact/column";
 import { Card } from "primereact/card";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { Divider } from "primereact/divider";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -22,14 +18,7 @@ const ReporteAnimales = () => {
     });
 
     const { data: especies = [] } = useFetchEspecies();
-
-    const {
-        data: animalesResponse = {},
-        refetch,
-        isFetching,
-    } = useFetchAnimalReportes(filtros);
-
-    const animales = animalesResponse?.Value || [];
+    const { refetch, isFetching } = useFetchAnimalReportes(filtros);
 
     const sexos = [
         { label: "Todos", value: "" },
@@ -37,33 +26,19 @@ const ReporteAnimales = () => {
         { label: "Hembra", value: "Hembra" },
     ];
 
-    const handleReporte = () => {
-        console.log("📤 Generando reporte con filtros:", filtros);
-        refetch();
-    };
-
-    const animalesConDatos = animales.map((e: { EspecieId: number }) => ({
-        ...e,
-        Especie: especies.find((c) => c.EspecieId === e.EspecieId)?.NombreComun || "No definido",
-    }));
-
-    const exportarPDF = async () => {
-        // Configuración inicial del documento
+    const exportarPDF = async (animalesConDatos: any[]) => {
         const doc = new jsPDF({
             orientation: "landscape",
-            unit: "mm"
+            unit: "mm",
         });
 
-        // Colores corporativos (puedes ajustarlos)
-        const primaryColor: [number, number, number] = [63, 81, 181]; // Azul oscuro
-        const secondaryColor: [number, number, number] = [255, 193, 7]; // Amarillo
+        // Colores institucionales
+        const primaryColor: [number, number, number] = [0, 82, 155]; // Azul institucional
+        const secondaryColor: [number, number, number] = [0, 102, 71]; // Verde institucional
         const lightGray: [number, number, number] = [245, 245, 245];
-        const darkGray: [number, number, number] = [33, 33, 33];
+        const darkGray: [number, number, number] = [51, 51, 51];
 
-        // Logo
-        const logoUrl = "https://res.cloudinary.com/dlbb3qssp/image/upload/v1750984362/logo3-removebg-preview_l3k6et.png";
-
-        // Función para convertir imagen a base64
+        // Cargar imágenes (logo y sello)
         const toBase64 = async (url: string): Promise<string> => {
             const response = await fetch(url);
             const blob = await response.blob();
@@ -74,179 +49,251 @@ const ReporteAnimales = () => {
             });
         };
 
-        const logoBase64 = await toBase64(logoUrl);
+        const logoUrl = "https://res.cloudinary.com/dlbb3qssp/image/upload/v1750984362/logo3-removebg-preview_l3k6et.png";
+        const selloUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Official_seal.svg/1200px-Official_seal.svg.png";
 
-        // Encabezado del reporte
-        doc.addImage(logoBase64, "PNG", 15, 4, 25, 25);
+        const [logoBase64, selloBase64] = await Promise.all([
+            toBase64(logoUrl),
+            toBase64(selloUrl)
+        ]);
 
-        // Título principal
-        doc.setFontSize(16);
+        // Fondo timbrado (marca de agua)
+        doc.setFillColor(230, 230, 230);
+        doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), 'F');
+
+        // Patrón de fondo sutil
+        doc.setDrawColor(220, 220, 220);
+        doc.setLineWidth(0.2);
+        for (let i = 0; i < doc.internal.pageSize.getWidth(); i += 20) {
+            doc.line(i, 0, i, doc.internal.pageSize.getHeight());
+        }
+        for (let i = 0; i < doc.internal.pageSize.getHeight(); i += 20) {
+            doc.line(0, i, doc.internal.pageSize.getWidth(), i);
+        }
+
+        // Marco decorativo
+        doc.setDrawColor(...primaryColor);
+        doc.setLineWidth(1.5);
+        doc.rect(10, 10, doc.internal.pageSize.getWidth() - 20, doc.internal.pageSize.getHeight() - 20);
+
+        // Encabezado institucional
+        doc.addImage(logoBase64, "PNG", 15, 12, 25, 25);
+        doc.setFontSize(14);
         doc.setFont("helvetica", "bold");
-        doc.setTextColor(...(primaryColor as [number, number, number]));
-        doc.text("REPORTE DE ANIMALES", doc.internal.pageSize.getWidth() / 2, 20, {
-            align: "center"
+        doc.setTextColor(...primaryColor);
+        doc.text("ZOOLOGICO DE SANTO DOMINGO", doc.internal.pageSize.getWidth() / 2, 20, {
+            align: "center",
         });
 
-        // Subtítulo
+        doc.setFontSize(12);
+        doc.text("DIRECCIÓN DE BIODIVERSIDAD Y CONSERVACIÓN", doc.internal.pageSize.getWidth() / 2, 26, {
+            align: "center",
+        });
+
+        doc.setFontSize(16);
+        doc.setTextColor(...secondaryColor);
+        doc.text("REPORTE OFICIAL DE ANIMALES", doc.internal.pageSize.getWidth() / 2, 34, {
+            align: "center",
+        });
+
+        // Línea decorativa
+        doc.setDrawColor(...secondaryColor);
+        doc.setLineWidth(0.8);
+        doc.line(doc.internal.pageSize.getWidth() / 2 - 60, 36, doc.internal.pageSize.getWidth() / 2 + 60, 36);
+
+        // Información del reporte
         doc.setFontSize(10);
         doc.setFont("helvetica", "normal");
         doc.setTextColor(...darkGray);
-        doc.text("Zoologic - Sistema de Gestión de zoologico de Santo Domingo", doc.internal.pageSize.getWidth() / 2, 26, {
-            align: "center"
-        });
+        doc.text(`Fecha de generación: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 15, 45);
+        doc.text(`Documento: RPT-ANML-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`, doc.internal.pageSize.getWidth() - 15, 45, { align: "right" });
 
-        // Fecha y filtros aplicados
-        doc.setFontSize(9);
-        doc.text(`Generado el: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 15, 35);
-
-        // Información de filtros
-        let filtersText = "Filtros aplicados: ";
-        if (filtros.especieId) {
-            const especie = especies.find(e => e.EspecieId === filtros.especieId);
-            filtersText += `Especie: ${especie?.NombreComun || ''} | `;
-        }
-        if (filtros.sexo) {
-            filtersText += `Sexo: ${filtros.sexo} | `;
-        }
-
-        if (filtersText === "Filtros aplicados: ") {
-            filtersText += "Ninguno (Todos los animales) | ";
-        } else {
-            filtersText = filtersText.slice(0, -3); // Eliminar el último " | "
-        }
-
-        // Añadir texto de filtros con formato
+        // Filtros aplicados
         doc.setFontSize(9);
         doc.setTextColor(100, 100, 100);
-        doc.text(filtersText, 15, 40, {
-            maxWidth: doc.internal.pageSize.getWidth() - 30
+        let filtersText = "Filtros aplicados: ";
+        if (filtros.especieId) {
+            const especie = especies.find((e) => e.EspecieId === filtros.especieId);
+            filtersText += `Especie: ${especie?.NombreComun || ""} | `;
+        }
+        if (filtros.sexo) filtersText += `Sexo: ${filtros.sexo} | `;
+        if (filtersText === "Filtros aplicados: ") {
+            filtersText += "Ninguno (Todos los animales)";
+        } else {
+            filtersText = filtersText.slice(0, -3);
+        }
+        doc.text(filtersText, 15, 50, {
+            maxWidth: doc.internal.pageSize.getWidth() - 30,
         });
 
         // Resumen estadístico
         const totalAnimales = animalesConDatos.length;
-        const hombres = animalesConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Macho").length;
-        const mujeres = animalesConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Hembra").length;
-        const numEspecies = [...new Set(animalesConDatos.map((e: { Especie: any; }) => e.Especie))].length;
+        const machos = animalesConDatos.filter((e) => e.Sexo === "Macho").length;
+        const hembras = animalesConDatos.filter((e) => e.Sexo === "Hembra").length;
 
-        // Cuadro de resumen
         doc.setFillColor(...lightGray);
-        doc.rect(15, 45, doc.internal.pageSize.getWidth() - 30, 10, "F");
+        doc.rect(15, 55, doc.internal.pageSize.getWidth() - 30, 8, "F");
 
         doc.setFontSize(10);
         doc.setFont("helvetica", "bold");
         doc.setTextColor(...primaryColor);
-        doc.text("RESUMEN ESTADÍSTICO", 20, 51);
+        doc.text("RESUMEN ESTADÍSTICO", 20, 60);
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9);
         doc.setTextColor(...darkGray);
 
-        const summaryY = 56;
+        const summaryY = 65;
         const colWidth = (doc.internal.pageSize.getWidth() - 40) / 4;
 
-        // Total animales
-        doc.setFillColor(230, 230, 250);
-        doc.roundedRect(20, summaryY, colWidth, 8, 2, 2, "F");
-        doc.text(`Total animales: ${totalAnimales}`, 25, summaryY + 5);
+        // Cajas de resumen con estilo mejorado
+        const drawSummaryBox = (x: number, text: string, color: [number, number, number]) => {
+            doc.setFillColor(color[0], color[1], color[2]);
+            doc.roundedRect(x, summaryY, colWidth - 5, 8, 2, 2, "F");
+            doc.setTextColor(255, 255, 255);
+            doc.text(text, x + 5, summaryY + 5);
+        };
 
-        // Hombres
-        doc.setFillColor(230, 240, 255);
-        doc.roundedRect(20 + colWidth, summaryY, colWidth, 8, 2, 2, "F");
-        doc.text(`Machos: ${hombres} (${Math.round((hombres / totalAnimales) * 100)}%)`, 25 + colWidth, summaryY + 5);
+        drawSummaryBox(20, `Total animales: ${totalAnimales}`, [0, 82, 155]);
+        drawSummaryBox(20 + colWidth, `Machos: ${machos}`, [0, 102, 71]);
+        drawSummaryBox(20 + colWidth * 2, `Hembras: ${hembras}`, [155, 82, 0]);
+        drawSummaryBox(20 + colWidth * 3, `Generado por: Zoologic`, [102, 0, 71]);
 
-        // Hembras
-        doc.setFillColor(255, 230, 240);
-        doc.roundedRect(20 + colWidth * 2, summaryY, colWidth, 8, 2, 2, "F");
-        doc.text(`Hembras: ${mujeres} (${Math.round((mujeres / totalAnimales) * 100)}%)`, 25 + colWidth * 2, summaryY + 5);
-        // Especies
-        // Tabla de datos
+        // Tabla principal
         autoTable(doc, {
-            startY: 70,
-            head: [[
-                "Codigo", "Indentificador", "Alias", "Especie", "Sexo", "Fecha de nacimiento", "Padre", "Madre",
-            ]],
-            body: animalesConDatos.map((e: {
-                IdentificadorUnico: string;
-                TipoIdentificador: string;
-                Alias: string;
-                Especie: string;
-                Sexo: string;
-                FechaNacimiento: string;
-                Padre: string;
-                Madre: string;
-            }) => [
-                    e.IdentificadorUnico,
-                    e.TipoIdentificador,
-                    e.Alias,
-                    e.Especie,
-                    e.Sexo,
-                    dayjs(e.FechaNacimiento).format("DD/MM/YYYY"),
-                    e.Padre,
-                    e.Madre,
-                ]),
+            startY: 80,
+            head: [
+                [
+                    { content: "Código", styles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' } },
+                    { content: "Identificador", styles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' } },
+                    { content: "Alias", styles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' } },
+                    { content: "Especie", styles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' } },
+                    { content: "Sexo", styles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' } },
+                    { content: "Fecha de nacimiento", styles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' } },
+                    { content: "Padre", styles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' } },
+                    { content: "Madre", styles: { fillColor: primaryColor, textColor: 255, fontStyle: 'bold' } },
+                ],
+            ],
+            body: animalesConDatos.map((e: any) => [
+                { content: e.IdentificadorUnico, styles: { fontStyle: 'bold' } },
+                e.TipoIdentificador,
+                e.Alias,
+                e.Especie,
+                { content: e.Sexo, styles: { textColor: e.Sexo === 'Macho' ? [0, 82, 155] : [155, 0, 82] } },
+                e.FechaNacimiento ? dayjs(e.FechaNacimiento).format("DD/MM/YYYY") : "Desconocida",
+                e.Padre || "Desconocido",
+                e.Madre || "Desconocida",
+            ]),
             styles: {
                 fontSize: 8,
-                cellPadding: 2,
+                cellPadding: 3,
                 overflow: "linebreak",
-                halign: "left"
-            },
-            headStyles: {
-                fillColor: primaryColor,
-                textColor: 255,
-                fontStyle: "bold",
-                fontSize: 8
+                halign: "left",
+                lineColor: [200, 200, 200],
+                lineWidth: 0.1,
             },
             alternateRowStyles: {
-                fillColor: lightGray
+                fillColor: [245, 245, 245],
             },
             columnStyles: {
-                0: { cellWidth: 25 },
+                0: { cellWidth: 25, fontStyle: 'bold' },
                 1: { cellWidth: 25 },
-                2: { cellWidth: 20 }, 
-                3: { cellWidth: 30 }, 
-                4: { cellWidth: 25 }, 
-                5: { cellWidth: 40 }, 
-                6: { cellWidth: 25 }, 
-                7: { cellWidth: 20 }
+                2: { cellWidth: 20 },
+                3: { cellWidth: 30 },
+                4: { cellWidth: 15, halign: 'center' },
+                5: { cellWidth: 25, halign: 'center' },
+                6: { cellWidth: 25 },
+                7: { cellWidth: 25 },
             },
-            margin: { top: 70 },
+            margin: { top: 80 },
             theme: "grid",
             tableLineColor: [200, 200, 200],
-            tableLineWidth: 0.1
+            tableLineWidth: 0.1,
+            didDrawPage: (data) => {
+                // Pie de página en cada hoja
+
+                // Primero dibujamos la línea azul
+                doc.setDrawColor(...primaryColor);
+                doc.setLineWidth(0.5);
+                doc.line(
+                    15,
+                    doc.internal.pageSize.getHeight() - 18,  // Movemos la línea un poco más abajo
+                    doc.internal.pageSize.getWidth() - 15,
+                    doc.internal.pageSize.getHeight() - 18
+                );
+
+                // Luego el texto del número de página (más arriba)
+                doc.setFontSize(8);
+                doc.setTextColor(100, 100, 100);
+                doc.text(
+                    `Página ${data.pageNumber} de ${data.pageCount ?? 'N'}`,
+                    doc.internal.pageSize.getWidth() / 2,
+                    doc.internal.pageSize.getHeight() - 22,  // Posición más arriba
+                    { align: "center" }
+                );
+
+                // Texto "Documento oficial" (más arriba y con ajuste de posición)
+                doc.text(
+                    "Documento oficial - Zoologico de Santo Domingo © 2023",
+                    doc.internal.pageSize.getWidth() - 15,
+                    doc.internal.pageSize.getHeight() - 22,  // Posición más arriba
+                    { align: "right" }
+                );
+
+                // Texto "Sello digital oficial" (si lo mantienes)
+                doc.text(
+                    "Sello digital oficial",
+                    doc.internal.pageSize.getWidth() - 35,
+                    doc.internal.pageSize.getHeight() - 15,
+                    { align: "center" }
+                );
+            }
         });
 
-        // Pie de página
-        const pageCount = doc.getNumberOfPages();
-        for (let i = 1; i <= pageCount; i++) {
-            doc.setPage(i);
+        // Sello húmedo en la última página
+        doc.setPage(doc.getNumberOfPages());
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text("Sello digital oficial", doc.internal.pageSize.getWidth() - 35, doc.internal.pageSize.getHeight() - 15, { align: "center" });
 
-            // Línea decorativa
-            doc.setDrawColor(...primaryColor);
-            doc.setLineWidth(0.5);
-            doc.line(15, doc.internal.pageSize.getHeight() - 15, doc.internal.pageSize.getWidth() - 15, doc.internal.pageSize.getHeight() - 15);
+        doc.save(`Reporte_Oficial_Animales_${new Date().toISOString().slice(0, 10)}.pdf`);
+    };
 
-            // Texto del pie
-            doc.setFontSize(10);
-            doc.setTextColor(100, 100, 100);
-            doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, {
-                align: "center"
-            });
+    const handleReporte = async () => {
+        try {
+            const { data } = await refetch();
+            const animales = data?.Value || [];
 
-            doc.text("© Zoologic - Sistema de Gestión del zoologico de Santo Domingo ", doc.internal.pageSize.getWidth() - 15, doc.internal.pageSize.getHeight() - 10, {
-                align: "right"
-            });
+            const animalesConDatos = animales.map((e: { EspecieId: number }) => ({
+                ...e,
+                Especie:
+                    especies.find((c) => c.EspecieId === e.EspecieId)?.NombreComun ||
+                    "No definido",
+            }));
+
+            await exportarPDF(animalesConDatos);
+        } catch (err) {
+            console.error("Error generando el reporte:", err);
         }
-
-        // Guardar el documento
-        doc.save(`Reporte_Animales_${new Date().toISOString().slice(0, 10)}.pdf`);
     };
 
     return (
         <div className="p-4 space-y-6">
-            <Card title="Filtros de Reporte" className="shadow-md">
+            <Card
+                title="Generador de Reporte Oficial"
+                className="shadow-lg border-t-4 border-blue-600"
+                header={
+                    <div className="bg-blue-600 text-white p-4 rounded-t-lg">
+                        <h2 className="text-xl font-bold">Reporte de Animales</h2>
+                        <p className="text-sm opacity-80">Sistema de Gestión Zoológica</p>
+                    </div>
+                }
+            >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="space-y-1">
-                        <label className="block text-sm font-medium text-gray-700">Especie</label>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Especie
+                        </label>
                         <Dropdown
                             value={filtros.especieId}
                             options={[
@@ -259,157 +306,40 @@ const ReporteAnimales = () => {
                             onChange={(e) => setFiltros({ ...filtros, especieId: e.value })}
                             placeholder="Seleccione especie"
                             className="w-full"
+                            filter
+                            showClear
                         />
                     </div>
 
                     <div className="space-y-1">
-                        <label className="block text-sm font-medium text-gray-700">Sexo</label>
+                        <label className="block text-sm font-medium text-gray-700">
+                            Sexo
+                        </label>
                         <Dropdown
                             value={filtros.sexo}
                             options={sexos}
                             onChange={(e) => setFiltros({ ...filtros, sexo: e.value })}
                             placeholder="Seleccione sexo"
                             className="w-full"
+                            showClear
                         />
                     </div>
                 </div>
 
-                <Divider />
+                <Divider className="my-4" />
 
                 <div className="flex justify-end gap-3">
                     <Button
-                        label="Generar Reporte"
-                        icon="pi pi-filter"
+                        label="Generar Reporte Oficial"
+                        icon="pi pi-file-pdf"
                         onClick={handleReporte}
                         loading={isFetching}
                         className="bg-blue-600 hover:bg-blue-700 border-blue-600"
+                        severity="info"
+                        size="large"
                     />
                 </div>
             </Card>
-
-            {isFetching ? (
-                <div className="flex justify-center items-center h-64">
-                    <ProgressSpinner />
-                </div>
-            ) : animalesConDatos.length > 0 ? (
-                <>
-                    <Card title="Resultados" className="shadow-md mt-2">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-lg font-semibold">
-                                Total animales: {animalesConDatos.length}
-                            </h3>
-                            <Button
-                                label="Exportar a PDF"
-                                icon="pi pi-file-pdf"
-                                severity="danger"
-                                onClick={exportarPDF}
-                                className="hover:bg-red-700 ml-2"
-                            />
-                        </div>
-
-                        <DataTable
-                            value={animalesConDatos}
-                            paginator
-                            rows={5}
-                            rowsPerPageOptions={[5, 10, 25]}
-                            tableStyle={{ minWidth: "50rem" }}
-                            stripedRows
-                            showGridlines
-                            size="small"
-                        >
-
-                            <Column field="IdentificadorUnico" header="Código" sortable />
-                            <Column field="TipoIdentificador" header="Identificador" sortable />
-                            <Column field="Alias" header="Alias" sortable />
-                            <Column field="NombreComun" header="Especie" sortable />
-                            <Column field="Sexo" header="Sexo" sortable />
-                            <Column
-                                field="FechaNacimiento"
-                                header="Fecha Nacimiento"
-                                sortable
-                                body={(rowData) => dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY")}
-                            />
-
-                            <Column field="Padre" header="Padre" sortable />
-                            <Column field="Madre" header="Madre" sortable />
-
-                        </DataTable>
-                    </Card>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                        <Card title="Distribución por Género" className="shadow-md mt-4">
-                            <Chart
-                                type="pie"
-                                data={{
-                                    labels: ["Macho", "Hembra"],
-                                    datasets: [
-                                        {
-                                            data: [
-                                                animalesConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Macho").length,
-                                                animalesConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Hembra").length,
-                                            ],
-                                            backgroundColor: ["#3B82F6", "#EC4899"],
-                                            hoverBackgroundColor: ["#2563EB", "#DB2777"],
-                                        },
-                                    ],
-                                }}
-                                options={{
-                                    plugins: {
-                                        legend: {
-                                            position: "bottom",
-                                            labels: {
-                                                usePointStyle: true,
-                                                padding: 20,
-                                            },
-                                        },
-                                    },
-                                }}
-                            />
-                        </Card>
-
-                        <Card title="Resumen" className="shadow-md mt-4">
-                            <div className="grid grid-cols-2 gap-4">
-                                <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                                    <h4 className="text-blue-800 font-medium">Machos</h4>
-                                    <p className="text-2xl font-bold text-blue-600">
-                                        {animalesConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Macho").length}
-                                    </p>
-                                </div>
-                                <div className="bg-pink-50 p-4 rounded-lg border border-pink-100">
-                                    <h4 className="text-pink-800 font-medium">Hembras </h4>
-                                    <p className="text-2xl font-bold text-pink-600">
-                                        {animalesConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Hembra").length}
-                                    </p>
-                                </div>
-                                <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
-                                    <h4 className="text-indigo-800 font-medium">Departamentos</h4>
-                                    <p className="text-2xl font-bold text-indigo-600">
-                                        {[...new Set(animalesConDatos.map((e: { Departamento: any; }) => e.Departamento))].length}
-                                    </p>
-                                </div>
-                                <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
-                                    <h4 className="text-purple-800 font-medium">Cargos</h4>
-                                    <p className="text-2xl font-bold text-purple-600">
-                                        {[...new Set(animalesConDatos.map((e: { Cargo: any; }) => e.Cargo))].length}
-                                    </p>
-                                </div>
-                            </div>
-                        </Card>
-                    </div>
-                </>
-            ) : (
-                <Card className="shadow-md">
-                    <div className="text-center py-8">
-                        <i className="pi pi-info-circle text-4xl text-blue-500 mb-3" />
-                        <h3 className="text-xl font-medium text-gray-700 mb-2">
-                            No hay datos para mostrar
-                        </h3>
-                        <p className="text-gray-500">
-                            Ajusta los filtros y genera un nuevo reporte
-                        </p>
-                    </div>
-                </Card>
-            )}
         </div>
     );
 };

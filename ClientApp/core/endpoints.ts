@@ -186,6 +186,7 @@ export const NECROPSIAS_UPDATE = `${NECROPSIAS_BASE}/Update/{id}`;
 //CRUD TipoBoletos
 export const TIPOBOLETO_GET = `${VENTAS_BASE}/GetTiposBoletos`;
 export const TIPOBOLETO_CREATE = `${VENTAS_BASE}/CreateTipoBoleto`;
+export const VERIFY_TICKET = `${VENTAS_BASE}/GetValidarBoletos`;
 
 //CRUD Compra
 export const COMPRA_GET = `${VENTAS_BASE}/GetCompras`;

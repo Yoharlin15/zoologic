@@ -1,9 +1,7 @@
 import React, { createContext, useContext, useCallback } from "react";
-import { Navigate, Outlet, RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
+import { Outlet, RouteObject, RouterProvider, createBrowserRouter } from "react-router-dom";
 import { Routes } from "#core";
-import { isAuthenticated } from "#utils";
 import { CustomMainLayout } from "#components";
-import PrivateRoute from "../../components/PrivateRoute/PrivateRoute";
 
 import {
   ZoologicLandingPage,
@@ -35,26 +33,26 @@ import Tratamientos from "ClientApp/views/salud/tratamiento/tratamiento";
 import SaludLayout from "ClientApp/views/salud/opciones";
 import NecropsiasList from "ClientApp/views/salud/necropsias/necropsias-list";
 import Examenes from "ClientApp/views/salud/examenes/examen";
-import ComportamientoLayout from "ClientApp/views/comportamientos/comportamiento";
 import Departamentos from "ClientApp/views/settings/departamentos/departamentos";
 import TratamientoDetalleWrapper from "ClientApp/views/salud/tratamientosAplicados/tratamiento-datails-view";
 import { CatalogoEspecies } from "ClientApp/views/landing/CatalogoEspecies";
 import TratamientosEspecies from "ClientApp/views/salud/tratamientoEspecie/tratamientoEspecie";
 import VistaReportes from "ClientApp/views/reportes/reportes";
-import { CustomSettingsLayout, SettingsLayout } from "ClientApp/components/layouts/settings";
+import { CustomSettingsLayout } from "ClientApp/components/layouts/settings";
 import AlimentosEspeciesList from "ClientApp/views/alimentacion/alimentosEspecies/alimentoEspecie-list";
 import MapaPage from "ClientApp/views/landing/MapaPage";
 import ChooseOptionView from "ClientApp/views/dashboard/chooseOptions";
 import PerfilUsuario from "ClientApp/views/usuarios/usuario-profile";
 import CompraBoletos from "ClientApp/views/ventas/CompraBoletos";
-import PagoStep from "ClientApp/views/ventas/PagoStep";
 import Paso2PagoWrapper from "ClientApp/views/ventas/Paso2PagoWrapper";
 import PagoExitoso from "ClientApp/views/ventas/PagoExitoso";
 import PreCompraPasos from "ClientApp/views/ventas/steps";
-import FacturaView from "ClientApp/views/ventas/factura";
 import FacturaComprobante from "ClientApp/views/ventas/factura";
 import TicketList from "ClientApp/views/tickets/ticket-list";
 import ComentariosDialog from "ClientApp/views/comentario/comentario";
+import ValidarBoleto from "ClientApp/views/tickets/verifyTicket";
+import BoleteroView from "ClientApp/views/tickets/ticketValidator";
+import { PrivateRoute } from "ClientApp/components/PrivateRoute";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -82,6 +80,11 @@ const Provider = () => {
       path: Routes.LANDING_ROUTE,
     },
     {
+      id: "boletero-view",
+      element: <BoleteroView />,
+      path: Routes.TICKET_VALIDATOR_ROUTE
+    },
+    {
       id: "steps-page",
       element: <PreCompraPasos />,
       path: Routes.STEPS_ROUTE,
@@ -105,6 +108,11 @@ const Provider = () => {
       id: "invoice",
       element: <FacturaComprobante />,
       path: Routes.INVOICE_ROUTE,
+    },
+    {
+      id: "verify-ticket",
+      element: <ValidarBoleto />,
+      path: Routes.VERIFY_TICKET_ROUTE
     },
     {
       id: "mapa",
@@ -140,7 +148,11 @@ const Provider = () => {
           children: [
             {
               path: Routes.DASHBOARD_ROUTE,
-              element: <DashboardView />
+              element: (
+                <PrivateRoute requiredPermission="Ver" requiredModule="Home">
+                  <DashboardView />
+                </PrivateRoute>
+              ),
             },
             {
               path: Routes.ChooseOptions,
@@ -236,7 +248,11 @@ const Provider = () => {
             },
             {
               path: Routes.VENTA_BOLETOS_ROUTE,
-              element: <TicketList />,
+              element: (
+                <PrivateRoute requiredPermission="Ver" requiredModule="Venta de boletos">
+                  <TicketList />
+                </PrivateRoute>
+              )
             },
             {
               path: Routes.REPORTES_ROUTE,

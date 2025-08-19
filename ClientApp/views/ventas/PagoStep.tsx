@@ -55,7 +55,8 @@ const PagoStep = () => {
               state: {
                 compraId,
                 codigoQR: data.Value.CodigoQR,
-                facturaId: data.Value.FacturaId
+                facturaId: data.Value.FacturaId,
+                validationUrl: data.Value.ValidationUrl,
               },
             });
           },

@@ -5,6 +5,16 @@ export interface ITipoBoleto {
   Precio: number;
 }
 
+export interface IValidacionBoleto {
+  valido: boolean;
+  Estado: string;        // "Válido" | "Usado" | "Vencido" | "No encontrado"
+  mensaje: string;
+  BoletoId: number;
+  CompraId: number;
+  CodigoQR: string;
+  Vencimiento?: string | null;
+}
+
 export interface ICreateTipoBoletos {
   Descripcion: string;
   Precio: number;
@@ -32,7 +42,6 @@ export interface ICreateCompra {
   FechaVisita: string | Date | null;
   DetalleCompra: IDetalleCompraItem[];
 }
-
 //Pagos
 
 export interface IPago {
