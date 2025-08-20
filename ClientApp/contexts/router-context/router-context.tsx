@@ -53,6 +53,7 @@ import ComentariosDialog from "ClientApp/views/comentario/comentario";
 import ValidarBoleto from "ClientApp/views/tickets/verifyTicket";
 import BoleteroView from "ClientApp/views/tickets/ticketValidator";
 import { PrivateRoute } from "ClientApp/components/PrivateRoute";
+import AccesoDenegadoView from "ClientApp/views/errores/AccesoDenegadoView";
 
 interface IRouterContextProps {
   routes: RouteObject[];
@@ -146,6 +147,10 @@ const Provider = () => {
           path: "/",
           element: renderMainLayout(<Outlet />), // solo renderiza layout si pasa PrivateRoute
           children: [
+            {
+              path: Routes.ACCESS_DENIED_ROUTE,
+              element: <AccesoDenegadoView />
+            },
             {
               path: Routes.DASHBOARD_ROUTE,
               element: (
