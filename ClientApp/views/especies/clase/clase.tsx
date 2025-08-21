@@ -107,6 +107,7 @@ const Clases = () => {
         sortable: true,
         header: "Fecha de creacion",
         field: "FechaCreacion",
+        style: { minWidth: "12rem" },
         body: (rowData: IClase) => (
           <div className="flex items-center gap-2">
             <i className="pi pi-calendar text-green-500"></i>
@@ -116,6 +117,21 @@ const Clases = () => {
           </div>
         ),
       },
+      {
+        header: "Acciones",
+        style: { minWidth: "8rem", textAlign: "left" },
+        body: (row: IClase) => (
+          <Button
+            icon="pi pi-ellipsis-v" // <-- horizontal en lugar de vertical
+            className="p-button-rounded p-button-text p-button-plain text-gray-700 hover:text-gray-900"
+            style={{ width: 28, height: 28, padding: 0, lineHeight: 1 }}
+            onClick={(e) => {
+              setSelectedClase(row);
+              cm.current?.show(e); // abre el ContextMenu ya existente
+            }}
+          />
+        ),
+      }
     ],
     [],
   );

@@ -18,7 +18,9 @@ import { CardTable, ICardTableProps } from "../../components/card-table";
 import dayjs from "dayjs";
 import { Reducers } from "#core";
 import { SplitButton } from "primereact/splitbutton";
-import ComportamientoSidebarCreate from "./comportamiento-sidebar-form";
+import ComportamientoSidebarForm from "./comportamiento-sidebar-form";
+import { Tag } from "primereact/tag";
+import { Button } from "primereact/button";
 
 interface IComportamientoTableProps {
   dispatch: React.Dispatch<any>;
@@ -32,6 +34,15 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
 
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [selectedComportamientoId, setSelectedComportamientoId] = useState<number | null>(null);
+
+  const getConductaSeverity = (value?: string): "success" | "danger" | "warning" | "info" | "secondary" => {
+    const v = (value ?? "").toLowerCase();
+    if (v.includes("tranquil") || v.includes("amist")) return "success";
+    if (v.includes("agres")) return "danger";
+    if (v.includes("estres") || v.includes("alert")) return "warning";
+    if (v.includes("entren")) return "info";
+    return "secondary";
+  };
 
   const menuModel = [
     {
@@ -62,7 +73,20 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
         field: "IdentificadorUnico",
         style: { minWidth: "12rem" },
       },
-
+      {
+        filter: true,
+        sortable: true,
+        header: "Entrenamiento",
+        field: "Entrenamiento",
+        style: { minWidth: "12rem" },
+      },
+      {
+        filter: true,
+        sortable: true,
+        header: "Conducta",
+        field: "Conducta",
+        style: { minWidth: "12rem" },
+      },
       {
         filter: true,
         sortable: true,
@@ -70,7 +94,6 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
         field: "NombreUsuario",
         style: { minWidth: "12rem" },
       },
-
       {
         filter: true,
         sortable: true,
@@ -82,22 +105,29 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
           return dayjs(rowData.FechaCreacion).format("DD/MM/YYYY");
         },
       },
-
       {
         filter: true,
         sortable: true,
-        header: "Habitat",
-        field: "Nombre",
-        style: { minWidth: "10rem" },
+        header: "Observaciones",
+        field: "Observaciones",
+        style: { minWidth: "12rem" },
       },
 
-       {
-        filter: true,
-        sortable: true,
-        header: "Entrenamiento",
-        field: "Entrenamiento",
-        style: { minWidth: "10rem" },
-      },
+      {
+        header: "Acciones",
+        style: { minWidth: "8rem", textAlign: "left" },
+        body: (row: IComportamiento) => (
+          <Button
+            icon="pi pi-ellipsis-v" // <-- horizontal en lugar de vertical
+            className="p-button-rounded p-button-text p-button-plain text-gray-700 hover:text-gray-900"
+            style={{ width: 28, height: 28, padding: 0, lineHeight: 1 }}
+            onClick={(e) => {
+              setSelectedComportamiento(row);
+              cm.current?.show(e); // abre el ContextMenu ya existente
+            }}
+          />
+        ),
+      }
     ],
     []
   );
@@ -127,7 +157,7 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
         renderHeadActions={[
           <SplitButton
             key="btn_add_split"
-            label="registrar comportamiento"
+            label="+ Agregar"
             severity="success"
             className="bg-green-400 hover:bg-green-600 border-0 shadow-none"
             color="primary"
@@ -159,10 +189,11 @@ const ComportamientoTable = ({ dispatch }: IComportamientoTableProps) => {
           ) => setSelectedComportamiento(e.value),
         }}
       />
-      <ComportamientoSidebarCreate
+      <ComportamientoSidebarForm
+        id={selectedComportamientoId ?? undefined}
         visible={sidebarVisible}
         onHide={() => setSidebarVisible(false)}
-        comportamientoId={selectedComportamientoId ?? undefined}
+        comportamientoId={undefined}
       />
     </div>
   );

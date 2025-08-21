@@ -30,18 +30,18 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
 
   // Filtrar módulos según los permisos
   const filterSidebarItems = () => {
-    const allowedModules = permisos
+    const allowedModules = permisos!
       .filter((permiso) => permiso.Acciones.Ver) // Solo módulos que tengan permiso para "Ver"
       .map((permiso) => permiso.ModuloNombre); // Obtener los nombres de los módulos permitidos
 
     const sidebarItems = [
       {
-        icon: <FontAwesomeIcon icon="home" />,
+        icon: <FontAwesomeIcon icon="home"/>,
         label: "Home",
         path: Routes.DASHBOARD_ROUTE,
       },
       {
-        icon: <FontAwesomeIcon icon="user-tie" />,
+        icon: <FontAwesomeIcon icon="user-tie"/>,
         label: "Empleados",
         path: Routes.EMPLEADOS_ROUTE,
       },
@@ -51,12 +51,12 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         path: Routes.EJEMPLARES_ROUTE,
       },
       {
-        icon: <FontAwesomeIcon icon="heart-pulse" />,
+        icon: <FontAwesomeIcon icon="heart-pulse"/>,
         label: "Salud animal",
         path: Routes.SALUD_ROUTE,
       },
       {
-        icon: <FontAwesomeIcon icon="bowl-food" />,
+        icon: <FontAwesomeIcon icon="bowl-food"/>,
         label: "Dietas",
         path: Routes.DIETA_APLICADA_ROUTE,
       },
@@ -66,17 +66,17 @@ const CustomMainLayout = ({ children }: React.PropsWithChildren) => {
         path: Routes.HABITAT_ROUTE,
       },
       {
-        icon: <FontAwesomeIcon icon="hippo" />,
+        icon: <FontAwesomeIcon icon="hippo"/>,
         label: "Comportamiento",
         path: Routes.COMPORTAMIENTO_ROUTE,
       },
       {
-        icon: <FontAwesomeIcon icon="ticket" />,
+        icon: <FontAwesomeIcon icon="ticket"/>,
         label: "Venta de boletos",
         path: Routes.VENTA_BOLETOS_ROUTE,
       },
       {
-        icon: <FontAwesomeIcon icon="user-gear" />,
+        icon: <FontAwesomeIcon icon="user-gear"/>,
         label: "Usuarios",
         path: Routes.USUARIOS_ROUTE,
       },

@@ -1,63 +1,88 @@
-import React, { useRef } from "react";
-import { Calendar } from "primereact/calendar";
-import "react-datepicker/dist/react-datepicker.css";
-import { Controller, FieldValues } from "react-hook-form";
+import React, { useEffect, useRef } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 import { Sidebar } from "primereact/sidebar";
 import { Button } from "primereact/button";
-import { useForm } from "react-hook-form";
-import {
-  Dropdown,
-  InputText,
-} from "ClientApp/components/inputs";
+import { Dropdown, InputTextArea } from "ClientApp/components/inputs";
 import { FieldColumn, Form } from "ClientApp/components/form";
 import { IComportamientoCreate } from "#interfaces";
 import { Toast } from "primereact/toast";
-import { useFetchAnimales, useFetchHabitats, useFetchUsuarios } from "ClientApp/hooks/useFetch";
-import { useCreateComportamientos } from "ClientApp/hooks/useMutation/useMutationComportamientos";
+import { useFetchAnimales, useFetchOneComportamiento } from "ClientApp/hooks/useFetch";
+import { useCreateComportamiento, useUpdateComportamiento } from "ClientApp/hooks/useMutation/useMutationComportamientos";
+import { useAuth } from "ClientApp/contexts/AuthContext/AuthContext";
 
 interface IComportamientoSidebarProps {
   id?: number;
   visible: boolean;
   onHide: () => void;
-  comportamientoId: number | undefined;
+  comportamientoId?: number;
 }
 
-const ComportamientoSidebarCreate = ({ onHide, visible }: IComportamientoSidebarProps) => {
+const ComportamientoSidebarForm = ({ id, onHide, visible }: IComportamientoSidebarProps) => {
   const toast = useRef<Toast>(null);
+  const { data: comportamientoData } = useFetchOneComportamiento(id!);
   const { data: animales } = useFetchAnimales();
-  const { data: usuarios } = useFetchUsuarios();
-  const { data: habitats } = useFetchHabitats(); // Assuming this fetches habitats, adjust if necessary
-  const createComportamiento = useCreateComportamientos();
-
+  const createComportamiento = useCreateComportamiento();
+  const updateComportamiento = useUpdateComportamiento();
+  const { usuarioId } = useAuth();
   const { control, handleSubmit, reset } = useForm<IComportamientoCreate, FieldValues>({
     mode: "onChange",
     defaultValues: {
       AnimalId: undefined,
-      UsuarioId: undefined,
-      HabitatId: undefined,
-      Fecha: null,
-      DetalleComportamientoId: undefined,
+      Entrenamiento: "",
+      Conducta: "",
+      Observaciones: "",
+      CreadoPor: usuarioId
     },
   });
+
+  // Prellenar el formulario si es edición
+  useEffect(() => {
+    if (comportamientoData) {
+      reset({
+        AnimalId: comportamientoData.AnimalId || undefined,
+        Entrenamiento: comportamientoData.Entrenamiento || "",
+        Conducta: comportamientoData.Conducta || "",
+        Observaciones: comportamientoData.Observaciones || "",
+        CreadoPor: comportamientoData.CreadoPor || usuarioId
+      });
+    }
+  }, [comportamientoData, reset]);
+
+  useEffect(() => {
+    if (!id && visible) {
+      reset({
+        AnimalId: undefined,
+        Entrenamiento: "",
+        Conducta: "",
+        Observaciones: "",
+        CreadoPor: usuarioId
+      });
+    }
+  }, [id, visible, reset]);
 
   const onSubmit = async (data: IComportamientoCreate) => {
     const payload = {
       AnimalId: Number(data.AnimalId),
-      HabitatId: Number(data.HabitatId),
-      UsuarioId: Number(data.UsuarioId),
-      Fecha: data.Fecha?.toISOString() || null,
-      DetalleComportamientoId: Number(data.DetalleComportamientoId)
+      Entrenamiento: data.Entrenamiento,
+      Conducta: data.Conducta,
+      Observaciones: data.Observaciones,
+      CreadoPor: Number(data.CreadoPor)
     };
 
-    console.log("Payload:", payload);
-    // para mostrar mensajes
     try {
-      const res = await createComportamiento.mutateAsync(payload);
+      let res;
+      if (id) {
+        res = await updateComportamiento.mutateAsync({ ComportamientoId: id, ...payload });
+      } else {
+        res = await createComportamiento.mutateAsync(payload);
+      }
+
       toast.current?.show({
         severity: "success",
         summary: "Éxito",
-        detail: res?.mensaje || "Animal creado correctamente.",
+        detail: res?.mensaje || `Comportamiento ${id ? "actualizado" : "creado"} correctamente.`,
       });
+
       reset();
       onHide();
     } catch (error: any) {
@@ -65,13 +90,14 @@ const ComportamientoSidebarCreate = ({ onHide, visible }: IComportamientoSidebar
       toast.current?.show({
         severity: "error",
         summary: "Error",
-        detail: error.response?.data?.mensaje || "Hubo un error al crear el animal.",
+        detail: error.response?.data?.mensaje || `Hubo un error al ${id ? "actualizar" : "crear"} el comportamiento.`,
       });
     }
   };
 
   return (
-    <><Toast ref={toast} />
+    <>
+      <Toast ref={toast} />
       <Sidebar
         position="right"
         visible={visible}
@@ -79,65 +105,61 @@ const ComportamientoSidebarCreate = ({ onHide, visible }: IComportamientoSidebar
           reset();
           onHide();
         }}
-        className="w-full sm:w-8 md:w-6 lg:w-6 xl:w-4"
-        header={<h1 className="font-semibold text-2xl text-900">Nuevo reporte</h1>}
+        className="w-full sm:w-8 md:w-6 lg:w-3 xl:w-3"
+        header={<h1 className="font-semibold text-2xl text-900">{id ? "Editar comportamiento" : "Nuevo comportamiento"}</h1>}
       >
         <Form>
-
-          <FieldColumn label="Animal" columns={{ sm: 6 }}>
+          <FieldColumn label="Animal">
             <Dropdown
               name="AnimalId"
               control={control}
-              placeholder="Seleccione una Especie"
+              placeholder="Animal"
               rules={{ required: "Campo obligatorio" }}
               options={animales || []}
-              optionLabel="Alias"
-              optionValue="AnimalId" />
+              optionLabel="IdentificadorUnico"
+              optionValue="AnimalId"
+            />
           </FieldColumn>
 
-
-          <FieldColumn label="Usuario" columns={{ sm: 6 }}>
+          <FieldColumn label="Entrenamiento">
             <Dropdown
-              name="UsuarioId"
+              name="Entrenamiento"
               control={control}
-              placeholder="Seleccione el usuario"
+              placeholder="Entrenamiento"
               rules={{ required: "Campo obligatorio" }}
-              options={usuarios || []}
-              optionLabel="NombreUsuario"
-              optionValue="UsuarioId" />
+              options={[
+                { label: "Entrenamiento medico", value: "Entrenamiento medico" },
+                { label: "Entrenamiento Cognitivo", value: "Entrenamiento Cognitivo" },
+                { label: "Entrenamiento adaptativo", value: "Entrenamiento adaptativo" },
+              ]}
+            />
           </FieldColumn>
 
-
-
-          <FieldColumn label="Habitat" columns={{ sm: 6 }}>
+          <FieldColumn label="Conducta">
             <Dropdown
-              name="HabitatId"
+              name="Conducta"
               control={control}
-              placeholder="Seleccione el habitat"
+              placeholder="Seleccione"
               rules={{ required: "Campo obligatorio" }}
-              options={habitats || []}
-              optionLabel="Nombre"
-              optionValue="HabitatId" />
+              options={[
+                { label: "Buena", value: "Buena" },
+                { label: "Regular", value: "Regular" },
+                { label: "Mala", value: "Mala" },
+              ]}
+            />
           </FieldColumn>
 
-          <FieldColumn label="Fecha de registro" columns={{ sm: 12 }}>
-            <Controller
-              name="Fecha"
+          <FieldColumn label="Observaciones">
+            <InputTextArea
+              name="Observaciones"
               control={control}
-              render={({ field }) => (
-                <Calendar
-                  value={field.value}
-                  onChange={(e) => field.onChange(e.value)}
-                  showIcon
-                  dateFormat="dd/mm/yy"
-                  placeholder="Seleccione una fecha"
-                  className="w-full"
-                  showButtonBar
-                  required />
-              )} />
+              placeholder="Observaciones"
+              rules={{ required: "Campo obligatorio" }}
+            />
           </FieldColumn>
-
+          <input type="hidden" name="CreadoPor" value={usuarioId!} />
         </Form>
+
         <div className="flex justify-content-end gap-2 mt-4">
           <Button
             label="Cancelar"
@@ -145,14 +167,17 @@ const ComportamientoSidebarCreate = ({ onHide, visible }: IComportamientoSidebar
             onClick={() => {
               reset();
               onHide();
-            }} />
+            }}
+          />
           <Button
             label="Guardar"
             severity="success"
-            onClick={handleSubmit(onSubmit)} />
+            onClick={handleSubmit(onSubmit)}
+          />
         </div>
-      </Sidebar></>
+      </Sidebar>
+    </>
   );
 };
 
-export default ComportamientoSidebarCreate;
+export default ComportamientoSidebarForm;

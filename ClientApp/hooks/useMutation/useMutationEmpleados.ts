@@ -13,7 +13,7 @@ export const useCreateEmpleado = () => {
   });
 };
 
-export const useUpdateEmpleado= () => {
+export const useUpdateEmpleado = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: EmpleadoApi.update,
@@ -24,7 +24,7 @@ export const useUpdateEmpleado= () => {
   });
 };
 
-export const useActivateEmpleado= () => {
+export const useActivateEmpleado = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: EmpleadoApi.activate,
@@ -35,7 +35,7 @@ export const useActivateEmpleado= () => {
   });
 };
 
-export const useDeleteEmpleado= () => {
+export const useDeleteEmpleado = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: EmpleadoApi.delete,

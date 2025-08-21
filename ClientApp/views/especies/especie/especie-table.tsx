@@ -170,6 +170,21 @@ const EspecieTable = ({ dispatch }: IEspecieTableProps) => {
         field: "ProcedenciaNombre",
         style: { minWidth: "6rem" },
       },
+      {
+        header: "Acciones",
+        style: { minWidth: "8rem", textAlign: "left" },
+        body: (row: IEspecie) => (
+          <Button
+            icon="pi pi-ellipsis-v" // <-- horizontal en lugar de vertical
+            className="p-button-rounded p-button-text p-button-plain text-gray-700 hover:text-gray-900"
+            style={{ width: 28, height: 28, padding: 0, lineHeight: 1 }}
+            onClick={(e) => {
+              setSelectedEspecie(row);
+              cm.current?.show(e); // abre el ContextMenu ya existente
+            }}
+          />
+        ),
+      }
     ],
     []
   );

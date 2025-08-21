@@ -120,17 +120,17 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
         body: (rowData) => rowData?.FechaNacimiento ? dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY") : "",
       },
       { filter: true, sortable: true, header: "Sexo", field: "Sexo", style: { minWidth: "12rem" } },
-      { filter: true, sortable: true, header: "Telefono", field: "Telefono", style: { minWidth: "12em" } },
-      { filter: true, sortable: true, header: "Correo personal", field: "Email", style: { minWidth: "12em" } },
+      { filter: true, sortable: true, header: "Telefono", field: "Telefono", style: { minWidth: "12rem" } },
+      { filter: true, sortable: true, header: "Correo personal", field: "Email", style: { minWidth: "18rem" } },
       { filter: true, sortable: true, header: "Nacionalidad", field: "Nacionalidad", style: { minWidth: "12rem" } },
-      { filter: true, sortable: true, header: "Dirección", field: "Direccion", style: { minWidth: "12rem" } },
+      { filter: true, sortable: true, header: "Dirección", field: "Direccion", style: { minWidth: "18rem" } },
       { filter: true, sortable: true, header: "Cargo", field: "CargoNombre", style: { minWidth: "12rem" } },
       {
         filter: true,
         sortable: true,
         header: "Fecha de contratacion",
         field: "FechaContratacion",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "18rem" },
         body: (rowData) => rowData?.FechaContratacion ? dayjs(rowData.FechaContratacion).format("DD/MM/YYYY") : "",
       },
       { filter: true, sortable: true, header: "Departamento", field: "NombreDepartamento", style: { minWidth: "12em" } },
@@ -143,6 +143,21 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
         style: { minWidth: "12rem" },
         body: (rowData) => rowData?.FechaCreacion ? dayjs(rowData.FechaCreacion).format("DD/MM/YYYY") : "",
       },
+      {
+        header: "Acciones",
+        style: { minWidth: "8rem", textAlign: "left" },
+        body: (row: IEmpleado) => (
+          <Button
+            icon="pi pi-ellipsis-v" // <-- horizontal en lugar de vertical
+            className="p-button-rounded p-button-text p-button-plain text-gray-700 hover:text-gray-900"
+            style={{ width: 28, height: 28, padding: 0, lineHeight: 1 }}
+            onClick={(e) => {
+              setSelectedEmpleado(row);
+              cm.current?.show(e); // abre el ContextMenu ya existente
+            }}
+          />
+        ),
+      }
     ],
     []
   );
@@ -199,7 +214,10 @@ const EmpleadoTable = ({ dispatch }: IEmpleadoTableProps) => {
     doc.save(`empleados_${dayjs().format("YYYYMMDD_HHmmss")}.pdf`);
   };
 
-  const estadosOptions = estados.data ?? [];
+  const estadosOptions = (estados.data ?? []).filter(
+    (estado) => estado.EstadoId === 1 || estado.EstadoId === 2
+  );
+
 
   return (
     <div className="h-full">

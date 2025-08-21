@@ -207,15 +207,15 @@ const MainLayout = ({
 };
 
 const LayoutContainer = ({ children }: React.PropsWithChildren) => (
-  <div className="min-h-screen flex relative surface-ground">{children}</div>
+  <div className="min-h-screen flex relative bg-gray-200">{children}</div>
 );
 
 const LayoutSidebar = ({ children, collapsed = false, isMobile = false, visible = false }: LayoutSidebarProps) => {
   const sidebarStyle: React.CSSProperties = {
     boxShadow: '4px 0 10px rgba(0, 0, 0, 0.05)',
     transition: 'transform 0.3s ease, width 0.3s ease',
+    overflow: 'hidden',
     backgroundColor: '#f5f5f5',
-    overflow: 'hidden'
   };
 
   if (isMobile) {

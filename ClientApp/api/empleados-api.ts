@@ -5,7 +5,7 @@ import API from "./api";
 
 interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   create?: (data: any) => Promise<any>;
-  delete?: (data: Partial<IEmpleadoAnulate>) => Promise<IEmpleadoAnulate>;
+  delete?: (id: number) => Promise<number>;
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
   getEmpleadoByEstadoId?: (id: number) => Promise<any>;
@@ -56,17 +56,13 @@ const EmpleadoApi: ApiCustom<IEmpleado> = {
     return response.data;
   },
 
-  delete: async (deletedEmpleado) => {
-    if (!deletedEmpleado.EmpleadoId) {
+  delete: async (id: number) => {
+    if (!id) {
       WarnUtils.missing(Endpoints.EMPLEADOS_DELETE, "Missing EmpleadoId");
       return Promise.reject(new Error("Missing EmpleadoId"));
     }
 
-    const url = Endpoints.EMPLEADOS_DELETE.replace(
-      "{id}",
-      deletedEmpleado.EmpleadoId.toString()
-    );
-
+    const url = Endpoints.EMPLEADOS_DELETE.replace("{id}", id.toString());
     const response = await API().delete(url);
     return response.data;
   },

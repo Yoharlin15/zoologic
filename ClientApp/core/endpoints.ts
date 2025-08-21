@@ -150,15 +150,9 @@ export const HABITATS_UPDATE = `${HABITATS_BASE}/Update/{id}`
 
 //CRUD Comportamiento
 export const COMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/${GET}`;
-export const COMPORTAMIENTO_GETBYID = `${COMPORTAMIENTO_BASE}/GetById`
+export const COMPORTAMIENTO_GETBYID = `${COMPORTAMIENTO_BASE}/GetComportamientoById`
 export const COMPORTAMIENTO_CREATE = `${COMPORTAMIENTO_BASE}/CreateComportamiento`;
 export const COMPORTAMIENTO_UPDATE = `${COMPORTAMIENTO_BASE}/Update/{id}`
-
-//CRUD DetalleComportamiento
-export const DETALLECOMPORTAMIENTO_GET = `${COMPORTAMIENTO_BASE}/GetDetallesComportamiento`;
-export const DETALLECOMPORTAMIENTO_GETBYID = `${COMPORTAMIENTO_BASE}GetById`
-export const DETALLECOMPORTAMIENTO_CREATE = `${COMPORTAMIENTO_BASE}/CreateDetalleComportamiento`;
-export const DETALLECOMPORTAMIENTO_UPDATE = `${COMPORTAMIENTO_BASE}/Update`;
 
 //Get Tratamiento
 export const TRATAMIENTOS_GET = `${TRATAMIENTOS_BASE}/GetTratamientos`;

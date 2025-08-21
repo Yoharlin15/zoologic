@@ -8,3 +8,11 @@ export const useFetchComportamientos = () => {
     queryFn: ComportamientoApi.getAll,
   });
 };
+
+export const useFetchOneComportamiento = (id: number) => {
+  return useQuery({
+    enabled: !!id,
+    queryKey: [Tags.COMPORTAMIENTOS, id],
+    queryFn: () => ComportamientoApi.getById?.(id),
+  });
+};

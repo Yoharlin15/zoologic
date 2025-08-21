@@ -93,28 +93,28 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         sortable: true,
         header: "Codigo",
         field: "IdentificadorUnico",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "10rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Identificador",
         field: "TipoIdentificador",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "10rem" },
       },
       {
         filter: true,
         sortable: true,
-        header: "Animal(Alias)",
+        header: "Alias",
         field: "Alias",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "10rem" },
       },
       {
         filter: true,
         sortable: true,
         header: "Especie",
         field: "NombreComun",
-        style: { minWidth: "12rem" },
+        style: { minWidth: "10rem" },
       },
       {
         filter: true,
@@ -128,7 +128,7 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         sortable: true,
         header: "Fecha de nacimiento",
         field: "FechaNacimiento",
-        style: { minWidth: "18rem" },
+        style: { minWidth: "14rem" },
         body: (rowData: IAnimal | null) => {
           if (!rowData?.FechaNacimiento) return "";
           return dayjs(rowData.FechaNacimiento).format("DD/MM/YYYY");
@@ -146,12 +146,27 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         sortable: true,
         header: "Fecha de creacion",
         field: "FechaCreacion",
-        style: { minWidth: "18rem" },
+        style: { minWidth: "14rem" },
         body: (rowData: IAnimal | null) => {
           if (!rowData?.FechaCreacion) return "";
           return dayjs(rowData.FechaCreacion).format("DD/MM/YYYY");
         },
       },
+      {
+        header: "Acciones",
+        style: { minWidth: "8rem", textAlign: "left" },
+        body: (row: IAnimal) => (
+          <Button
+            icon="pi pi-ellipsis-v" // <-- horizontal en lugar de vertical
+            className="p-button-rounded p-button-text p-button-plain text-gray-700 hover:text-gray-900"
+            style={{ width: 28, height: 28, padding: 0, lineHeight: 1 }}
+            onClick={(e) => {
+              setSelectedAnimal(row);
+              cm.current?.show(e); // abre el ContextMenu ya existente
+            }}
+          />
+        ),
+      }
     ],
     []
   );
@@ -170,10 +185,10 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         AnimalId,
         EstadoId: parseInt(newState) // Convertimos a número si es necesario
       });
-      
+
       // Actualizamos la lista de animales
       await animal.refetch();
-      
+
       // Mostramos mensaje de éxito
       dispatch({
         type: "SHOW_TOAST",
@@ -239,14 +254,14 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
           ) => setSelectedAnimal(e.value),
         }}
       />
-      
+
       <AnimalSidebarForm
         id={selectedAnimalId ?? undefined}
         visible={sidebarVisible}
         onHide={() => setSidebarVisible(false)}
         especieId={undefined}
       />
-      
+
       <HabitatModalUpdate
         visible={habitatModalVisible}
         idAnimal={animalIdToAssignHabitat}

@@ -66,9 +66,8 @@ const CardTable = <TB extends object>({
         <DataTable
           value={value}
           paginator
-          
           rowsPerPageOptions={[5, 7]}
-          className="border-1 border-gray-200 rounded-lg overflow-hidden"
+          className="rounded-xl overflow-hidden shadow-sm"
           {...(tableProps as DataTableProps<TB[]>)}
           rows={7}
           paginatorClassName={clsx(tableProps?.paginatorClassName, "border-none")}
@@ -78,7 +77,7 @@ const CardTable = <TB extends object>({
               key={column.field}
               {...column}
               filter={false}
-              headerClassName="border border-gray-200"
+              headerClassName="border border-gray-200 bg-green-50 text-green-900"
               bodyClassName="border border-gray-200"
             />
           ))}

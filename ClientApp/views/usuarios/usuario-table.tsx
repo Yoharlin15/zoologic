@@ -112,7 +112,7 @@ const UsuarioTable = ({ dispatch }: IUsuarioTableProps) => {
         onHide={() => setSelectedUsuario(undefined)}
       />
       <CardTable<IUsuario>
-        title="Lista de usuarios registrados en el sistema"
+        title="Usuarios registrados en el sistema"
         columns={columns}
         value={filteredUsuarios}
         skeletonLoading={usuario.isPending}
