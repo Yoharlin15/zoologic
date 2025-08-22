@@ -201,7 +201,7 @@ const LandingPage = () => {
 
             </div>
             <p className="text-md text-white mt-3">
-              <i className="pi pi-info-circle mr-1"></i> No aceptamos reembolsos
+              <i className="pi pi-info-circle mr-1"></i> No se realizan reembolsos una vez facturadas las entradas. (no refounds)
             </p>
           </div>
         </div>

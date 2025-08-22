@@ -5,6 +5,7 @@ import {
   PaymentElement
 } from "@stripe/react-stripe-js";
 import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useCreatePago } from "ClientApp/hooks/useMutation/useMutationPago";
 
@@ -18,9 +19,17 @@ const PagoStep = () => {
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [confirmVisible, setConfirmVisible] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // Se abre el diálogo en lugar de pagar directo
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!stripe || !elements || !compraId) return;
+    setConfirmVisible(true);
+  };
+
+  // Lógica real de pago (se ejecuta al confirmar en el diálogo)
+  const proceedPayment = async () => {
     if (!stripe || !elements || !compraId) return;
 
     setLoading(true);
@@ -31,7 +40,7 @@ const PagoStep = () => {
       confirmParams: {
         return_url: `${window.location.origin}/confirmacion-pago`,
       },
-      redirect: "if_required", // 👈 importante para que no redirija automáticamente
+      redirect: "if_required",
     });
 
     if (error) {
@@ -41,7 +50,6 @@ const PagoStep = () => {
     }
 
     if (paymentIntent && paymentIntent.status === "succeeded") {
-      // Guardar el pago en el backend
       crearPago(
         {
           CompraId: compraId,
@@ -49,8 +57,6 @@ const PagoStep = () => {
         },
         {
           onSuccess: (data) => {
-            console.log("Respuesta del backend al crear pago:", data);
-
             navigate("/successful-payment", {
               state: {
                 compraId,
@@ -60,14 +66,38 @@ const PagoStep = () => {
               },
             });
           },
+          onError: () => {
+            setErrorMessage(
+              "El pago fue procesado, pero ocurrió un problema al registrar la transacción. Contacta soporte con tu comprobante."
+            );
+          },
+          onSettled: () => setLoading(false),
         }
       );
     } else {
       setErrorMessage("El pago no fue exitoso.");
+      setLoading(false);
     }
-
-    setLoading(false);
   };
+
+  const confirmFooter = (
+    <div className="flex gap-2 justify-end">
+      <Button
+        label="Cancelar"
+        className="p-button-text"
+        onClick={() => setConfirmVisible(false)}
+        disabled={loading}
+      />
+      <Button
+        label={loading ? "Procesando..." : "Sí, pagar"}
+        onClick={() => {
+          setConfirmVisible(false);
+          proceedPayment();
+        }}
+        disabled={loading}
+      />
+    </div>
+  );
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gray-100 p-4">
@@ -89,6 +119,28 @@ const PagoStep = () => {
           />
         </form>
       </div>
+
+      {/* Diálogo de confirmación */}
+      <Dialog
+        header="Confirmar pago"
+        visible={confirmVisible}
+        style={{ width: "32rem", maxWidth: "90vw" }}
+        onHide={() => !loading && setConfirmVisible(false)}
+        footer={confirmFooter}
+        closable={!loading}
+        blockScroll
+        modal
+      >
+        <div className="space-y-2">
+          <p className="text-base">
+            ¿Estás seguro de que deseas proceder con el pago?
+          </p>
+          <p className="text-sm text-gray-600">
+            <strong>Importante:</strong> No se realizan reembolsos una vez
+            facturadas las entradas.
+          </p>
+        </div>
+      </Dialog>
     </div>
   );
 };

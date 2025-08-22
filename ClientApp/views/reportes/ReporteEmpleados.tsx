@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
-import { DataTable } from "primereact/datatable";
-import { Chart } from "primereact/chart";
-import { Column } from "primereact/column";
 import { Card } from "primereact/card";
-import { ProgressSpinner } from "primereact/progressspinner";
 import { Divider } from "primereact/divider";
+import { Dialog } from "primereact/dialog";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import {
@@ -15,26 +12,24 @@ import {
   useFetchEmpleadoReportes,
   useFetchEstados,
 } from "ClientApp/hooks/useFetch";
+import dayjs from "dayjs";
 
 const ReporteEmpleados = () => {
-  const [filtros, setFiltros] = useState<any>({
-    estadoId: null,
-    cargoId: null,
-    departamentoId: null,
-    sexo: "",
-  });
-
-  const { data: estados = [] } = useFetchEstados();
+  const [filtros, setFiltros] = useState<any>({ empleadoId: null, sexo: "" });
   const { data: cargos = [] } = useFetchCargos();
+  const { data: estados = [] } = useFetchEstados();
   const { data: departamentos = [] } = useFetchDepartamentos();
+  const { refetch, isFetching } = useFetchEmpleadoReportes(filtros);
 
-  const {
-    data: empleadosResponse = {},
-    refetch,
-    isFetching,
-  } = useFetchEmpleadoReportes(filtros);
+  // Fallback preview si el navegador bloquea la pestaña nueva
+  const [previewVisible, setPreviewVisible] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
 
-  const empleados = empleadosResponse?.Value || [];
+  useEffect(() => {
+    return () => {
+      if (pdfUrl) URL.revokeObjectURL(pdfUrl);
+    };
+  }, [pdfUrl]);
 
   const sexos = [
     { label: "Todos", value: "" },
@@ -42,35 +37,16 @@ const ReporteEmpleados = () => {
     { label: "Femenino", value: "Femenino" },
   ];
 
-  const handleReporte = () => {
-    console.log("📤 Generando reporte con filtros:", filtros);
-    refetch();
-  };
+  const exportarPDFyMostrarPrint = async (empleadosConDatos: any[]) => {
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm" });
 
-  const empleadosConDatos = empleados.map((e: { CargoId: number; DepartamentoId: number }) => ({
-    ...e,
-    Cargo: cargos.find((c) => c.CargoId === e.CargoId)?.Cargo || "No definido",
-    Departamento:
-      departamentos.find((d) => d.DepartamentoId === e.DepartamentoId)?.Nombre || "No definido",
-  }));
-
-  const exportarPDF = async () => {
-    // Configuración inicial del documento
-    const doc = new jsPDF({
-      orientation: "landscape",
-      unit: "mm"
-    });
-
-    // Colores corporativos (puedes ajustarlos)
-    const primaryColor: [number, number, number] = [63, 81, 181]; // Azul oscuro
-    const secondaryColor: [number, number, number] = [255, 193, 7]; // Amarillo
+    // Colores
+    const primaryColor: [number, number, number] = [0, 82, 155];
+    const secondaryColor: [number, number, number] = [0, 102, 71];
     const lightGray: [number, number, number] = [245, 245, 245];
-    const darkGray: [number, number, number] = [33, 33, 33];
+    const darkGray: [number, number, number] = [51, 51, 51];
 
     // Logo
-    const logoUrl = "https://res.cloudinary.com/dlbb3qssp/image/upload/v1741974209/Captura_de_pantalla_2025-03-14_133841-removebg-preview_ibdy4g.png";
-
-    // Función para convertir imagen a base64
     const toBase64 = async (url: string): Promise<string> => {
       const response = await fetch(url);
       const blob = await response.blob();
@@ -80,254 +56,251 @@ const ReporteEmpleados = () => {
         reader.readAsDataURL(blob);
       });
     };
+    const logoUrl = "https://res.cloudinary.com/dlbb3qssp/image/upload/v1742419070/zoodom_atpfei.png";
+    const [logoBase64] = await Promise.all([toBase64(logoUrl)]);
 
-    const logoBase64 = await toBase64(logoUrl);
+    // Fondo
+    doc.setFillColor(230, 230, 230);
+    doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), "F");
+    doc.setDrawColor(220, 220, 220);
+    doc.setLineWidth(0.2);
+    for (let i = 0; i < doc.internal.pageSize.getWidth(); i += 20) {
+      doc.line(i, 0, i, doc.internal.pageSize.getHeight());
+    }
+    for (let i = 0; i < doc.internal.pageSize.getHeight(); i += 20) {
+      doc.line(0, i, doc.internal.pageSize.getWidth(), i);
+    }
 
-    // Encabezado del reporte
-    doc.addImage(logoBase64, "PNG", 15, 5, 30, 30);
+    // Marco
+    doc.setDrawColor(...primaryColor);
+    doc.setLineWidth(1.5);
+    doc.rect(10, 10, doc.internal.pageSize.getWidth() - 20, doc.internal.pageSize.getHeight() - 20);
 
-    // Título principal
-    doc.setFontSize(16);
+    // Obtiene el tamaño real (px) de una dataURL para conservar proporciones
+    const getImageSizeFromDataUrl = (dataUrl: string): Promise<{ w: number; h: number }> =>
+      new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => resolve({ w: img.width, h: img.height });
+        img.crossOrigin = "anonymous";
+        img.src = dataUrl;
+      });
+
+    // Encabezado
+    // Mantener proporción del logo
+    const { w: logoPxW, h: logoPxH } = await getImageSizeFromDataUrl(logoBase64);
+    const logoWidthMM = 40; // ajusta a gusto (mm)
+    const logoHeightMM = logoWidthMM * (logoPxH / logoPxW);
+    // Posición recomendada
+    const logoX = 18;
+    const logoY = 15;
+
+    doc.addImage(logoBase64, "PNG", logoX, logoY, logoWidthMM, logoHeightMM);
+
+    const headerCenterX = doc.internal.pageSize.getWidth() / 2;
     doc.setFont("helvetica", "bold");
-    doc.setTextColor(...(primaryColor as [number, number, number]));
-    doc.text("REPORTE DE EMPLEADOS", doc.internal.pageSize.getWidth() / 2, 20, {
-      align: "center"
-    });
-
-    // Subtítulo
-    doc.setFontSize(10);
+    doc.setFontSize(14);
+    doc.setTextColor(...primaryColor);
+    doc.text("PARQUE ZOOLÓGICO NACIONAL (ZOODOM)", headerCenterX, 18, { align: "center" });
+    doc.setFontSize(11);
+    doc.setTextColor(...secondaryColor);
+    doc.text("DIRECCIÓN DE BIODIVERSIDAD Y CONSERVACIÓN", headerCenterX, 24, { align: "center" });
     doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
     doc.setTextColor(...darkGray);
-    doc.text("Zoologic - Sistema de Gestión de Personal", doc.internal.pageSize.getWidth() / 2, 26, {
-      align: "center"
-    });
+    doc.text(
+      "Dirección: Avenida La Vega Real, Arroyo Hondo, Distrito Nacional, República Dominicana.",
+      headerCenterX,
+      30,
+      { align: "center", maxWidth: doc.internal.pageSize.getWidth() - 40 }
+    );
+    doc.text("Tel.: 809-378-2149", headerCenterX, 35, { align: "center" });
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(15);
+    doc.setTextColor(...secondaryColor);
+    doc.text("REPORTE OFICIAL DE EMPLEADOS", headerCenterX, 42, { align: "center" });
+    doc.setDrawColor(...secondaryColor);
+    doc.setLineWidth(0.8);
+    doc.line(headerCenterX - 60, 44, headerCenterX + 60, 44);
 
-    // Fecha y filtros aplicados
-    doc.setFontSize(8);
-    doc.text(`Generado el: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 15, 35);
+    // Info reporte
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(...darkGray);
+    doc.text(`Fecha de generación: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 15, 52);
+    doc.text(
+      `Documento: RPT-ANML-${new Date().getFullYear()}-${Math.floor(Math.random() * 10000)
+        .toString()
+        .padStart(4, "0")}`,
+      doc.internal.pageSize.getWidth() - 15,
+      52,
+      { align: "right" }
+    );
 
-    // Información de filtros
+    // Filtros
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
     let filtersText = "Filtros aplicados: ";
-    if (filtros.estadoId) {
-      const estado = estados.find(e => e.EstadoId === filtros.estadoId);
-      filtersText += `Estado: ${estado?.NombreEstado || ''} | `;
+    if (filtros.departamentoId) {
+      const departamento = departamentos.find((e) => e.DepartamentoId === filtros.departamentoId);
+      filtersText += `Departamento: ${departamento?.Nombre || ""} | `;
     }
     if (filtros.cargoId) {
-      const cargo = cargos.find(c => c.CargoId === filtros.cargoId);
-      filtersText += `Cargo: ${cargo?.Cargo || ''} | `;
+      const cargo = cargos.find((e: any) => e.CargoId === filtros.cargoId);
+      filtersText += `Cargo: ${cargo?.Cargo || ""} | `;
     }
-    if (filtros.departamentoId) {
-      const depto = departamentos.find(d => d.DepartamentoId === filtros.departamentoId);
-      filtersText += `Departamento: ${depto?.Nombre || ''} | `;
+    if (filtros.estadoId) {
+      const estado = estados.find((e: any) => e.EstadoId === filtros.estadoId);
+      filtersText += `Estado: ${estado?.NombreEstado || ""} | `;
     }
-    if (filtros.sexo) {
-      filtersText += `Sexo: ${filtros.sexo} | `;
-    }
+    if (filtros.sexo) filtersText += `Sexo: ${filtros.sexo} | `;
+    doc.text(
+      filtersText === "Filtros aplicados: " ? filtersText + "Ninguno (Todos los empleados)" : filtersText.slice(0, -3),
+      15,
+      58,
+      { maxWidth: doc.internal.pageSize.getWidth() - 30 }
+    );
 
-    if (filtersText === "Filtros aplicados: ") {
-      filtersText += "Ninguno (Todos los empleados)";
-    } else {
-      filtersText = filtersText.slice(0, -3); // Eliminar el último " | "
-    }
-
-    // Añadir texto de filtros con formato
-    doc.setFontSize(8);
-    doc.setTextColor(100, 100, 100);
-    doc.text(filtersText, 15, 40, {
-      maxWidth: doc.internal.pageSize.getWidth() - 30
-    });
-
-    // Resumen estadístico
+    // Resumen
     const totalEmpleados = empleadosConDatos.length;
-    const hombres = empleadosConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Masculino").length;
-    const mujeres = empleadosConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Femenino").length;
-    const numDepartamentos = [...new Set(empleadosConDatos.map((e: { Departamento: any; }) => e.Departamento))].length;
-    const numCargos = [...new Set(empleadosConDatos.map((e: { Cargo: any; }) => e.Cargo))].length;
-
-    // Cuadro de resumen
+    const masculinos = empleadosConDatos.filter((e) => e.Sexo === "Masculino").length;
+    const femeninos = empleadosConDatos.filter((e) => e.Sexo === "Femenino").length;
     doc.setFillColor(...lightGray);
-    doc.rect(15, 45, doc.internal.pageSize.getWidth() - 30, 10, "F");
-
+    doc.rect(15, 63, doc.internal.pageSize.getWidth() - 30, 8, "F");
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...primaryColor);
-    doc.text("RESUMEN ESTADÍSTICO", 20, 51);
-
+    doc.text("RESUMEN ESTADÍSTICO", 20, 68);
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
+    doc.setFontSize(9);
     doc.setTextColor(...darkGray);
-
-    const summaryY = 56;
+    const summaryY = 73;
     const colWidth = (doc.internal.pageSize.getWidth() - 40) / 4;
+    const drawSummaryBox = (x: number, text: string, color: [number, number, number]) => {
+      doc.setFillColor(color[0], color[1], color[2]);
+      doc.roundedRect(x, summaryY, colWidth - 5, 8, 2, 2, "F");
+      doc.setTextColor(255, 255, 255);
+      doc.text(text, x + 5, summaryY + 5);
+    };
+    drawSummaryBox(20, `Total empleados: ${totalEmpleados}`, [0, 82, 155]);
+    drawSummaryBox(20 + colWidth, `Masculinos: ${masculinos}`, [0, 102, 71]);
+    drawSummaryBox(20 + colWidth * 2, `Femeninos: ${femeninos}`, [155, 82, 0]);
+    drawSummaryBox(20 + colWidth * 3, `Generado por: Zoologic`, [102, 0, 71]);
 
-    // Total empleados
-    doc.setFillColor(230, 230, 250);
-    doc.roundedRect(20, summaryY, colWidth, 8, 2, 2, "F");
-    doc.text(`Total empleados: ${totalEmpleados}`, 25, summaryY + 5);
-
-    // Hombres
-    doc.setFillColor(230, 240, 255);
-    doc.roundedRect(20 + colWidth, summaryY, colWidth, 8, 2, 2, "F");
-    doc.text(`Hombres: ${hombres} (${Math.round((hombres / totalEmpleados) * 100)}%)`, 25 + colWidth, summaryY + 5);
-
-    // Mujeres
-    doc.setFillColor(255, 230, 240);
-    doc.roundedRect(20 + colWidth * 2, summaryY, colWidth, 8, 2, 2, "F");
-    doc.text(`Mujeres: ${mujeres} (${Math.round((mujeres / totalEmpleados) * 100)}%)`, 25 + colWidth * 2, summaryY + 5);
-
-    // Departamentos
-    doc.setFillColor(230, 255, 240);
-    doc.roundedRect(20 + colWidth * 3, summaryY, colWidth, 8, 2, 2, "F");
-    doc.text(`Departamentos: ${numDepartamentos} | Cargos: ${numCargos}`, 25 + colWidth * 3, summaryY + 5);
-
-    // Tabla de datos
+    // Tabla
     autoTable(doc, {
-      startY: 70,
+      startY: 88,
       head: [[
-        "Nombre", "Apellidos", "Cédula", "FechaNacimiento", "Sexo", "Telefono", "Nacionalidad", "Direccion",
-        "Cargo", "Contratación", "Departamento", "Estado", "Email"
+        { content: "Nombres", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Apellidos", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Cedula", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "FechaNac.", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Sexo", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Telefono", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Pais", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold", } },
+        { content: "Direccion", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Cargo", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Contratacion", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Estado", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Departamento", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+        { content: "Email", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
       ]],
-      body: empleadosConDatos.map((e: {
-        Nombres: string;
-        Apellidos: string;
-        Cedula: string;
-        FechaNacimiento: string;
-        Sexo: string;
-        Telefono: string;
-        Nacionalidad: string;
-        Direccion: string;
-        Cargo: string;
-        Departamento: string;
-        NombreEstado: string;
-        FechaContratacion: string;
-        Email: string;
-      }) => [
+      body: empleadosConDatos.map((e: any) => [
         e.Nombres,
         e.Apellidos,
         e.Cedula,
-        e.FechaNacimiento,
+        e.FechaNacimiento ? dayjs(e.FechaNacimiento).format("DD/MM/YYYY") : "Desconocida",
         e.Sexo,
         e.Telefono,
         e.Nacionalidad,
         e.Direccion,
         e.Cargo,
+        e.FechaContratacion ? dayjs(e.FechaContratacion).format("DD/MM/YYYY") : "Desconocida",
+        e.Estado,
         e.Departamento,
-        e.NombreEstado,
-        e.FechaContratacion,
-        e.Email
+        e.Email,
       ]),
-      styles: {
-        fontSize: 7,
-        cellPadding: 2,
-        overflow: "linebreak",
-        halign: "left"
-      },
-      headStyles: {
-        fillColor: primaryColor,
-        textColor: 255,
-        fontStyle: "bold",
-        fontSize: 8
-      },
-      alternateRowStyles: {
-        fillColor: lightGray
-      },
+      styles: { fontSize: 8, cellPadding: 3, overflow: "linebreak", halign: "left", lineColor: [200, 200, 200], lineWidth: 0.1 },
+      alternateRowStyles: { fillColor: [245, 245, 245] },
       columnStyles: {
-        0: { cellWidth: 25 }, // Nombre
-        1: { cellWidth: 25 }, // Apellidos
-        2: { cellWidth: 20 }, // Cédula
-        3: { cellWidth: 12 }, // Sexo
-        4: { cellWidth: 25 }, // Cargo
-        5: { cellWidth: 25 }, // Departamento
-        6: { cellWidth: 20 }, // Estado
-        7: { cellWidth: 20 }  // Contratación
+        0: { cellWidth: 25, fontStyle: "bold" },
+        1: { cellWidth: 25 },
+        2: { cellWidth: 25 },
+        3: { cellWidth: 20 },
+        4: { cellWidth: 19 },
+        5: { cellWidth: 25 },
+        6: { cellWidth: 12 },
+        7: { cellWidth: 25 },
+        8: { cellWidth: 20 },
+        9: { cellWidth: 20 },
+        10: { cellWidth: 16 },
+        11: { cellWidth: 17 },
+        12: { cellWidth: 20 },
       },
-      margin: { top: 70 },
+      margin: { top: 88 },
       theme: "grid",
       tableLineColor: [200, 200, 200],
-      tableLineWidth: 0.1
+      tableLineWidth: 0.1,
+      didDrawPage: (data) => {
+        // Pie
+        doc.setDrawColor(...primaryColor);
+        doc.setLineWidth(0.5);
+        doc.line(15, doc.internal.pageSize.getHeight() - 18, doc.internal.pageSize.getWidth() - 15, doc.internal.pageSize.getHeight() - 18);
+        doc.setFontSize(8);
+        doc.setTextColor(100, 100, 100);
+        doc.text(`Página ${data.pageNumber} de ${doc.getNumberOfPages()}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 22, { align: "center" });
+        doc.text("Documento oficial - Parque Zoológico Nacional (ZOODOM)", 15, doc.internal.pageSize.getHeight() - 22);
+        doc.text(
+          "Dirección: Av. La Vega Real, Arroyo Hondo, DN, República Dominicana.  |  Tel.: 809-378-2149",
+          15,
+          doc.internal.pageSize.getHeight() - 15,
+          { maxWidth: doc.internal.pageSize.getWidth() - 30 }
+        );
+      },
     });
 
-    // Pie de página
-    const pageCount = doc.getNumberOfPages();
-    for (let i = 1; i <= pageCount; i++) {
-      doc.setPage(i);
+    // 👉 Mostrar vista de impresión del navegador
+    doc.autoPrint(); // marca el PDF para abrir el diálogo de impresión
+    // Abrir en nueva pestaña: el visor nativo mostrará el diálogo/controles de imprimir
+    const blobUrl = doc.output("bloburl");
+    const win = window.open(blobUrl, "_blank");
 
-      // Línea decorativa
-      doc.setDrawColor(...primaryColor);
-      doc.setLineWidth(0.5);
-      doc.line(15, doc.internal.pageSize.getHeight() - 15, doc.internal.pageSize.getWidth() - 15, doc.internal.pageSize.getHeight() - 15);
-
-      // Texto del pie
-      doc.setFontSize(8);
-      doc.setTextColor(100, 100, 100);
-      doc.text(`Página ${i} de ${pageCount}`, doc.internal.pageSize.getWidth() / 2, doc.internal.pageSize.getHeight() - 10, {
-        align: "center"
-      });
-
-      doc.text("© Zoologic - Sistema de Gestión de Personal", doc.internal.pageSize.getWidth() - 15, doc.internal.pageSize.getHeight() - 10, {
-        align: "right"
-      });
+    // Fallback si el navegador bloquea la pestaña
+    if (!win) {
+      setPdfUrl(blobUrl.toString());
+      setPreviewVisible(true);
     }
+  };
 
-    // Guardar el documento
-    doc.save(`Reporte_Empleados_${new Date().toISOString().slice(0, 10)}.pdf`);
+  const handleReporte = async () => {
+    try {
+      const { data } = await refetch();
+      const empleados = data?.Value || [];
+
+      const empleadosConDatos = empleados.map((e: { DepartamentoId: number, CargoId: number, EstadoId: number }) => ({
+        ...e,
+        Cargo: cargos.find((c: any) => c.CargoId === e.CargoId)?.Cargo || "No definido",
+        Estado: estados.find((s: any) => s.EstadoId === e.EstadoId)?.NombreEstado || "No definido",
+        Departamento: departamentos.find((c) => c.DepartamentoId === e.DepartamentoId)?.Nombre || "No definido",
+      }));
+      await exportarPDFyMostrarPrint(empleadosConDatos);
+    } catch (err) {
+      console.error("Error generando el reporte:", err);
+    }
   };
 
   return (
-    <div className="p-4 space-y-6">
-      <Card title="Filtros de Reporte" className="shadow-md">
+    <div className="p-2 space-y-6">
+      <Card
+        title="Generador de Reporte Oficial"
+        className="shadow-lg border-t-4 border-blue-600"
+        header={
+          <div className="bg-green-500 text-white p-4 rounded-t-lg">
+            <h2 className="text-xl font-bold">Reporte de Empleados</h2>
+            <p className="text-sm opacity-100">Sistema de Gestión Zoológica</p>
+          </div>
+        }
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">Estado</label>
-            <Dropdown
-              value={filtros.estadoId}
-              options={[
-                { label: "Todos", value: null },
-                ...estados.map((e) => ({
-                  label: e.NombreEstado,
-                  value: e.EstadoId,
-                })),
-              ]}
-              onChange={(e) => setFiltros({ ...filtros, estadoId: e.value })}
-              placeholder="Seleccione estado"
-              className="w-full"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">Cargo</label>
-            <Dropdown
-              value={filtros.cargoId}
-              options={[
-                { label: "Todos", value: null },
-                ...cargos.map((c) => ({
-                  label: c.Cargo,
-                  value: c.CargoId,
-                })),
-              ]}
-              onChange={(e) => setFiltros({ ...filtros, cargoId: e.value })}
-              placeholder="Seleccione cargo"
-              className="w-full"
-            />
-          </div>
-
-          <div className="space-y-1">
-            <label className="block text-sm font-medium text-gray-700">Departamento</label>
-            <Dropdown
-              value={filtros.departamentoId}
-              options={[
-                { label: "Todos", value: null },
-                ...departamentos.map((d) => ({
-                  label: d.Nombre,
-                  value: d.DepartamentoId,
-                })),
-              ]}
-              onChange={(e) => setFiltros({ ...filtros, departamentoId: e.value })}
-              placeholder="Seleccione departamento"
-              className="w-full"
-            />
-          </div>
-
           <div className="space-y-1">
             <label className="block text-sm font-medium text-gray-700">Sexo</label>
             <Dropdown
@@ -336,143 +309,82 @@ const ReporteEmpleados = () => {
               onChange={(e) => setFiltros({ ...filtros, sexo: e.value })}
               placeholder="Seleccione sexo"
               className="w-full"
+              showClear
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">Cargo</label>
+            <Dropdown
+              value={filtros.cargoId}
+              options={[{ label: "Todos", value: null }, ...cargos.map((e: any) => ({ label: e.Cargo, value: e.cargoId }))]}
+              onChange={(e) => setFiltros({ ...filtros, cargoId: e.value })}
+              placeholder="Seleccione cargo"
+              className="w-full"
+              showClear
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">Departamento</label>
+            <Dropdown
+              value={filtros.departamentoId}
+              options={[{ label: "Todos", value: null }, ...departamentos.map((e: any) => ({ label: e.Nombre, value: e.departamentoId }))]}
+              onChange={(e) => setFiltros({ ...filtros, departamentoId: e.value })}
+              placeholder="Seleccione departamento"
+              className="w-full"
+              showClear
+            />
+          </div>
+
+          <div className="space-y-1">
+            <label className="block text-sm font-medium text-gray-700">Estado</label>
+            <Dropdown
+              value={filtros.estadoId}
+              options={[{ label: "Todos", value: null }, ...estados.map((e: any) => ({ label: e.NombreEstado, value: e.EstadoId }))]}
+              onChange={(e) => setFiltros({ ...filtros, estadoId: e.value })}
+              placeholder="Seleccione estado"
+              className="w-full"
+              showClear
             />
           </div>
         </div>
 
-        <Divider />
-
+        <Divider className="my-4" />
         <div className="flex justify-end gap-3">
           <Button
-            label="Generar Reporte"
-            icon="pi pi-filter"
+            label="Vista de impresión"
+            icon="pi pi-print"
             onClick={handleReporte}
             loading={isFetching}
-            className="bg-blue-600 hover:bg-blue-700 border-blue-600"
+            className="bg-green-500 hover:bg-green-700 border-green-500"
+            severity="info"
+            size="large"
           />
         </div>
       </Card>
 
-      {isFetching ? (
-        <div className="flex justify-center items-center h-64">
-          <ProgressSpinner />
-        </div>
-      ) : empleadosConDatos.length > 0 ? (
-        <>
-          <Card title="Resultados" className="shadow-md mt-2">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-semibold">
-                Total empleados: {empleadosConDatos.length}
-              </h3>
-              <Button
-                label="Exportar a PDF"
-                icon="pi pi-file-pdf"
-                severity="danger"
-                onClick={exportarPDF}
-                className="hover:bg-red-700 ml-2"
-              />
-            </div>
-
-            <DataTable
-              value={empleadosConDatos}
-              paginator
-              rows={5}
-              rowsPerPageOptions={[5, 10, 25]}
-              tableStyle={{ minWidth: "50rem" }}
-              stripedRows
-              showGridlines
-              size="small"
-            >
-              <Column field="Nombres" header="Nombres" sortable className="min-w-[18rem]" />
-              <Column field="Apellidos" header="Apellidos" sortable className="min-w-[10rem]" />
-              <Column field="Cedula" header="Cédula" sortable className="min-w-[10rem]" />
-              <Column field="FechaNacimiento" header="Fecha Nacimiento" sortable className="min-w-[10rem]" />
-              <Column field="Sexo" header="Sexo" sortable className="min-w-[10rem]" />
-              <Column field="Telefono" header="Teléfono" sortable className="min-w-[10rem]" />
-              <Column field="Email" header="Email" sortable className="min-w-[10rem]" />
-              <Column field="Nacionalidad" header="Nacionalidad" sortable className="min-w-[10rem]" />
-              <Column field="Direccion" header="Dirección" sortable className="min-w-[10rem]" />
-              <Column field="Cargo" header="Cargo" sortable className="min-w-[10rem]" />
-              <Column field="FechaContratacion" header="Fecha Contratación" sortable className="min-w-[10rem]" />
-              <Column field="Departamento" header="Departamento" sortable className="min-w-[10rem]" />
-              <Column field="NombreEstado" header="Estado" sortable className="min-w-[10rem]" />
-            </DataTable>
-          </Card>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <Card title="Distribución por Género" className="shadow-md mt-4">
-              <Chart
-                type="pie"
-                data={{
-                  labels: ["Masculino", "Femenino"],
-                  datasets: [
-                    {
-                      data: [
-                        empleadosConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Masculino").length,
-                        empleadosConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Femenino").length,
-                      ],
-                      backgroundColor: ["#3B82F6", "#EC4899"],
-                      hoverBackgroundColor: ["#2563EB", "#DB2777"],
-                    },
-                  ],
-                }}
-                options={{
-                  plugins: {
-                    legend: {
-                      position: "bottom",
-                      labels: {
-                        usePointStyle: true,
-                        padding: 20,
-                      },
-                    },
-                  },
-                }}
-              />
-            </Card>
-
-            <Card title="Resumen" className="shadow-md mt-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                  <h4 className="text-blue-800 font-medium">Hombres</h4>
-                  <p className="text-2xl font-bold text-blue-600">
-                    {empleadosConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Masculino").length}
-                  </p>
-                </div>
-                <div className="bg-pink-50 p-4 rounded-lg border border-pink-100">
-                  <h4 className="text-pink-800 font-medium">Mujeres</h4>
-                  <p className="text-2xl font-bold text-pink-600">
-                    {empleadosConDatos.filter((e: { Sexo: string; }) => e.Sexo === "Femenino").length}
-                  </p>
-                </div>
-                <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
-                  <h4 className="text-indigo-800 font-medium">Departamentos</h4>
-                  <p className="text-2xl font-bold text-indigo-600">
-                    {[...new Set(empleadosConDatos.map((e: { Departamento: any; }) => e.Departamento))].length}
-                  </p>
-                </div>
-                <div className="bg-purple-50 p-4 rounded-lg border border-purple-100">
-                  <h4 className="text-purple-800 font-medium">Cargos</h4>
-                  <p className="text-2xl font-bold text-purple-600">
-                    {[...new Set(empleadosConDatos.map((e: { Cargo: any; }) => e.Cargo))].length}
-                  </p>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </>
-      ) : (
-        <Card className="shadow-md">
-          <div className="text-center py-8">
-            <i className="pi pi-info-circle text-4xl text-blue-500 mb-3" />
-            <h3 className="text-xl font-medium text-gray-700 mb-2">
-              No hay datos para mostrar
-            </h3>
-            <p className="text-gray-500">
-              Ajusta los filtros y genera un nuevo reporte
-            </p>
-          </div>
-        </Card>
-      )}
+      {/* Fallback preview si la pestaña fue bloqueada */}
+      <Dialog
+        header="Vista previa del PDF"
+        visible={previewVisible}
+        style={{ width: "80vw" }}
+        modal
+        onHide={() => {
+          setPreviewVisible(false);
+          if (pdfUrl) {
+            URL.revokeObjectURL(pdfUrl);
+            setPdfUrl(null);
+          }
+        }}
+        maximizable
+      >
+        {pdfUrl && (
+          <iframe
+            src={pdfUrl}
+            title="Vista previa PDF"
+            style={{ width: "100%", height: "75vh", border: "none" }}
+          />
+        )}
+      </Dialog>
     </div>
   );
 };
