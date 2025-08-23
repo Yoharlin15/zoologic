@@ -77,6 +77,17 @@ const AnimalTable = ({ dispatch }: IAnimalTableProps) => {
         }
       },
     },
+    {
+      label: "Asignar hábitat",
+      icon: "pi pi-map-marker",
+      command: () => {
+        if (selectedAnimal) {
+          setAnimalIdToAssignHabitat(selectedAnimal.AnimalId);
+          setEspecieIdToAssignHabitat(selectedAnimal.EspecieId);
+          setHabitatModalVisible(true);
+        }
+      },
+    },
   ];
 
   const [confirmState, confirmDispatch] = useReducer(Reducers.DialogsReducer, {

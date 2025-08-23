@@ -7,15 +7,16 @@ import { Dialog } from "primereact/dialog";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import {
+    useFetchCompraReportes,
     useFetchEstados,
-    useFetchHabitatReportes,
+    useFetchUsuarios,
 } from "ClientApp/hooks/useFetch";
 
-
-const ReporteHabitats = () => {
-    const [filtros, setFiltros] = useState<any>({ estadoId: null, estado: "" });
+const ReporteCompras = () => {
+    const [filtros, setFiltros] = useState<any>({ usuarioId: null, Usuario: "" });
+    const { data: usuarios = [] } = useFetchUsuarios();
     const { data: estados = [] } = useFetchEstados();
-    const { refetch, isFetching } = useFetchHabitatReportes(filtros);
+    const { refetch, isFetching } = useFetchCompraReportes(filtros);
 
     // Fallback preview si el navegador bloquea la pestaña nueva
     const [previewVisible, setPreviewVisible] = useState(false);
@@ -27,7 +28,7 @@ const ReporteHabitats = () => {
         };
     }, [pdfUrl]);
 
-    const exportarPDFyMostrarPrint = async (habitatsConDatos: any[]) => {
+    const exportarPDFyMostrarPrint = async (comprasConDatos: any[]) => {
         const doc = new jsPDF({ orientation: "landscape", unit: "mm" });
 
         // Colores
@@ -130,13 +131,16 @@ const ReporteHabitats = () => {
         doc.setFontSize(9);
         doc.setTextColor(100, 100, 100);
         let filtersText = "Filtros aplicados: ";
-        if (filtros.estadoId) {
-            const habitat = estados.find((e) => e.EstadoId === filtros.estadoId);
-            filtersText += `Habitat: ${habitat?.NombreEstado || ""} | `;
+        if (filtros.usuarioId) {
+            const compra = usuarios.find((e: { UsuarioId: any; }) => e.UsuarioId === filtros.usuarioId);
+            filtersText += `Usuario: ${compra?.NombreUsuario || ""} | `;
         }
-
+        if (filtros.estadoId) {
+            const compra = estados.find((e) => e.EstadoId === filtros.estadoId);
+            filtersText += `Estado: ${compra?.NombreEstado || ""} | `;
+        }
         // Resumen
-        const totalHabitats = habitatsConDatos.length;
+        const totalCompras = comprasConDatos.length;
         doc.setFillColor(...lightGray);
         doc.rect(15, 63, doc.internal.pageSize.getWidth() - 30, 8, "F");
         doc.setFontSize(10);
@@ -154,42 +158,40 @@ const ReporteHabitats = () => {
             doc.setTextColor(255, 255, 255);
             doc.text(text, x + 5, summaryY + 5);
         };
-        drawSummaryBox(20, `Total habitats: ${totalHabitats}`, [0, 82, 155]);
+        drawSummaryBox(20, `Total Compras: ${totalCompras}`, [0, 82, 155]);
         drawSummaryBox(20 + colWidth * 3, `Generado por: Zoologic`, [102, 0, 71]);
 
         // Tabla
         autoTable(doc, {
             startY: 88,
             head: [[
-                { content: "HabitatId", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
-                { content: "Nombre", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
-                { content: "Cantidad", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+                { content: "CompraId", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+                { content: "Usuario", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+                { content: "Fecha Compra", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+                { content: "Total Compra", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
                 { content: "Estado", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
-                { content: "Descripcion", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold"} }, 
-                { content: "Especie", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
-                { content: "Tamaño", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
-                
+                { content: "Fecha Visita", styles: { fillColor: primaryColor, textColor: 255, fontStyle: "bold" } },
+
             ]],
-            body: habitatsConDatos.map((e: any) => [
-                { content: e.HabitatId, styles: { fontStyle: "bold" } },
-                e.Nombre,
-                e.CantidadAnimales,
-                e.Estado,
-                { content: e.Descripcion, styles: { text: "center" } },,
-                e.Especie,
-                e.Tamaño
+            body: comprasConDatos.map((e: any) => [
+                e.CompraId,
+                e.NombreUsuario,
+                e.FechaCompra,
+                e.TotalCompra,
+                e.NombreEstado,
+                e.FechaVisita,
             ]),
             styles: { fontSize: 8, cellPadding: 3, overflow: "linebreak", halign: "left", lineColor: [200, 200, 200], lineWidth: 0.1 },
             alternateRowStyles: { fillColor: [245, 245, 245] },
             columnStyles: {
                 0: { cellWidth: 25, fontStyle: "bold" },
                 1: { cellWidth: 25 },
-                2: { cellWidth: 20 },
-                3: { cellWidth: 15 },
-                4: { cellWidth: 50, halign: "center" },
-                5: { cellWidth: 25, halign: "center" },
+                2: { cellWidth: 40 },
+                3: { cellWidth: 30 },
+                4: { cellWidth: 40 },
+                5: { cellWidth: 40 },
                 6: { cellWidth: 25 },
-                7: { cellWidth: 25 },
+                7: { cellWidth: 40 },
             },
             margin: { top: 88 },
             theme: "grid",
@@ -229,12 +231,12 @@ const ReporteHabitats = () => {
     const handleReporte = async () => {
         try {
             const { data } = await refetch();
-            const habitats = data?.Value || [];
-            const habitatsConDatos = habitats.map((e: { EstadoId: number }) => ({
+            const compras = data?.Value || [];
+            const comprasConDatos = compras.map((e: { UsuarioId: number }) => ({
                 ...e,
-                Estado: estados.find((c) => c.EstadoId === e.EstadoId)?.NombreEstado|| "No definido",
+                Usuario: usuarios.find((c: { UsuarioId: number; }) => c.UsuarioId === e.UsuarioId)?.NombreComun || "No definido",
             }));
-            await exportarPDFyMostrarPrint(habitatsConDatos);
+            await exportarPDFyMostrarPrint(comprasConDatos);
         } catch (err) {
             console.error("Error generando el reporte:", err);
         }
@@ -247,24 +249,35 @@ const ReporteHabitats = () => {
                 className="shadow-lg border-t-4 border-blue-600"
                 header={
                     <div className="bg-green-500 text-white p-4 rounded-t-lg">
-                        <h2 className="text-xl font-bold">Reporte de Habitats</h2>
+                        <h2 className="text-xl font-bold">Reporte de Compras</h2>
                         <p className="text-sm opacity-100">Sistema de Gestión Zoológica</p>
                     </div>
                 }
             >
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div className="space-y-1">
+                        <label className="block text-sm font-medium text-gray-700">Usuario</label>
+                        <Dropdown
+                            value={filtros.usuarioId}
+                            options={[{ label: "Todos", value: null }, ...usuarios.map((e: any) => ({ label: e.NombreUsuario, value: e.UsuarioId }))]}
+                            onChange={(e) => setFiltros({ ...filtros, usuarioId: e.value })}
+                            placeholder="Seleccione usuario"
+                            className="w-full"
+                            showClear
+                        />
+                    </div>
+                    <div className="space-y-1">
                         <label className="block text-sm font-medium text-gray-700">Estado</label>
                         <Dropdown
                             value={filtros.estadoId}
                             options={[{ label: "Todos", value: null }, ...estados.map((e: any) => ({ label: e.NombreEstado, value: e.EstadoId }))]}
-                            onChange={(e) => setFiltros({ ...filtros, estadoId: e.value })} 
+                            onChange={(e) => setFiltros({ ...filtros, estadoId: e.value })}
                             placeholder="Seleccione estado"
                             className="w-full"
-                            filter
                             showClear
                         />
                     </div>
+
                 </div>
 
                 <Divider className="my-4" />
@@ -309,4 +322,4 @@ const ReporteHabitats = () => {
     );
 };
 
-export default ReporteHabitats;
+export default ReporteCompras;

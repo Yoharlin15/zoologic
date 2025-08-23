@@ -9,6 +9,7 @@ interface ApiCustom<T> extends Omit<Api<T>, "create" | "update"> {
   activate?: (id: number) => Promise<number>;
   getById?: (id: number) => Promise<any>;
   getCompraByUsuarioId?: (id: number) => Promise<any>;
+  getCompraReportes?: (id: number) => Promise<any>;
 }
 
 const CompraApi: ApiCustom<ICompra> = {
@@ -25,6 +26,13 @@ const CompraApi: ApiCustom<ICompra> = {
 
   create: async (data) => {
     const result = await API().post(Endpoints.COMPRA_CREATE, data);
+    return result.data;
+  },
+
+  getCompraReportes: async (params) => {
+    console.log("🟢 Llamando a la API con filtros:", params);
+    const result = await API().get(Endpoints.COMPRAS_REPORTES, { params });
+    console.log("🟢 Datos recibidos del backend:", result.data);
     return result.data;
   },
 }

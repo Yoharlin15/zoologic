@@ -11,6 +11,8 @@ export interface IValidacionBoleto {
   mensaje: string;
   BoletoId: number;
   CompraId: number;
+  Cantidad: number;
+  Descripcion: string;
   CodigoQR: string;
   Vencimiento?: string | null;
 }

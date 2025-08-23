@@ -109,6 +109,11 @@ const ValidarBoleto: React.FC = () => {
                 <div className="text-xs text-gray-500 mb-1">Compra</div>
                 <div><span className="font-medium">CompraId:</span> {data.CompraId ?? "—"}</div>
               </div>
+
+              <div className="border rounded-md p-3">
+                <div className="text-xs text-gray-500 mb-1">Cantidad</div>
+                <div><span className="font-medium">Cantidad:</span> {data.Cantidad ?? "—"}</div>
+              </div>
             </div>
 
             <Divider />

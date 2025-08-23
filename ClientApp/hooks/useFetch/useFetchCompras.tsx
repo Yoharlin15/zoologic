@@ -57,3 +57,12 @@ export const useFetchCompraByUsuarioId = (
     ...options, // después para que no pisen queryKey/queryFn
   });
 };
+
+export const useFetchCompraReportes = (filtros: any) => {
+  return useQuery({
+    enabled: false, // No se ejecuta al montar
+    queryKey: [Tags.COMPRAS, filtros],
+    queryFn: () => CompraApi.getCompraReportes?.(filtros),
+  });
+};
+

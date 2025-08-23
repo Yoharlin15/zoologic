@@ -3,6 +3,7 @@ import { Dropdown } from "primereact/dropdown";
 import ReporteEmpleados from "./ReporteEmpleados";
 import ReporteAnimales from "./ReporteAnimales";
 import ReporteHabitats from "./ReporteHabitats";
+import ReporteCompras from "./ReporteCompras";
 
 
 const VistaReportes = () => {
@@ -12,6 +13,7 @@ const VistaReportes = () => {
     { label: "Empleados", value: "empleados" },
     { label: "Animales", value: "animales" },
     { label: "habitats", value: "habitats" },
+    { label: "Compras", value: "compras" }
   ];
 
   const renderReporte = () => {
@@ -22,6 +24,8 @@ const VistaReportes = () => {
          return <ReporteAnimales />;
        case "habitats":
          return <ReporteHabitats />;
+       case "compras":
+         return <ReporteCompras />;
       default:
         return <p className="text-gray-500">Seleccione un módulo</p>;
     }

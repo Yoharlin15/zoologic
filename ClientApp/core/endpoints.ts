@@ -184,6 +184,7 @@ export const VERIFY_TICKET = `${VENTAS_BASE}/GetValidarBoletos`;
 
 //CRUD Compra
 export const COMPRA_GET = `${VENTAS_BASE}/GetCompras`;
+export const COMPRAS_REPORTES = `${VENTAS_BASE}/GetReporteCompras`;
 export const COMPRA_BY_USUARIOID = `${VENTAS_BASE}/GetCompraByUsuarioId`;
 export const COMPRA_CREATE = `${VENTAS_BASE}/CreateCompra`;
 
